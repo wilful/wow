@@ -1,0 +1,168 @@
+---
+/**
+ * Иллюстрации сайта. Всё нарисовано в SVG: ноль веса, резкость на любом экране,
+ * никаких вопросов с правами на чужой арт.
+ */
+interface Props {
+  variant?: string;
+  label?: string;
+}
+
+const { variant = 'banner', label } = Astro.props as Props;
+const uid = `a-${variant}-${Math.random().toString(36).slice(2, 7)}`;
+---
+
+<svg
+  class:list={['artwork', `artwork--${variant}`]}
+  viewBox="0 0 600 380"
+  role="img"
+  aria-label={label ?? 'Иллюстрация в стиле World of Warcraft'}
+>
+  {
+    variant === 'nightelf' && (
+      <g>
+        <defs>
+          <linearGradient id={`${uid}-sky`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#141a45" />
+            <stop offset="1" stop-color="#05060e" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="380" fill={`url(#${uid}-sky)`} />
+        <circle cx="300" cy="126" r="96" fill="#8f6ad6" opacity="0.16" />
+        <g fill="#c8b4ff" opacity="0.85">
+          <path d="M300 96c26 20 40 42 40 66 0 30-18 46-40 46s-40-16-40-46c0-24 14-46 40-66z" opacity="0.3" />
+          <path d="M244 132c18 6 30 22 34 44l-46-16z" fill="#8f6ad6" opacity="0.6" />
+          <path d="M356 132c-18 6-30 22-34 44l46-16z" fill="#8f6ad6" opacity="0.6" />
+          <path d="M300 84c20 26 30 48 30 74 0 28-14 44-30 44s-30-16-30-44c0-26 10-48 30-74z" fill="#e9e3d5" opacity="0.16" />
+          <path d="M276 168c6-4 14-4 20 0M304 168c6-4 14-4 20 0" stroke="#f5e3ad" stroke-width="3" fill="none" stroke-linecap="round" />
+        </g>
+        <path d="M0 320l120-70 90 54 110-84 120 88 90-56 70 44v164H0z" fill="#0b0f24" />
+        <path d="M0 360l160-56 130 46 140-58 170 60v68H0z" fill="#070a1a" />
+      </g>
+    )
+  }
+
+  {
+    variant === 'bloodelf' && (
+      <g>
+        <rect width="600" height="380" fill="#0d0a18" />
+        <circle cx="300" cy="150" r="120" fill="#c03a33" opacity="0.2" />
+        <circle cx="300" cy="150" r="72" fill="#f5e3ad" opacity="0.14" />
+        <path d="M300 70c30 26 46 54 46 84 0 32-20 52-46 52s-46-20-46-52c0-30 16-58 46-84z" fill="#e9d3b0" opacity="0.2" />
+        <path d="M232 138c-22-14-40-16-52-8 16 12 30 26 38 42zM368 138c22-14 40-16 52-8-16 12-30 26-38 42z" fill="#d8b46a" opacity="0.55" />
+        <path d="M300 40l12 34 34 12-34 12-12 34-12-34-34-12 34-12z" fill="#f5e3ad" opacity="0.7" />
+        <path d="M280 186c6-4 14-4 20 0M300 186c6-4 14-4 20 0" stroke="#8ef0c0" stroke-width="3" fill="none" stroke-linecap="round" />
+        <path d="M0 330l140-64 120 60 130-72 140 74 70-38v90H0z" fill="#120e22" />
+      </g>
+    )
+  }
+
+  {
+    variant === 'orc' && (
+      <g>
+        <rect width="600" height="380" fill="#0a0d16" />
+        <circle cx="300" cy="170" r="128" fill="#3f7a3c" opacity="0.16" />
+        <path d="M300 84c34 0 56 26 56 62 0 34-22 60-56 60s-56-26-56-60c0-36 22-62 56-62z" fill="#5f7a48" opacity="0.4" />
+        <path d="M266 192c8-10 14-14 20-14s10 4 12 14zM322 192c-8-10-14-14-20-14s-10 4-12 14z" fill="#f5e3ad" opacity="0.85" />
+        <path d="M246 236c18 12 34 18 54 18s36-6 54-18" stroke="#2b3a1e" stroke-width="8" fill="none" stroke-linecap="round" opacity="0.6" />
+        <path d="M256 122c-16-6-30-2-40 10M344 122c16-6 30-2 40 10" stroke="#3f5a2a" stroke-width="7" fill="none" stroke-linecap="round" />
+        <g stroke="#b8322b" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.8">
+          <path d="M180 300l60-30M420 300l-60-30M300 322v-46" />
+        </g>
+        <path d="M0 344l160-58 140 50 140-56 160 60v40H0z" fill="#080a12" />
+      </g>
+    )
+  }
+
+  {
+    variant === 'undead' && (
+      <g>
+        <rect width="600" height="380" fill="#070b12" />
+        <circle cx="300" cy="150" r="120" fill="#52c295" opacity="0.14" />
+        <path d="M300 78c32 0 54 24 54 58 0 36-24 62-54 62s-54-26-54-62c0-34 22-58 54-58z" fill="#b9c2c0" opacity="0.28" />
+        <path d="M252 120c14-8 28-8 42 0M306 120c14-8 28-8 42 0" stroke="#d8b46a" stroke-width="5" fill="none" stroke-linecap="round" opacity="0.85" />
+        <circle cx="278" cy="152" r="9" fill="#8ef0c0" opacity="0.9" />
+        <circle cx="322" cy="152" r="9" fill="#8ef0c0" opacity="0.9" />
+        <path d="M266 204c12 8 22 12 34 12s22-4 34-12" stroke="#cfd8d6" stroke-width="3" fill="none" />
+        <g stroke="#2b3a3a" stroke-width="3" fill="none" opacity="0.7">
+          <path d="M300 214v34M282 246h36" />
+        </g>
+        <path d="M120 300c40-26 76-38 110-38s60 10 82 30M468 300c-40-26-76-38-110-38" stroke="#9fb8b4" stroke-width="6" fill="none" opacity="0.35" />
+        <path d="M0 336l150-44 130 36 150-40 170 50v42H0z" fill="#050810" />
+      </g>
+    )
+  }
+
+  {
+    variant === 'tauren' && (
+      <g>
+        <rect width="600" height="380" fill="#0c0a10" />
+        <circle cx="300" cy="160" r="130" fill="#d8b46a" opacity="0.14" />
+        <path d="M300 96c30 0 50 24 50 56s-20 58-50 58-50-26-50-58 20-56 50-56z" fill="#6b4a2a" opacity="0.5" />
+        <g fill="#e9e3d5" opacity="0.7">
+          <path d="M250 118c-30-16-52-12-66 8 26-4 46 4 60 20z" />
+          <path d="M350 118c30-16 52-12 66 8-26-4-46 4-60 20z" />
+          <path d="M300 246c-14 0-24 10-24 22s10 20 24 20 24-8 24-20-10-22-24-22z" fill="#3a2a18" opacity="0.8" />
+        </g>
+        <path d="M276 176c6-4 12-4 18 0M306 176c6-4 12-4 18 0" stroke="#f5e3ad" stroke-width="4" fill="none" stroke-linecap="round" />
+        <path d="M0 330c80-40 160-52 300-52s220 12 300 52v50H0z" fill="#0a0810" />
+      </g>
+    )
+  }
+
+  {
+    variant === 'troll' && (
+      <g>
+        <rect width="600" height="380" fill="#0a1010" />
+        <circle cx="300" cy="158" r="122" fill="#4a86d8" opacity="0.14" />
+        <path d="M300 92c30 0 52 24 52 56 0 34-22 58-52 58s-52-24-52-58c0-32 22-56 52-56z" fill="#6f8f5a" opacity="0.42" />
+        <g stroke="#f5e3ad" stroke-width="4" fill="none" stroke-linecap="round" opacity="0.85">
+          <path d="M266 128c-6-14-8-26-6-36" />
+          <path d="M334 128c6-14 8-26 6-36" />
+          <path d="M282 216c-8 10-8 20 0 26M318 216c8 10 8 20 0 26" />
+        </g>
+        <path d="M278 174c6-4 12-4 18 0M304 174c6-4 12-4 18 0" stroke="#8ef0c0" stroke-width="4" fill="none" stroke-linecap="round" />
+        <g fill="#d8b46a" opacity="0.55">
+          <path d="M180 120l14 26 26 6-26 6-14 26-14-26-26-6 26-6z" />
+          <circle cx="440" cy="180" r="10" />
+          <circle cx="120" cy="220" r="7" />
+        </g>
+        <path d="M0 332l140-48 150 40 150-42 160 50v48H0z" fill="#06100f" />
+      </g>
+    )
+  }
+
+  {
+    (variant === 'banner' || variant === 'gallery') && (
+      <g>
+        <defs>
+          <linearGradient id={`${uid}-sea`} x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#151d47" />
+            <stop offset="1" stop-color="#05060e" />
+          </linearGradient>
+        </defs>
+        <rect width="600" height="380" fill={`url(#${uid}-sea)`} />
+        <circle cx="430" cy="90" r="46" fill="#f5e3ad" opacity="0.85" />
+        <circle cx="446" cy="78" r="40" fill="#0a0d22" opacity="0.6" />
+        <g fill="#f5e3ad" opacity="0.5">
+          <circle cx="90" cy="60" r="1.8" />
+          <circle cx="180" cy="120" r="1.4" />
+          <circle cx="300" cy="52" r="1.6" />
+          <circle cx="540" cy="190" r="1.5" />
+        </g>
+        <path d="M0 268l110-72 90 58 110-82 110 88 90-56 90 62v114H0z" fill="#101635" />
+        <path d="M0 318l140-58 130 48 140-60 190 62v70H0z" fill="#080b1c" />
+        <path d="M0 350c60-16 120-16 180 0s120 16 180 0 120-16 240 0v30H0z" fill="#05060e" opacity="0.9" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .artwork {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: var(--radius-sm);
+  }
+</style>

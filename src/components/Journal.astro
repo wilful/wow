@@ -1,0 +1,63 @@
+---
+import Artwork from './Artwork.astro';
+import { getCollection } from 'astro:content';
+
+const { limit = 0, showAll = false } = Astro.props as { limit?: number; showAll?: boolean };
+const base = import.meta.env.BASE_URL;
+
+const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+const posts = limit ? all.slice(0, limit) : all;
+
+const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const fmt = (d: Date) => `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+---
+
+<section class="section" id="journal">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Журнал</span>
+      <h2>{showAll ? 'Все записи' : 'Мои впечатления от патча'}</h2>
+      <p>
+        Здесь я пишу то, что чувствую в игре: первые вечера, подземелья, случайные встречи и кадры,
+        которые хочется сохранить.
+      </p>
+    </div>
+
+    <div class="journal">
+      {
+        posts.map((post, i) => (
+          <article class:list={['panel', 'panel--hover', 'post-card', 'reveal', i === 0 && 'post-card--lead']}>
+            <a class="post-card__art" href={`${base}posts/${post.id}/`}>
+              <Artwork variant={post.data.cover} label={post.data.title} />
+            </a>
+            <div class="post-card__body">
+              <div class="post-card__meta">
+                <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+                <span class:list={['chip', post.data.faction !== 'neutral' && `chip--${post.data.faction}`]}>
+                  {post.data.race}
+                </span>
+              </div>
+              <h3>
+                <a href={`${base}posts/${post.id}/`}>{post.data.title}</a>
+              </h3>
+              <p>{post.data.excerpt}</p>
+              <a class="post-card__more" href={`${base}posts/${post.id}/`}>Читать запись →</a>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    {
+      !showAll && (
+        <p class="journal__more">
+          <a class="btn btn--ghost" href={`${base}archive/`}>
+            Все записи журнала
+          </a>
+        </p>
+      )
+    }
+  </div>
+</section>

@@ -114,114 +114,6 @@ function initEmbers() {
   requestAnimationFrame(frame);
 }
 
-/* ---------- Таймер до ближайшего события (сб 20:00 МСК) ---------- */
-function initCountdown() {
-  const root = document.querySelector('[data-countdown]');
-  if (!root) return;
-
-  const cells = {
-    days: root.querySelector('[data-cd="days"]'),
-    hours: root.querySelector('[data-cd="hours"]'),
-    minutes: root.querySelector('[data-cd="minutes"]'),
-    seconds: root.querySelector('[data-cd="seconds"]'),
-  };
-
-  const pad = (value) => String(value).padStart(2, '0');
-
-  function nextEventStart() {
-    // 20:00 по Москве = 17:00 UTC
-    const now = new Date();
-    const target = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 17, 0, 0)
-    );
-    // 6 = суббота
-    const shift = (6 - target.getUTCDay() + 7) % 7;
-    target.setUTCDate(target.getUTCDate() + shift);
-    if (target.getTime() <= now.getTime()) target.setUTCDate(target.getUTCDate() + 7);
-    return target;
-  }
-
-  let target = nextEventStart();
-
-  function tick() {
-    let diff = Math.floor((target.getTime() - Date.now()) / 1000);
-    if (diff <= 0) {
-      target = nextEventStart();
-      diff = Math.floor((target.getTime() - Date.now()) / 1000);
-    }
-
-    const days = Math.floor(diff / 86400);
-    const hours = Math.floor((diff % 86400) / 3600);
-    const minutes = Math.floor((diff % 3600) / 60);
-    const seconds = diff % 60;
-
-    if (cells.days) cells.days.textContent = pad(days);
-    if (cells.hours) cells.hours.textContent = pad(hours);
-    if (cells.minutes) cells.minutes.textContent = pad(minutes);
-    if (cells.seconds) cells.seconds.textContent = pad(seconds);
-  }
-
-  tick();
-  setInterval(tick, 1000);
-}
-
-/* ---------- Новости из JSON ---------- */
-async function initNews() {
-  const list = document.querySelector('[data-news-list]');
-  if (!list) return;
-  const url = list.dataset.newsList;
-  if (!url) return;
-
-  const months = [
-    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
-    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
-  ];
-
-  const formatDate = (iso) => {
-    const date = new Date(iso);
-    if (Number.isNaN(date.getTime())) return iso;
-    return `${date.getUTCDate()} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
-  };
-
-  try {
-    const response = await fetch(url, { headers: { Accept: 'application/json' } });
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-    const items = await response.json();
-    if (!Array.isArray(items) || !items.length) throw new Error('empty');
-
-    list.innerHTML = '';
-    items.slice(0, 4).forEach((item) => {
-      const article = document.createElement('article');
-      article.className = 'panel news-item reveal is-visible';
-      article.innerHTML = `
-        <time datetime="${item.date}">${formatDate(item.date)}</time>
-        <div>
-          <span class="chip">${item.tag}</span>
-          <h3>${item.title}</h3>
-          <p>${item.text}</p>
-        </div>`;
-      list.append(article);
-    });
-  } catch {
-    list.innerHTML =
-      '<p class="panel news__skeleton">Не удалось загрузить новости. Обновите страницу или загляните в Discord — там всё самое свежее.</p>';
-  }
-}
-
-/* ---------- «Живые» цифры реалмов (демо-заглушка до подключения API) ---------- */
-function initRealms() {
-  document.querySelectorAll('[data-realm-online]').forEach((node) => {
-    const base = Number(node.dataset.realmOnline || 0);
-    if (!base) return;
-    const jitter = () => {
-      const value = Math.max(0, base + Math.round((Math.random() - 0.45) * 24));
-      node.textContent = value.toLocaleString('ru-RU');
-    };
-    jitter();
-    if (!reduceMotion) setInterval(jitter, 6000);
-  });
-}
-
 /* ---------- Год в подвале ---------- */
 function initYear() {
   document.querySelectorAll('[data-year]').forEach((node) => {
@@ -229,14 +121,35 @@ function initYear() {
   });
 }
 
+/* ---------- Ленивая загрузка видео (YouTube / ВКонтакте) ---------- */
+function initVideos() {
+  document.querySelectorAll('[data-video]').forEach((figure) => {
+    const button = figure.querySelector('[data-video-play]');
+    const src = figure.dataset.src;
+    if (!button || !src || button.dataset.bound === '1') return;
+    button.dataset.bound = '1';
+
+    button.addEventListener('click', () => {
+      const frame = document.createElement('div');
+      frame.className = 'video__embed';
+      const iframe = document.createElement('iframe');
+      iframe.src = src;
+      iframe.title = figure.querySelector('.video__caption')?.textContent || 'Видео';
+      iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+      frame.appendChild(iframe);
+      button.replaceWith(frame);
+    });
+  });
+}
+
 function boot() {
   initNav();
   initReveal();
   initEmbers();
-  initCountdown();
-  initNews();
-  initRealms();
   initYear();
+  initVideos();
 }
 
 if (document.readyState === 'loading') {

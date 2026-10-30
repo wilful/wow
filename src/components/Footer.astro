@@ -1,42 +1,25 @@
 ---
+const base = import.meta.env.BASE_URL;
 ---
-
-<section class="section" id="join">
-  <div class="container">
-    <div class="panel cta reveal">
-      <span class="eyebrow">Добро пожаловать</span>
-      <h2>Ваш персонаж ждёт в Азероте</h2>
-      <p>
-        Скачайте клиент, создайте аккаунт и заходите в игру. Discord — самый быстрый способ найти
-        гильдию, пати или ответ на любой вопрос.
-      </p>
-      <div class="btn-row">
-        <a class="btn btn--gold" href="#start">Начать играть</a>
-        <a class="btn btn--ghost" href="#faq">Частые вопросы</a>
-      </div>
-    </div>
-  </div>
-</section>
 
 <footer class="footer">
   <div class="container">
     <div class="footer__inner">
       <strong style="font-family:var(--font-display);color:var(--gold-bright)">WoW Forever</strong>
       <nav aria-label="Подвал">
-        <a href="#about">О проекте</a>
-        <a href="#start">Как начать</a>
-        <a href="#realms">Реалмы</a>
-        <a href="#news">Новости</a>
-        <a href="#faq">FAQ</a>
+        <a href={`${base}#journal`}>Журнал</a>
+        <a href={`${base}#races`}>Расы</a>
+        <a href={`${base}#gallery`}>Галерея</a>
+        <a href={`${base}archive/`}>Все записи</a>
+        <a href={`${base}#about`}>О сайте</a>
       </nav>
       <span>© <span data-year>2026</span> WoW Forever</span>
     </div>
 
     <small>
-      Превью-лендинг. World of Warcraft и связанные названия — товарные знаки Blizzard
-      Entertainment, Inc. Проект некоммерческий и не связан с Blizzard. Ссылки на Discord, форум и
-      файлы клиента добавьте перед публикацией — сейчас это заполнители
-      (файл <code>src/components/Footer.astro</code>).
+      Личный сайт игрока. World of Warcraft и связанные названия — товарные знаки Blizzard
+      Entertainment, Inc. Проект некоммерческий и не связан с Blizzard. Все иллюстрации нарисованы
+      в SVG специально для этого сайта.
     </small>
   </div>
 </footer>

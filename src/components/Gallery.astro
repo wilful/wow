@@ -1,0 +1,36 @@
+---
+import Artwork from './Artwork.astro';
+import { shots } from '../data/gallery';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="section" id="gallery">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Галерея</span>
+      <h2>Кадры из игры</h2>
+      <p>
+        Пока это нарисованные заглушки в стиле Азерота. Как только вы добавите свои скриншоты в
+        <code>public/images/</code>, они встанут на эти места — файл <code>src/data/gallery.ts</code>.
+      </p>
+    </div>
+
+    <div class="gallery">
+      {
+        shots.map((shot) => (
+          <figure class="shot reveal">
+            <div class="shot__frame">
+              {shot.src ? (
+                <img src={`${base}${shot.src.replace(/^\//, '')}`} alt={shot.caption} loading="lazy" />
+              ) : (
+                <Artwork variant={shot.art} label={shot.caption} />
+              )}
+            </div>
+            <figcaption>{shot.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import '../styles/blog.css';
 
 interface Props {
   title?: string;
@@ -7,8 +8,8 @@ interface Props {
 }
 
 const {
-  title = 'WoW Forever — русскоязычный мир World of Warcraft',
-  description = 'WoW Forever — русскоязычное сообщество и игровой мир в духе классического World of Warcraft: рейды, PvP, гильдии и живой Discord.',
+  title = 'WoW Forever — дневник игрока о новом патче',
+  description = 'WoW Forever — личный дневник фаната World of Warcraft: впечатления от нового патча, истории персонажей, скриншоты и видео.',
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
