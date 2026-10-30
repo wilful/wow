@@ -1,0 +1,273 @@
+---
+const runes = {
+  titans: 'M12 2v20M12 2l8 6M11 11.6l8.6 6.4',
+  well: 'M12 2v20M3.5 7.5l17 9M20.5 7.5l-17 9',
+  sundering: 'M13.5 2 5 13.5h6L9 22l8.5-11.5h-6z',
+  legion: 'M12 2.4l2.9 6.4h6.7l-5.4 4.3 2 6.9L12 15.9l-6.2 4.1 2-6.9L2.4 8.8h6.7z',
+  aspects: 'M12 1.8c4.3 4.4 6.4 7.6 6.4 11.4a6.4 6.4 0 11-12.8 0c0-3.8 2.1-7 6.4-11.4z',
+  war: 'M4.2 5.6 18.4 19.8M19.8 5.6 5.6 19.8M4.2 5.6h4.4M19.8 5.6h-4.4',
+};
+
+const facts = [
+  {
+    rune: 'titans',
+    tag: 'Древнейшая эпоха',
+    title: 'Титаны-творцы',
+    text: 'Задолго до игроков Азерот был миром хаоса, пока из Великой Тьмы не пришли Титаны. Они одолели Древних Богов, заточили их под землю и упорядочили мир, оставив после себя хранителей и Ульдум.',
+  },
+  {
+    rune: 'well',
+    tag: 'Колодец Вечности',
+    title: 'Источник арканы',
+    text: 'Титаны оставили в сердце мира Колодец Вечности — озеро чистой магии. Возле него расцвела империя ночных эльфов, а сама вода стала причиной и могущества, и падения их цивилизации.',
+  },
+  {
+    rune: 'sundering',
+    tag: '10 000 лет назад',
+    title: 'Раскол',
+    text: 'Когда Пылающий Легион прорвался в мир, Колодец взорвался. Единый континент Калимдор разлетелся на куски, моря хлынули в разломы, и с тех пор Азерот выглядит так, как его знают игроки.',
+  },
+  {
+    rune: 'aspects',
+    tag: 'Хранители',
+    title: 'Драконьи Аспекты',
+    text: 'Титаны даровали пяти драконам мощь стихий: Алекстраза хранит жизнь, Ноздорму — время, Изера — сон, Малигос — магию, а Нелтарион, ставший Смертокрылом, обратился против всех.',
+  },
+  {
+    rune: 'legion',
+    tag: 'Угроза миров',
+    title: 'Пылающий Легион',
+    text: 'Тёмный титан Саргерас собрал армию демонов, чтобы выжечь жизнь во всех мирах. Его легионы дважды приходили в Азерот — и оба раза их останавливали ценой самого мира.',
+  },
+  {
+    rune: 'war',
+    tag: 'Новейшая история',
+    title: 'Орда и Альянс',
+    text: 'Открытие Тёмного Портала свело вместе орков и людей. Две войны раскололи Азерот на два лагеря, и вражда Орды и Альянса стала той эпохой, в которую играют на классических серверах.',
+  },
+];
+
+const timeline = [
+  {
+    era: 'Эпоха Титанов',
+    text: 'Упорядочивание мира, тюрьма Древних Богов, рождение хранителей и первых рас.',
+  },
+  {
+    era: 'Империя ночных эльфов',
+    text: 'Расцвет Сурамара и Калдорея у берегов Колодца Вечности, культ Элуны и первые друиды.',
+  },
+  {
+    era: 'Война Древних и Раскол',
+    text: 'Вторжение Легиона, гибель Калдорея и раскол единого континента на четыре части.',
+  },
+  {
+    era: 'Классика',
+    text: 'Спустя годы после Третьей Войны герои Азерота начинают свой путь: рейды, PvP и гильдии.',
+  },
+];
+---
+
+<section class="section" id="lore">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Лор вселенной</span>
+      <h2>Легенды Азерота</h2>
+      <p>
+        Прежде чем выбрать реалм, стоит вспомнить, что за мир вас ждёт: титаны, драконы, древние
+        проклятия и десять тысяч лет истории.
+      </p>
+    </div>
+
+    <div class="panel banner reveal">
+      <svg viewBox="0 0 1200 420" role="img" aria-label="Азерот в лунном свете: дракон над горными вершинами">
+        <defs>
+          <linearGradient id="lore-sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#141a45"></stop>
+            <stop offset="0.55" stop-color="#0a0d22"></stop>
+            <stop offset="1" stop-color="#05060e"></stop>
+          </linearGradient>
+          <radialGradient id="lore-halo">
+            <stop offset="0" stop-color="#f5e3ad" stop-opacity="0.55"></stop>
+            <stop offset="1" stop-color="#f5e3ad" stop-opacity="0"></stop>
+          </radialGradient>
+          <linearGradient id="lore-peak-a" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#232a55"></stop>
+            <stop offset="1" stop-color="#05060e"></stop>
+          </linearGradient>
+          <linearGradient id="lore-peak-b" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#161d3d"></stop>
+            <stop offset="1" stop-color="#05060e"></stop>
+          </linearGradient>
+          <linearGradient id="lore-fog" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#8f6ad6" stop-opacity="0"></stop>
+            <stop offset="1" stop-color="#8f6ad6" stop-opacity="0.22"></stop>
+          </linearGradient>
+          <linearGradient id="lore-crystal" x1="0" y1="0" x2="0.4" y2="1">
+            <stop offset="0" stop-color="#c8b4ff"></stop>
+            <stop offset="0.5" stop-color="#8f6ad6"></stop>
+            <stop offset="1" stop-color="#2c2350"></stop>
+          </linearGradient>
+          <path
+            id="lore-wing"
+            d="M168 66 C 212 46 250 32 286 30 Q 268 46 266 58 Q 284 58 292 70 Q 266 76 262 88 Q 276 92 280 104 L 168 104 Z"
+          ></path>
+        </defs>
+
+        <rect width="1200" height="420" fill="url(#lore-sky)"></rect>
+
+        <g fill="#f5e3ad">
+          <circle cx="180" cy="70" r="1.8" opacity="0.8"></circle>
+          <circle cx="300" cy="46" r="1.4" opacity="0.6"></circle>
+          <circle cx="420" cy="96" r="1.6" opacity="0.7"></circle>
+          <circle cx="520" cy="52" r="1.3" opacity="0.5"></circle>
+          <circle cx="700" cy="78" r="1.5" opacity="0.65"></circle>
+          <circle cx="1000" cy="60" r="1.6" opacity="0.7"></circle>
+          <circle cx="1090" cy="140" r="1.4" opacity="0.55"></circle>
+          <circle cx="860" cy="230" r="1.3" opacity="0.45"></circle>
+          <circle cx="120" cy="200" r="1.5" opacity="0.5"></circle>
+          <circle cx="640" cy="180" r="1.4" opacity="0.5"></circle>
+        </g>
+
+        <circle cx="880" cy="118" r="150" fill="url(#lore-halo)"></circle>
+        <circle cx="880" cy="118" r="52" fill="#f5e3ad" opacity="0.92"></circle>
+        <circle cx="898" cy="104" r="46" fill="#0a0d22" opacity="0.55"></circle>
+
+        <path
+          d="M0 300 L 140 214 L 236 282 L 330 176 L 452 300 L 560 224 L 690 306 L 812 206 L 950 300 L 1080 232 L 1200 306 L 1200 420 L 0 420 Z"
+          fill="url(#lore-peak-a)"
+          opacity="0.95"></path>
+        <path
+          d="M0 350 L 120 292 L 232 350 L 366 272 L 500 354 L 636 286 L 774 358 L 918 280 L 1050 356 L 1200 292 L 1200 420 L 0 420 Z"
+          fill="url(#lore-peak-b)"></path>
+
+        <g
+          transform="translate(430,96) scale(1.05)"
+          fill="#f5e3ad"
+          opacity="0.5"
+          style="filter: drop-shadow(0 0 22px rgba(245, 227, 173, 0.35))">
+          <use href="#lore-wing" transform="translate(320,0) scale(-1,1)"></use>
+          <use href="#lore-wing"></use>
+          <path d="M160 58 C 170 72 173 96 166 118 C 164 125 162 130 160 136 C 158 130 156 125 154 118 C 147 96 150 72 160 58 Z"></path>
+          <path d="M160 136 L 167 146 L 160 162 L 153 146 Z"></path>
+          <path d="M160 42 C 167 46 169 56 167 63 C 165 69 155 69 153 63 C 151 56 153 46 160 42 Z"></path>
+          <path d="M152 50 L 140 38 L 151 43 Z"></path>
+          <path d="M168 50 L 180 38 L 169 43 Z"></path>
+        </g>
+
+        <g transform="translate(96,300)" opacity="0.9">
+          <path d="M28 96 L 42 24 L 56 96 Z" fill="url(#lore-crystal)"></path>
+          <path d="M56 96 L 72 40 L 88 96 Z" fill="url(#lore-crystal)" opacity="0.85"></path>
+          <path d="M8 96 L 20 52 L 32 96 Z" fill="url(#lore-crystal)" opacity="0.7"></path>
+          <ellipse cx="48" cy="96" rx="52" ry="12" fill="#8f6ad6" opacity="0.25"></ellipse>
+        </g>
+
+        <rect y="330" width="1200" height="90" fill="url(#lore-fog)"></rect>
+
+        <g stroke="#f5e3ad" stroke-width="1.6" fill="none" opacity="0.3" stroke-linecap="round">
+          <path d="M150 396v-14M150 382l7 5M150 389l7 5"></path>
+          <path d="M330 396v-14M330 382l7 5M330 389l7 5"></path>
+          <path d="M510 396v-14M510 382l7 5M510 389l7 5"></path>
+          <path d="M690 396v-14M690 382l7 5M690 389l7 5"></path>
+          <path d="M870 396v-14M870 382l7 5M870 389l7 5"></path>
+          <path d="M1050 396v-14M1050 382l7 5M1050 389l7 5"></path>
+        </g>
+      </svg>
+      <span class="banner__tag">Азерот · под лунным светом</span>
+    </div>
+
+    <div class="lore__grid" style="margin-top:clamp(1.5rem,3vw,2.25rem)">
+      {
+        facts.map((fact) => (
+          <article class="panel panel--hover lore-card reveal">
+            <span class="lore-card__rune" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                <path d={runes[fact.rune as keyof typeof runes]} />
+              </svg>
+            </span>
+            <span class="lore-card__tag">{fact.tag}</span>
+            <h3>{fact.title}</h3>
+            <p>{fact.text}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <hr class="divider" />
+
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items:start">
+      <div class="timeline reveal">
+        {
+          timeline.map((item) => (
+            <div class="timeline__item">
+              <span class="timeline__era">{item.era}</span>
+              <p>{item.text}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <div class="panel art reveal">
+        <svg viewBox="0 0 900 380" role="img" aria-label="Старинная карта Азерота с компасом и проложенным маршрутом">
+          <defs>
+            <linearGradient id="lore-parchment" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#1b1830"></stop>
+              <stop offset="0.5" stop-color="#141127"></stop>
+              <stop offset="1" stop-color="#0d0b1c"></stop>
+            </linearGradient>
+          </defs>
+
+          <rect x="6" y="6" width="888" height="368" rx="8" fill="url(#lore-parchment)" stroke="rgba(216,180,106,.45)"></rect>
+          <rect x="20" y="20" width="860" height="340" rx="4" fill="none" stroke="rgba(216,180,106,.25)"></rect>
+
+          <g stroke="rgba(216,180,106,.12)" stroke-width="1">
+            <path d="M20 100h860M20 180h860M20 260h860M180 20v340M400 20v340M620 20v340M760 20v340"></path>
+          </g>
+
+          <path
+            d="M120 268 C 88 226 112 168 176 148 C 226 132 286 138 328 116 C 372 94 424 104 446 136 C 468 168 436 198 468 228 C 500 258 562 258 604 278 C 646 298 706 288 748 306"
+            fill="none"
+            stroke="rgba(82,194,149,.5)"
+            stroke-width="2"></path>
+          <path
+            d="M612 150 C 660 128 730 122 786 138 M770 214 C 812 226 840 248 852 278"
+            fill="none"
+            stroke="rgba(82,194,149,.3)"
+            stroke-width="1.6"></path>
+
+          <path
+            d="M300 250 C 400 214 470 264 560 214 C 628 176 664 182 716 152"
+            fill="none"
+            stroke="#f5e3ad"
+            stroke-width="2"
+            stroke-dasharray="2 8"
+            stroke-linecap="round"
+            opacity="0.85"></path>
+
+          <g stroke="#f5e3ad" stroke-width="3" stroke-linecap="round" opacity="0.95">
+            <path d="M708 144l16 16M724 144l-16 16"></path>
+          </g>
+
+          <g opacity="0.8">
+            <path d="M160 214l14-26 14 26z" fill="none" stroke="rgba(216,180,106,.6)" stroke-width="1.6"></path>
+            <path d="M200 232l14-26 14 26z" fill="none" stroke="rgba(216,180,106,.45)" stroke-width="1.6"></path>
+            <path d="M520 300l14-26 14 26z" fill="none" stroke="rgba(216,180,106,.45)" stroke-width="1.6"></path>
+            <circle cx="262" cy="220" r="5" fill="none" stroke="rgba(82,194,149,.6)" stroke-width="1.6"></circle>
+            <circle cx="580" cy="286" r="5" fill="none" stroke="rgba(82,194,149,.6)" stroke-width="1.6"></circle>
+          </g>
+
+          <g transform="translate(756,104)" opacity="0.9">
+            <circle r="46" fill="none" stroke="rgba(216,180,106,.35)"></circle>
+            <circle r="36" fill="none" stroke="rgba(216,180,106,.18)" stroke-dasharray="3 6"></circle>
+            <path d="M0-44 9 0 0 44-9 0Z" fill="rgba(245,227,173,.85)"></path>
+            <path d="M-44 0 0-9 44 0 0 9Z" fill="rgba(216,180,106,.6)"></path>
+            <circle r="5" fill="#05060e" stroke="rgba(245,227,173,.9)"></circle>
+          </g>
+        </svg>
+        <p class="art__caption">
+          Старинная карта Азерота: пунктиром — путь героя, крестиком — место, где начинается ваша
+          история.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
