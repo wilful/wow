@@ -1,0 +1,79 @@
+---
+const realms = [
+  {
+    name: 'Азерот',
+    type: 'PvE',
+    rates: 'x1',
+    text: 'Мирный реалм для тех, кто хочет пройти весь контент без постоянных стычек в открытом мире.',
+    online: 812,
+    status: 'online',
+    flags: ['ru', 'pve'],
+  },
+  {
+    name: 'Кровавый Крик',
+    type: 'PvP',
+    rates: 'x1',
+    text: 'Открытое PvP во всех зонах, арены и бг с рейтингом. Классика для тех, кто любит адреналин.',
+    online: 1046,
+    status: 'online',
+    flags: ['ru', 'pvp'],
+  },
+  {
+    name: 'Вечная Песнь',
+    type: 'RP-PvE',
+    rates: 'x1',
+    text: 'Ролевой реалм: гильдейские истории, события и атмосферная игра в своё удовольствие.',
+    online: 268,
+    status: 'online',
+    flags: ['ru', 'rp'],
+  },
+];
+---
+
+<section class="section section--alt" id="realms">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Реалмы</span>
+      <h2>Выберите свой мир</h2>
+      <p>Три реалма — три стиля игры. Персонажей можно создавать на любом, ничего не теряя.</p>
+    </div>
+
+    <div class="grid grid--3">
+      {
+        realms.map((realm) => (
+          <article class="panel panel--pad panel--hover reveal">
+            <div class="realm__top">
+              <h3>{realm.name}</h3>
+              <span class={`status${realm.status === 'online' ? '' : ' status--offline'}`}>
+                <span class="status__dot" aria-hidden="true" />
+                {realm.status === 'online' ? 'онлайн' : 'обслуживание'}
+              </span>
+            </div>
+
+            <div class="realm__flags">
+              <span class="chip chip--alliance">Альянс</span>
+              <span class="chip chip--horde">Орда</span>
+              <span class="chip">{realm.type}</span>
+            </div>
+
+            <p style="margin-top:1rem;color:var(--muted)">{realm.text}</p>
+
+            <div class="realm__meta">
+              <span>
+                Рейты: <b>{realm.rates}</b>
+              </span>
+              <span>
+                Игроков онлайн: <b data-realm-online={realm.online}>—</b>
+              </span>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+
+    <p class="reveal" style="margin-top:1.5rem;color:var(--muted);font-size:.87rem;text-align:center">
+      Цифры онлайна здесь — демонстрационные. Раздел легко переключается на реальный API сервера,
+      когда он появится.
+    </p>
+  </div>
+</section>

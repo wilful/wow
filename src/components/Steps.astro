@@ -1,0 +1,57 @@
+---
+const steps = [
+  {
+    title: 'Скачайте клиент',
+    text: 'Клиент 1.12.1 лежит в разделе «Файлы» на форуме и в закрепе Discord. Нужна только распаковка, установка не требуется.',
+  },
+  {
+    title: 'Создайте аккаунт',
+    text: 'Регистрация в панели управления: почта, ник и пароль. Через минуту аккаунт готов, и вы можете зайти в игру.',
+  },
+  {
+    title: 'Настройте realmlist',
+    text: 'В файле realmlist.wtf укажите адрес проекта и заходите в игру. Для первого старта есть инструкция с картинками.',
+  },
+  {
+    title: 'Вливайтесь в сообщество',
+    text: 'Возьмите стартовые задания, найдите гильдию в Discord и приходите на вечерние рейды и PvP-сборы.',
+  },
+];
+
+const specs = [
+  'Windows 7/10/11, Linux или macOS',
+  'Процессор уровня Core 2 Duo 2.4 ГГц',
+  '2 ГБ оперативной памяти',
+  '~6 ГБ свободного места',
+  'Интернет от 1 Мбит/с',
+  'Разрешение от 1024×768',
+];
+---
+
+<section class="section" id="start">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Старт за 15 минут</span>
+      <h2>Как начать играть</h2>
+      <p>Четыре шага от нуля до первого персонажа в мире. Если что-то не выйдет — помогут в Discord.</p>
+    </div>
+
+    <div class="grid steps" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+      {
+        steps.map((step) => (
+          <article class="panel panel--hover step reveal">
+            <h3>{step.title}</h3>
+            <p>{step.text}</p>
+          </article>
+        ))
+      }
+    </div>
+
+    <div class="panel panel--pad spec reveal">
+      <h3>Системные требования</h3>
+      <ul class="spec__list">
+        {specs.map((item) => <li>{item}</li>)}
+      </ul>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,23 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="section section--alt" id="news">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Новости</span>
+      <h2>Что происходит на сервере</h2>
+      <p>Список подтягивается отдельным файлом, поэтому новости можно обновлять без пересборки сайта.</p>
+    </div>
+
+    <div class="news__list" data-news-list={`${base}news.json`}>
+      <p class="panel news__skeleton">Загружаем свежие новости…</p>
+    </div>
+
+    <noscript>
+      <p class="panel news__skeleton">
+        Новости подгружаются скриптом. Включите JavaScript или читайте раздел новостей в Discord.
+      </p>
+    </noscript>
+  </div>
+</section>
