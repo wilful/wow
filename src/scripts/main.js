@@ -165,50 +165,6 @@ function initCountdown() {
   setInterval(tick, 1000);
 }
 
-/* ---------- Выбор класса ---------- */
-function initClasses() {
-  const picks = Array.from(document.querySelectorAll('[data-class-pick]'));
-  const detail = document.querySelector('[data-class-detail]');
-  if (!picks.length || !detail) return;
-
-  const title = detail.querySelector('[data-class-title]');
-  const tagline = detail.querySelector('[data-class-tagline]');
-  const roles = detail.querySelector('[data-class-roles]');
-  const text = detail.querySelector('[data-class-text]');
-  const meters = Array.from(detail.querySelectorAll('[data-meter]'));
-
-  function select(button) {
-    picks.forEach((pick) => pick.setAttribute('aria-selected', String(pick === button)));
-
-    if (title) title.textContent = button.dataset.name || '';
-    if (tagline) tagline.textContent = button.dataset.tagline || '';
-    if (text) text.textContent = button.dataset.text || '';
-
-    if (roles) {
-      roles.innerHTML = '';
-      (button.dataset.roles || '').split(',').forEach((role) => {
-        const label = role.trim();
-        if (!label) return;
-        const chip = document.createElement('span');
-        chip.className = 'chip';
-        chip.textContent = label;
-        roles.append(chip);
-      });
-    }
-
-    meters.forEach((meter) => {
-      const key = meter.dataset.meter;
-      const value = button.dataset[key] || '50';
-      meter.style.setProperty('--v', value);
-      const label = meter.querySelector('[data-meter-value]');
-      if (label) label.textContent = value;
-    });
-  }
-
-  picks.forEach((pick) => pick.addEventListener('click', () => select(pick)));
-  select(picks[0]);
-}
-
 /* ---------- Новости из JSON ---------- */
 async function initNews() {
   const list = document.querySelector('[data-news-list]');
@@ -278,7 +234,6 @@ function boot() {
   initReveal();
   initEmbers();
   initCountdown();
-  initClasses();
   initNews();
   initRealms();
   initYear();

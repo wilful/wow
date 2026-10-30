@@ -18,6 +18,51 @@ const facts = [
   <div class="hero__bg" aria-hidden="true"></div>
 
   <svg
+    class="hero__runes"
+    viewBox="0 0 1440 600"
+    preserveAspectRatio="xMidYMid slice"
+    aria-hidden="true"
+    focusable="false"
+  >
+    <g fill="#f5e3ad">
+      <circle cx="140" cy="80" r="1.6"></circle>
+      <circle cx="330" cy="150" r="1.3"></circle>
+      <circle cx="520" cy="60" r="1.8"></circle>
+      <circle cx="880" cy="120" r="1.4"></circle>
+      <circle cx="1180" cy="70" r="1.7"></circle>
+      <circle cx="1340" cy="200" r="1.3"></circle>
+      <circle cx="760" cy="220" r="1.2"></circle>
+      <circle cx="240" cy="320" r="1.4"></circle>
+      <circle cx="1040" cy="330" r="1.2"></circle>
+    </g>
+    <g
+      fill="none"
+      stroke="#c8b4ff"
+      stroke-width="1.6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      opacity="0.75"
+    >
+      <path d="M200 470v-30M200 440l14 9M200 455l14 9" transform="translate(0,40)"></path>
+      <path d="M420 500v-30M420 470l14 9M420 485l14 9"></path>
+      <path d="M900 500v-30M900 470l14 9M900 485l14 9"></path>
+      <path d="M1260 480v-30M1260 450l14 9M1260 465l14 9"></path>
+    </g>
+  </svg>
+
+  <svg class="hero__moon" viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+    <defs>
+      <radialGradient id="hero-halo">
+        <stop offset="0" stop-color="#f5e3ad" stop-opacity="0.5"></stop>
+        <stop offset="1" stop-color="#f5e3ad" stop-opacity="0"></stop>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="58" fill="url(#hero-halo)"></circle>
+    <circle cx="60" cy="60" r="33" fill="#f5e3ad"></circle>
+    <circle cx="73" cy="49" r="29" fill="#0a0d22" opacity="0.62"></circle>
+  </svg>
+
+  <svg
     class="hero__mountains"
     viewBox="0 0 1440 320"
     preserveAspectRatio="none"
@@ -26,12 +71,12 @@ const facts = [
   >
     <defs>
       <linearGradient id="m1" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#1d2333"></stop>
-        <stop offset="1" stop-color="#06070b"></stop>
+        <stop offset="0" stop-color="#232a55"></stop>
+        <stop offset="1" stop-color="#05060e"></stop>
       </linearGradient>
       <linearGradient id="m2" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="#131826"></stop>
-        <stop offset="1" stop-color="#06070b"></stop>
+        <stop offset="0" stop-color="#161d3d"></stop>
+        <stop offset="1" stop-color="#05060e"></stop>
       </linearGradient>
     </defs>
     <path

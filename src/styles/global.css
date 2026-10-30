@@ -1,35 +1,40 @@
 /* ==========================================================================
    WoW Forever — лендинг
-   Стиль: «тёмный игровой UI» — панели, тултипы и золото в духе интерфейса WoW
+   Стиль: high fantasy — золото, арканный фиолет, изумруд, руны и туман
    ========================================================================== */
 
 /* ---------- Токены темы ---------- */
 :root {
-  --bg-0: #06070b;
-  --bg-1: #0b0d13;
-  --bg-2: #11141d;
-  --panel-1: #171b26;
-  --panel-2: #101320;
-  --line: rgba(227, 189, 109, 0.22);
-  --line-strong: rgba(227, 189, 109, 0.55);
+  --bg-0: #05060e;
+  --bg-1: #090c1a;
+  --bg-2: #0e1226;
+  --panel-1: #151a34;
+  --panel-2: #0c1024;
+  --line: rgba(216, 180, 106, 0.24);
+  --line-strong: rgba(216, 180, 106, 0.58);
 
-  --gold: #e3bd6d;
-  --gold-bright: #f6dfa8;
-  --gold-deep: #a8822a;
-  --text: #ece6d8;
-  --muted: #a59c8b;
+  --gold: #d8b46a;
+  --gold-bright: #f5e3ad;
+  --gold-deep: #97701f;
+  --arcane: #8f6ad6;
+  --arcane-soft: rgba(143, 106, 214, 0.22);
+  --arcane-bright: #c8b4ff;
+  --emerald: #52c295;
+  --text: #e9e3d5;
+  --muted: #a39c96;
 
-  --alliance: #3f7fd1;
-  --horde: #b8352f;
+  --alliance: #4a86d8;
+  --horde: #c03a33;
   --green: #5fbe6a;
 
   --radius: 10px;
   --radius-sm: 6px;
   --shadow: 0 22px 45px -24px rgba(0, 0, 0, 0.95);
-  --glow: 0 0 22px rgba(227, 189, 109, 0.28);
+  --glow: 0 0 26px rgba(216, 180, 106, 0.3);
+  --glow-arcane: 0 0 30px rgba(143, 106, 214, 0.35);
   --container: 1140px;
 
-  --font-display: 'Playfair Display', 'Times New Roman', Georgia, serif;
+  --font-display: 'Cormorant', 'Playfair Display', 'Times New Roman', Georgia, serif;
   --font-body: 'Segoe UI', system-ui, -apple-system, 'Noto Sans', Roboto, Arial, sans-serif;
 }
 
@@ -54,9 +59,12 @@ body {
   color: var(--text);
   background-color: var(--bg-0);
   background-image:
-    radial-gradient(1100px 600px at 12% -10%, rgba(63, 127, 209, 0.18), transparent 60%),
-    radial-gradient(900px 520px at 88% 4%, rgba(184, 53, 47, 0.16), transparent 62%),
-    radial-gradient(1200px 700px at 50% 110%, rgba(227, 189, 109, 0.1), transparent 65%);
+    radial-gradient(900px 620px at 50% 118%, rgba(5, 6, 14, 0.9), transparent 70%),
+    radial-gradient(1100px 620px at 10% -12%, rgba(143, 106, 214, 0.26), transparent 62%),
+    radial-gradient(900px 540px at 90% 2%, rgba(63, 127, 209, 0.16), transparent 64%),
+    radial-gradient(700px 460px at 78% 62%, rgba(82, 194, 149, 0.1), transparent 66%),
+    radial-gradient(1200px 700px at 50% 108%, rgba(216, 180, 106, 0.12), transparent 65%),
+    radial-gradient(160% 120% at 50% 50%, transparent 42%, rgba(0, 0, 0, 0.62) 100%);
   background-attachment: fixed;
   overflow-x: hidden;
 }
@@ -85,7 +93,7 @@ a:hover {
 }
 
 ::selection {
-  background: rgba(227, 189, 109, 0.3);
+  background: rgba(216, 180, 106, 0.3);
 }
 
 h1,
@@ -93,10 +101,12 @@ h2,
 h3,
 h4 {
   font-family: var(--font-display);
+  font-weight: 700;
   line-height: 1.15;
+  letter-spacing: 0.015em;
   margin: 0 0 0.6em;
   color: var(--gold-bright);
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 2px 22px rgba(0, 0, 0, 0.75), 0 0 34px rgba(143, 106, 214, 0.22);
 }
 
 h1 {
@@ -140,7 +150,7 @@ ul {
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 30%),
     rgba(6, 7, 11, 0.55);
-  border-block: 1px solid rgba(227, 189, 109, 0.12);
+  border-block: 1px solid rgba(216, 180, 106, 0.12);
   z-index: -1;
 }
 
@@ -166,7 +176,7 @@ ul {
   color: var(--gold);
   border: 1px solid var(--line);
   border-radius: 999px;
-  background: rgba(227, 189, 109, 0.07);
+  background: rgba(216, 180, 106, 0.07);
 }
 
 .grid {
@@ -181,7 +191,9 @@ ul {
 /* ---------- Панель в духе игрового интерфейса ---------- */
 .panel {
   position: relative;
-  background: linear-gradient(180deg, var(--panel-1), var(--panel-2));
+  background:
+    radial-gradient(120% 80% at 50% -20%, rgba(143, 106, 214, 0.12), transparent 62%),
+    linear-gradient(180deg, var(--panel-1), var(--panel-2));
   border: 1px solid var(--line);
   border-radius: var(--radius);
   box-shadow: var(--shadow), inset 0 1px 0 rgba(255, 255, 255, 0.05);
@@ -196,11 +208,12 @@ ul {
 .panel::after {
   content: '';
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   border: 2px solid var(--gold);
-  opacity: 0.5;
+  opacity: 0.55;
   pointer-events: none;
+  filter: drop-shadow(0 0 6px rgba(216, 180, 106, 0.35));
 }
 
 .panel::before {
@@ -254,24 +267,24 @@ ul {
 .btn--gold {
   color: #2a1f06;
   background: linear-gradient(180deg, var(--gold-bright), var(--gold) 45%, var(--gold-deep));
-  box-shadow: 0 10px 26px -12px rgba(227, 189, 109, 0.9);
+  box-shadow: 0 10px 26px -12px rgba(216, 180, 106, 0.9);
 }
 
 .btn--gold:hover {
   color: #2a1f06;
   filter: brightness(1.07);
-  box-shadow: 0 14px 30px -12px rgba(227, 189, 109, 1);
+  box-shadow: 0 14px 30px -12px rgba(216, 180, 106, 1);
 }
 
 .btn--ghost {
   color: var(--gold);
-  background: rgba(227, 189, 109, 0.06);
+  background: rgba(216, 180, 106, 0.06);
   border-color: var(--line-strong);
 }
 
 .btn--ghost:hover {
   color: var(--gold-bright);
-  background: rgba(227, 189, 109, 0.12);
+  background: rgba(216, 180, 106, 0.12);
 }
 
 /* ---------- Навигация ---------- */
@@ -281,7 +294,7 @@ ul {
   z-index: 60;
   backdrop-filter: blur(12px);
   background: rgba(6, 7, 11, 0.82);
-  border-bottom: 1px solid rgba(227, 189, 109, 0.16);
+  border-bottom: 1px solid rgba(216, 180, 106, 0.16);
 }
 
 .nav__inner {
@@ -337,7 +350,7 @@ ul {
   height: 40px;
   align-items: center;
   justify-content: center;
-  background: rgba(227, 189, 109, 0.08);
+  background: rgba(216, 180, 106, 0.08);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   color: var(--gold);
@@ -388,8 +401,29 @@ ul {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(760px 420px at 50% 6%, rgba(227, 189, 109, 0.14), transparent 65%),
-    linear-gradient(180deg, rgba(6, 7, 11, 0) 40%, var(--bg-0) 100%);
+    radial-gradient(620px 340px at 62% 8%, rgba(200, 180, 255, 0.16), transparent 62%),
+    radial-gradient(900px 460px at 22% 0%, rgba(143, 106, 214, 0.22), transparent 64%),
+    radial-gradient(760px 420px at 50% 6%, rgba(216, 180, 106, 0.14), transparent 65%),
+    linear-gradient(180deg, rgba(5, 6, 14, 0) 40%, var(--bg-0) 100%);
+}
+
+.hero__moon {
+  position: absolute;
+  top: clamp(1.5rem, 5vw, 3.5rem);
+  right: clamp(4%, 12vw, 16%);
+  z-index: -2;
+  width: clamp(64px, 9vw, 108px);
+  height: clamp(64px, 9vw, 108px);
+  opacity: 0.85;
+  filter: drop-shadow(0 0 26px rgba(245, 227, 173, 0.35));
+}
+
+.hero__runes {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  opacity: 0.28;
+  pointer-events: none;
 }
 
 .hero__mountains {
@@ -467,7 +501,7 @@ ul {
   gap: 1.6rem;
   margin: 0;
   padding-top: 1.2rem;
-  border-top: 1px solid rgba(227, 189, 109, 0.18);
+  border-top: 1px solid rgba(216, 180, 106, 0.18);
 }
 
 .hero__stat b {
@@ -492,7 +526,7 @@ ul {
 .hero__card h3 {
   margin-bottom: 1rem;
   padding-bottom: 0.7rem;
-  border-bottom: 1px solid rgba(227, 189, 109, 0.22);
+  border-bottom: 1px solid rgba(216, 180, 106, 0.22);
   font-size: 1.05rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -537,7 +571,7 @@ ul {
   color: var(--gold);
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
-  background: rgba(227, 189, 109, 0.07);
+  background: rgba(216, 180, 106, 0.07);
 }
 
 .card__icon svg {
@@ -576,7 +610,7 @@ ul {
   color: #2a1f06;
   background: linear-gradient(180deg, var(--gold-bright), var(--gold-deep));
   border-radius: 50%;
-  box-shadow: 0 6px 18px -8px rgba(227, 189, 109, 0.9);
+  box-shadow: 0 6px 18px -8px rgba(216, 180, 106, 0.9);
 }
 
 .step p {
@@ -636,7 +670,7 @@ ul {
   border-radius: 999px;
   border: 1px solid var(--line);
   color: var(--gold);
-  background: rgba(227, 189, 109, 0.08);
+  background: rgba(216, 180, 106, 0.08);
 }
 
 .chip--alliance {
@@ -695,110 +729,6 @@ ul {
 
 .realm__meta b {
   color: var(--gold-bright);
-}
-
-/* ---------- Классы ---------- */
-.classes__picks {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 0.75rem;
-  margin-bottom: 1.6rem;
-}
-
-.class-pick {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.85rem 0.5rem;
-  font: inherit;
-  font-size: 0.85rem;
-  color: var(--text);
-  cursor: pointer;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  transition: transform 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-}
-
-.class-pick:hover {
-  transform: translateY(-3px);
-  border-color: var(--line-strong);
-  background: rgba(227, 189, 109, 0.07);
-}
-
-.class-pick[aria-selected='true'] {
-  border-color: var(--gold);
-  background: rgba(227, 189, 109, 0.13);
-  box-shadow: var(--glow);
-}
-
-.class-pick__crest {
-  width: 42px;
-  height: 42px;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  color: var(--gold-bright);
-  background: conic-gradient(from 210deg, rgba(227, 189, 109, 0.35), rgba(63, 127, 209, 0.35), rgba(184, 53, 47, 0.3));
-  border: 1px solid var(--line-strong);
-  clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
-}
-
-.class-detail {
-  padding: clamp(1.3rem, 2.5vw, 2rem);
-}
-
-.class-detail__head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.75rem;
-  margin-bottom: 0.6rem;
-}
-
-.class-detail__head h3 {
-  margin: 0;
-}
-
-.class-detail__roles {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-}
-
-.class-detail p {
-  color: var(--muted);
-}
-
-.meter {
-  margin-top: 1.2rem;
-}
-
-.meter__row {
-  display: grid;
-  grid-template-columns: 130px 1fr 42px;
-  align-items: center;
-  gap: 0.8rem;
-  font-size: 0.88rem;
-  color: var(--muted);
-  margin-bottom: 0.5rem;
-}
-
-.meter__bar {
-  height: 8px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.08);
-  overflow: hidden;
-}
-
-.meter__bar span {
-  display: block;
-  height: 100%;
-  width: calc(var(--v, 50) * 1%);
-  background: linear-gradient(90deg, var(--gold-deep), var(--gold-bright));
-  transition: width 0.5s ease;
 }
 
 /* ---------- Событие / таймер ---------- */
@@ -972,7 +902,7 @@ ul {
 /* ---------- Подвал ---------- */
 .footer {
   padding: 2.5rem 0 2rem;
-  border-top: 1px solid rgba(227, 189, 109, 0.16);
+  border-top: 1px solid rgba(216, 180, 106, 0.16);
   background: rgba(6, 7, 11, 0.7);
   font-size: 0.9rem;
   color: var(--muted);
@@ -998,6 +928,194 @@ ul {
   max-width: 70ch;
   font-size: 0.78rem;
   color: #7d7767;
+}
+
+/* ---------- Фэнтези-орнаменты, лор и иллюстрации ---------- */
+.section__head h2::after {
+  content: '❖';
+  display: block;
+  margin: 0.7rem auto 0;
+  font-size: 0.9rem;
+  letter-spacing: 0.6em;
+  color: var(--gold);
+  opacity: 0.75;
+  text-shadow: 0 0 16px rgba(216, 180, 106, 0.5);
+}
+
+.divider {
+  height: 1px;
+  margin: clamp(2rem, 5vw, 3rem) 0;
+  border: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(216, 180, 106, 0.45) 22%,
+    var(--arcane) 50%,
+    rgba(216, 180, 106, 0.45) 78%,
+    transparent
+  );
+}
+
+/* декоративная «картина» в духе старинной гравюры */
+.art {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1rem, 3vw, 1.6rem);
+}
+
+.art svg {
+  width: 100%;
+  height: auto;
+}
+
+.art__caption {
+  margin: 0.9rem 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+  font-style: italic;
+}
+
+.art--wide {
+  padding: clamp(0.75rem, 2.5vw, 1.25rem);
+}
+
+.art--wide svg {
+  display: block;
+  border-radius: var(--radius-sm);
+}
+
+/* сетка лор-фактов */
+.lore__grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.lore-card {
+  padding: 1.5rem;
+}
+
+.lore-card__rune {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 1rem;
+  color: var(--arcane-bright);
+  background: radial-gradient(circle at 50% 30%, var(--arcane-soft), rgba(143, 106, 214, 0.06));
+  border: 1px solid rgba(143, 106, 214, 0.45);
+  border-radius: 50%;
+  box-shadow: var(--glow-arcane);
+}
+
+.lore-card__rune svg {
+  width: 24px;
+  height: 24px;
+}
+
+.lore-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.lore-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.96rem;
+}
+
+.lore-card__tag {
+  display: inline-block;
+  margin-bottom: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--emerald);
+}
+
+/* лента эпох */
+.timeline {
+  position: relative;
+  margin-top: clamp(2rem, 4vw, 3rem);
+  padding-left: 1.6rem;
+  display: grid;
+  gap: 1.4rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 4px;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 2px;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--arcane) 12%,
+    var(--gold) 50%,
+    var(--arcane) 88%,
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.timeline__item {
+  position: relative;
+}
+
+.timeline__item::before {
+  content: '';
+  position: absolute;
+  left: -1.6rem;
+  top: 0.45rem;
+  width: 10px;
+  height: 10px;
+  background: var(--gold-bright);
+  transform: rotate(45deg);
+  box-shadow: 0 0 14px rgba(216, 180, 106, 0.75);
+}
+
+.timeline__era {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--gold-bright);
+}
+
+.timeline__item p {
+  margin: 0.2rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* большая иллюстрация-баннер */
+.banner {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.banner svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.banner__tag {
+  position: absolute;
+  left: clamp(1.2rem, 3vw, 2rem);
+  bottom: clamp(1rem, 3vw, 1.6rem);
+  padding: 0.3rem 0.9rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-bright);
+  background: rgba(5, 6, 14, 0.7);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
 }
 
 /* ---------- Анимация появления ---------- */
