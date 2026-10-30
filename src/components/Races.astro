@@ -1,0 +1,42 @@
+---
+import Artwork from './Artwork.astro';
+
+const races = [
+  { art: 'nightelf', name: 'Ночные эльфы', faction: 'Альянс', text: 'Элуна, лунный свет и три яруса древесного города. Начинал здесь и вернусь снова.' },
+  { art: 'bloodelf', name: 'Кровавые эльфы', faction: 'Орда', text: 'Золото, зелёные глаза и очень много самоуверенности. Идеальный класс для любителей магии.' },
+  { art: 'orc', name: 'Орки', faction: 'Орда', text: 'Простое «бей и не сдавайся» — то, за что я люблю воина. Мои основные персонажи здесь.' },
+  { art: 'undead', name: 'Нежить', faction: 'Орда', text: 'Самые интересные стартовые квесты и самая мрачная атмосфера во всей игре.' },
+  { art: 'tauren', name: 'Таурены', faction: 'Орда', text: 'Спокойные, огромные, ближе всех к природе. Друид-таурен — базовая классика.' },
+  { art: 'troll', name: 'Тролли', faction: 'Орда', text: 'Шаманы, лоа и чистое безумие в бою. Беру их, когда хочется хаоса.' },
+];
+---
+
+<section class="section section--alt" id="races">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Расы Азерота</span>
+      <h2>За кого я играю</h2>
+      <p>
+        Каждая раса — отдельный характер и отдельные впечатления. По этим карточкам потом удобно
+        искать записи журнала: нажмите на расу в ленте, и увидите всё, что я про неё писал.
+      </p>
+    </div>
+
+    <div class="races">
+      {
+        races.map((race) => (
+          <article class="panel panel--hover race reveal">
+            <div class="race__art">
+              <Artwork variant={race.art} label={`Портрет: ${race.name}`} />
+            </div>
+            <div class="race__body">
+              <span class="race__faction">{race.faction}</span>
+              <h3>{race.name}</h3>
+              <p>{race.text}</p>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

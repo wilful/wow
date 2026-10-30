@@ -1,0 +1,35 @@
+---
+/**
+ * Ленивая вставка видео: сначала показывается заглушка, iframe грузится
+ * только по клику. YouTube подключается в режиме youtube-nocookie.
+ */
+interface Props {
+  platform: 'youtube' | 'vk';
+  id: string;
+  title?: string;
+}
+
+const { platform, id, title = 'Видео' } = Astro.props as Props;
+
+const src =
+  platform === 'vk'
+    ? (() => {
+        const [oid, vid] = id.split('_');
+        return `https://vk.com/video_ext.php?oid=${oid}&id=${vid}&hd=2`;
+      })()
+    : `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0`;
+
+const poster =
+  platform === 'youtube' ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : null;
+---
+
+<figure class="video" data-video data-src={src}>
+  <button class="video__frame" type="button" data-video-play aria-label={`Включить видео: ${title}`}>
+    {poster ? <img class="video__poster" src={poster} alt="" loading="lazy" /> : null}
+    <span class="video__badge">{platform === 'vk' ? 'ВКонтакте' : 'YouTube'}</span>
+    <span class="video__play" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+    </span>
+  </button>
+  <figcaption class="video__caption">{title}</figcaption>
+</figure>

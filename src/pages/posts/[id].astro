@@ -1,0 +1,58 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Artwork from '../../components/Artwork.astro';
+import VideoEmbed from '../../components/VideoEmbed.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('posts', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const base = import.meta.env.BASE_URL;
+
+const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const date = post.data.date;
+const human = `${date.getUTCDate()} ${months[date.getUTCMonth()]} ${date.getUTCFullYear()}`;
+---
+
+<Layout title={`${post.data.title} — WoW Forever`} description={post.data.excerpt}>
+  <Nav />
+  <main id="main">
+    <article class="section">
+      <div class="container article">
+        <p class="article__back"><a href={`${base}archive/`}>← Все записи</a></p>
+        <header class="article__head">
+          <span class:list={['chip', post.data.faction !== 'neutral' && `chip--${post.data.faction}`]}>{post.data.race}</span>
+          <h1>{post.data.title}</h1>
+          <p class="article__meta"><time datetime={date.toISOString()}>{human}</time></p>
+          <p class="article__lead">{post.data.excerpt}</p>
+        </header>
+
+        <div class="panel art article__cover">
+          <Artwork variant={post.data.cover} label={post.data.title} />
+        </div>
+
+        <div class="prose">
+          <Content />
+        </div>
+
+        {post.data.videos.length > 0 && (
+          <div class="article__videos">
+            {post.data.videos.map((video) => (
+              <VideoEmbed platform={video.platform} id={video.id} title={video.title ?? post.data.title} />
+            ))}
+          </div>
+        )}
+
+        <hr class="divider" />
+        <p class="article__back"><a class="btn btn--ghost" href={`${base}#journal`}>Вернуться в журнал</a></p>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>

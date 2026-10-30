@@ -1,0 +1,21 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Journal from '../components/Journal.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Layout title="Все записи — WoW Forever" description="Полный архив записей журнала WoW Forever: впечатления от нового патча, галерея и заметки.">
+  <Nav />
+  <main id="main">
+    <section class="section archive-head">
+      <div class="container section__head">
+        <span class="eyebrow">Архив</span>
+        <h1>Все записи журнала</h1>
+        <p>Свежие — сверху. Каждая запись открывается отдельной страницей.</p>
+      </div>
+    </section>
+    <Journal showAll />
+  </main>
+  <Footer />
+</Layout>
