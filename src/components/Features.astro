@@ -1,0 +1,72 @@
+---
+const features = [
+  {
+    title: 'Никакого доната на прогресс',
+    text: 'Рейты x1, весь контент открывается игрой, а не кошельком. Платного «усиления» персонажа нет и не будет.',
+    icon: 'shield',
+  },
+  {
+    title: 'Контент, который работает',
+    text: 'Скрипты подземелий и рейдов доведены до состояния «как в оригинале»: боссы, механики, лут-таблицы.',
+    icon: 'map',
+  },
+  {
+    title: 'Живое русское сообщество',
+    text: 'Гильдии, рейд-найты по расписанию, форум и Discord с голосовыми каналами под каждую группу.',
+    icon: 'users',
+  },
+  {
+    title: 'Стабильность без вайпов',
+    text: 'Сервер не откатывают «в ноль» каждый сезон. Персонажи, гильдии и достижения остаются с вами.',
+    icon: 'clock',
+  },
+  {
+    title: 'PvP по правилам',
+    text: 'Арены, бг и мировое PvP с честным рейтингом, античитом и разбором спорных ситуаций.',
+    icon: 'swords',
+  },
+  {
+    title: 'Открытая разработка',
+    text: 'Патчноуты, голосования по правкам и баг-трекер на форуме — видно, над чем идёт работа.',
+    icon: 'scroll',
+  },
+];
+
+const icons = {
+  shield: 'M32 6l20 8v14c0 13-8.5 22.6-20 28-11.5-5.4-20-15-20-28V14z',
+  map: 'M6 14l16-6 20 6 16-6v36l-16 6-20-6-16 6z',
+  users: 'M22 34a9 9 0 100-18 9 9 0 000 18zm-16 12c0-6 7-10 16-10s16 4 16 10M44 20a7 7 0 100 14',
+  clock: 'M32 8a24 24 0 100 48 24 24 0 000-48zm0 10v16l12 6',
+  swords: 'M12 52l28-28M40 12l12 12-28 28M12 12l28 28M40 52L52 40',
+  scroll: 'M16 8h26a6 6 0 016 6v36a6 6 0 006 6H20a6 6 0 01-6-6V12a4 4 0 014-4zm8 14h20M22 34h20M22 44h14',
+};
+---
+
+<section class="section section--alt" id="about">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">О проекте</span>
+      <h2>Мир, в который хочется вернуться</h2>
+      <p>
+        WoW Forever — это домашний сервер и сообщество для тех, кто скучает по классике и хочет
+        играть на русском языке без «магазина за реальные деньги».
+      </p>
+    </div>
+
+    <div class="grid grid--3">
+      {
+        features.map((feature) => (
+          <article class="panel panel--pad panel--hover card reveal">
+            <span class="card__icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round">
+                <path d={icons[feature.icon as keyof typeof icons]} />
+              </svg>
+            </span>
+            <h3>{feature.title}</h3>
+            <p>{feature.text}</p>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,63 @@
+---
+const links = [
+  { href: '#about', label: 'О проекте' },
+  { href: '#start', label: 'Как начать' },
+  { href: '#realms', label: 'Реалмы' },
+  { href: '#classes', label: 'Классы' },
+  { href: '#news', label: 'Новости' },
+  { href: '#faq', label: 'FAQ' },
+];
+---
+
+<header class="nav">
+  <nav class="container nav__inner" aria-label="Основная навигация">
+    <a class="nav__brand" href="#top">
+      <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+        <path
+          d="M32 3 57 16.5v31L32 61 7 47.5v-31z"
+          fill="rgba(227,189,109,.08)"
+          stroke="#e3bd6d"
+          stroke-width="3"></path>
+        <path d="M32 16l10.5 6.5v13L32 48l-10.5-6.5v-13z" fill="none" stroke="#e3bd6d" stroke-width="3"
+        ></path>
+        <path d="M32 25v13M25.5 31.5h13" stroke="#f6dfa8" stroke-width="3" stroke-linecap="round"></path>
+      </svg>
+      <span>WoW&nbsp;Forever</span>
+    </a>
+
+    <button
+      class="nav__toggle"
+      type="button"
+      data-nav-toggle
+      aria-expanded="false"
+      aria-controls="nav-links"
+    >
+      <span aria-hidden="true">☰</span>
+      <span class="visually-hidden">Меню</span>
+    </button>
+
+    <ul class="nav__links" id="nav-links" data-nav-links>
+      {
+        links.map((link) => (
+          <li>
+            <a href={link.href}>{link.label}</a>
+          </li>
+        ))
+      }
+      <li>
+        <a class="btn btn--gold nav__cta" href="#start">Начать играть</a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+</style>
