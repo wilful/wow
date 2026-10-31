@@ -1,0 +1,99 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import Artwork from '../../components/Artwork.astro';
+import { races } from '../../data/races';
+
+export function getStaticPaths() {
+  return races.map((race) => ({ params: { slug: race.slug }, props: { race } }));
+}
+
+const { race } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const all = (await getCollection('posts', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.getTime() - a.data.date.getTime()
+);
+// Записи журнала, отмеченные этой расой в frontmatter (поле `race`).
+const related = all.filter((post) => post.data.race === race.name);
+
+const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+const fmt = (d: Date) => `${d.getUTCDate()} ${months[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+---
+
+<Layout title={`${race.name} — WoW Forever`} description={race.card}>
+  <Nav />
+  <main id="main">
+    <article class="section">
+      <div class="container article">
+        <p class="article__back"><a href={`${base}#races`}>← Все расы</a></p>
+
+        <header class="article__head">
+          <span class:list={['chip', race.faction !== 'neutral' && `chip--${race.faction}`]}>
+            {race.factionLabel}
+          </span>
+          <h1>{race.name}</h1>
+          <p class="article__lead">{race.lead}</p>
+        </header>
+
+        <div class="panel art article__cover">
+          <Artwork variant={race.art} label={`Иллюстрация: ${race.name}`} />
+        </div>
+
+        <div class="prose">
+          {race.body.map((paragraph) => <p>{paragraph}</p>)}
+
+          <h2>Что цепляет</h2>
+        </div>
+
+        <dl class="race-page__traits">
+          {
+            race.traits.map((trait) => (
+              <div>
+                <dt>{trait.title}</dt>
+                <dd>{trait.text}</dd>
+              </div>
+            ))
+          }
+        </dl>
+
+        <blockquote class="race-page__quote">{race.quote}</blockquote>
+
+        {
+          related.length > 0 && (
+            <section class="race-page__related" aria-labelledby="race-related">
+              <h2 id="race-related">Записи об этой расе</h2>
+              <div class="journal">
+                {related.map((post) => (
+                  <article class="panel panel--hover post-card reveal">
+                    <a class="post-card__art" href={`${base}posts/${post.id}/`}>
+                      <Artwork variant={post.data.cover} label={post.data.title} />
+                    </a>
+                    <div class="post-card__body">
+                      <div class="post-card__meta">
+                        <time datetime={post.data.date.toISOString()}>{fmt(post.data.date)}</time>
+                      </div>
+                      <h3>
+                        <a href={`${base}posts/${post.id}/`}>{post.data.title}</a>
+                      </h3>
+                      <p>{post.data.excerpt}</p>
+                      <a class="post-card__more" href={`${base}posts/${post.id}/`}>Читать запись →</a>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )
+        }
+
+        <hr class="divider" />
+        <p class="article__back">
+          <a class="btn btn--ghost" href={`${base}#races`}>Вернуться к расам</a>
+        </p>
+      </div>
+    </article>
+  </main>
+  <Footer />
+</Layout>
