@@ -1,0 +1,87 @@
+---
+/**
+ * «Персонажи игры» — светлые дружелюбные иллюстрации с героями Азерота.
+ * Каждый кадр нарисован в SVG прямо здесь: ноль веса и резкость на любом экране.
+ */
+const heroes = [
+  {
+    title: 'Человек-паладин',
+    text: 'Свет в руках и доброе сердце. Стоит на страже Стормвинда.',
+    sky: ['#eaf1ff', '#cdddf9'],
+    tone: '#4f74c8',
+    accent: '#f0c766',
+    rune: 'M320 44v40M300 62h40',
+  },
+  {
+    title: 'Дворф-охотник',
+    text: 'Крепкая броня, верный медведь и отличное чувство юмора.',
+    sky: ['#fff4e3', '#f4dcb8'],
+    tone: '#a4703a',
+    accent: '#d5a34a',
+    rune: 'M300 48l14 10-14 10-14-10z',
+  },
+  {
+    title: 'Гном-маг',
+    text: 'Искры арканы, хитрая механика и очень много энтузиазма.',
+    sky: ['#f2ecff', '#d9cdf7'],
+    tone: '#7c5cf0',
+    accent: '#c9b4ff',
+    rune: 'M300 46v28M288 60h24',
+  },
+  {
+    title: 'Ворген-друид',
+    text: 'Свобода леса, лунная магия и взгляд, от которого мурашки.',
+    sky: ['#eafaf1', '#c9efd9'],
+    tone: '#3c8d6a',
+    accent: '#8fe0b8',
+    rune: 'M300 44c10 10 14 18 14 26a14 14 0 11-28 0c0-8 4-16 14-26z',
+  },
+];
+---
+
+<section class="section section--alt" id="characters">
+  <div class="container">
+    <div class="section__head reveal">
+      <span class="eyebrow">Персонажи игры</span>
+      <h2>Герои, за которых хочется играть</h2>
+      <p>Пара добрых портретов — просто чтобы на сайте стало теплее и наряднее.</p>
+    </div>
+
+    <div class="heroes">
+      {
+        heroes.map((hero) => (
+          <figure class="panel panel--hover hero-card reveal">
+            <svg viewBox="0 0 600 380" role="img" aria-label={`Иллюстрация: ${hero.title}`}>
+              <defs>
+                <linearGradient id={`hg-${hero.tone.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color={hero.sky[0]} />
+                  <stop offset="1" stop-color={hero.sky[1]} />
+                </linearGradient>
+              </defs>
+              <rect width="600" height="380" fill={`url(#hg-${hero.tone.replace('#', '')})`} />
+              <circle cx="300" cy="150" r="150" fill={hero.tone} opacity="0.12" />
+              {/* плечи */}
+              <path d="M170 340c20-70 70-108 130-108s110 38 130 108z" fill={hero.tone} opacity="0.9" />
+              {/* голова */}
+              <circle cx="300" cy="150" r="66" fill={hero.tone} />
+              <circle cx="300" cy="150" r="66" fill="#fff" opacity="0.14" />
+              {/* глаза */}
+              <circle cx="278" cy="148" r="8" fill="#fff" />
+              <circle cx="322" cy="148" r="8" fill="#fff" />
+              {/* улыбка */}
+              <path d="M276 178c14 12 34 12 48 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" />
+              {/* акцентный «топор/руна/свет» */}
+              <path d={hero.rune} stroke={hero.accent} stroke-width="7" fill="none" stroke-linecap="round" />
+              <circle cx="470" cy="90" r="26" fill={hero.accent} opacity="0.55" />
+              <path d="M0 356h600" stroke="#ffffff" stroke-width="2" opacity="0.5" />
+            </svg>
+            <figcaption class="hero-card__body">
+              <h3>{hero.title}</h3>
+              <p>{hero.text}</p>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>

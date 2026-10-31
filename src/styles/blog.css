@@ -397,3 +397,35 @@
 .archive-head {
   padding-bottom: 0;
 }
+
+/* ---------- Персонажи игры ---------- */
+.heroes {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.hero-card {
+  margin: 0;
+  overflow: hidden;
+}
+
+.hero-card svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.hero-card__body {
+  padding: 1.1rem 1.35rem 1.45rem;
+}
+
+.hero-card__body h3 {
+  margin: 0 0 0.35rem;
+}
+
+.hero-card__body p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}

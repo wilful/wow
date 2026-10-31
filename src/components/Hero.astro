@@ -1,13 +1,6 @@
 ---
 import Artwork from './Artwork.astro';
 const base = import.meta.env.BASE_URL;
-
-const stats = [
-  ['Патч', '12.0'],
-  ['Первый вечер', '24 октября'],
-  ['Записей', 'пополняется'],
-  ['Галерея', 'свои скрины'],
-];
 ---
 
 <section class="hero" id="top">
@@ -36,21 +29,18 @@ const stats = [
     <div>
       <h1 class="hero__title"><span>Дневник игрока</span>WoW Forever</h1>
       <p class="hero__lead">
-        Мой личный журнал о новом патче: впечатления, скриншоты, любимые расы и всё, что цепляет в
-        Азероте через много лет после первой ночи в игре.
+        Добрый дневник фаната World of Warcraft: любимые расы, тёплые скриншоты и заметки о новом
+        сервере WoW Forever. Заходи — тут уютно.
       </p>
       <div class="btn-row">
         <a class="btn btn--gold" href="#journal">Читать записи</a>
-        <a class="btn btn--ghost" href="#gallery">Смотреть галерею</a>
+        <a class="btn btn--ghost" href="#characters">Персонажи игры</a>
       </div>
-      <dl class="hero__stats">
-        {stats.map(([k, v]) => (<div class="hero__stat"><dt>{v}</dt><dd>{k}</dd></div>))}
-      </dl>
     </div>
 
     <aside class="panel art hero__art" aria-label="Иллюстрация журнала">
       <Artwork variant="nightelf" label="Ночная эльфийка под луной" />
-      <p class="art__caption">«Возвращаться в Азерот — это как читать старую любимую книгу»</p>
+      <p class="art__caption">Моя ночная эльфийка — с неё начинался этот дневник</p>
       <a class="hero__art-link" href={`${base}posts/pervyy-vecher-v-patche/`}>Первая запись журнала →</a>
     </aside>
   </div>
