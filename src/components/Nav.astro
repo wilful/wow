@@ -1,10 +1,10 @@
 ---
 const base = import.meta.env.BASE_URL;
 const links = [
-  { href: `${base}#journal`, label: 'Журнал' },
-  { href: `${base}#races`, label: 'Расы' },
+  { href: `${base}#lore`, label: 'Мир и лор' },
+  { href: `${base}#races`, label: 'Народы' },
+  { href: `${base}#journal`, label: 'Истории' },
   { href: `${base}#gallery`, label: 'Галерея' },
-  { href: `${base}archive/`, label: 'Все записи' },
 ];
 ---
 
@@ -26,7 +26,7 @@ const links = [
 
     <ul class="nav__links" id="nav-links" data-nav-links>
       {links.map((link) => (<li><a href={link.href}>{link.label}</a></li>))}
-      <li><a class="btn btn--gold nav__cta" href={`${base}#journal`}>Читать журнал</a></li>
+      <li><a class="btn btn--gold nav__cta" href={`${base}archive/`}>Все истории <span aria-hidden="true">↗</span></a></li>
     </ul>
   </nav>
 </header>
