@@ -1,0 +1,139 @@
+/* Fan-made Azeroth field guide: nocturnal ink, parchment and warm brass. */
+:root {
+  --bg-0: #10130f;
+  --bg-1: #171b15;
+  --bg-2: #20251c;
+  --surface: rgba(30, 34, 26, .96);
+  --surface-2: rgba(23, 27, 21, .96);
+  --line: rgba(221, 206, 164, .15);
+  --line-strong: rgba(213, 173, 91, .62);
+  --gold: #d0a24e;
+  --gold-bright: #e1bd72;
+  --gold-deep: #ba8d42;
+  --accent: #d0a24e;
+  --arcane: #7b9a83;
+  --arcane-soft: rgba(123, 154, 131, .16);
+  --arcane-bright: #9bb69d;
+  --emerald: #86a67f;
+  --ink: #f1e9d6;
+  --text: #d3cbb8;
+  --muted: #a29b89;
+  --alliance: #7295ba;
+  --horde: #bb6e5c;
+  --green: #86a67f;
+  --shadow: 0 30px 65px -30px rgba(0, 0, 0, .85);
+  --shadow-soft: 0 14px 36px -22px rgba(0, 0, 0, .85);
+  --glow: 0 0 0 1px rgba(213, 173, 91, .23), 0 24px 46px -26px rgba(213, 173, 91, .23);
+  --glow-arcane: 0 0 22px rgba(123, 154, 131, .2);
+  --container: 1200px;
+}
+
+body {
+  color: var(--text);
+  background-color: var(--bg-0);
+  background-image: radial-gradient(ellipse at 50% -20%, rgba(96, 111, 79, .22), transparent 60%),
+    radial-gradient(ellipse at 90% 55%, rgba(111, 78, 43, .09), transparent 45%);
+}
+h1, h2, h3, h4 { color: var(--ink); }
+a { color: var(--gold-bright); }
+a:hover { color: #f0d99c; }
+.section { padding-block: clamp(4rem, 8vw, 7.5rem); }
+.section--alt::before {
+  background: linear-gradient(180deg, rgba(196, 165, 104, .035), transparent 45%), rgba(255,255,255,.012);
+  border-color: var(--line);
+}
+.section__head { margin-bottom: clamp(2.5rem, 5vw, 4rem); }
+.section__head h2::after { background: linear-gradient(90deg, transparent, var(--gold), transparent); }
+.eyebrow {
+  color: var(--gold-bright);
+  background: rgba(34, 38, 29, .78);
+  border-color: rgba(213,173,91,.24);
+  border-radius: 2px;
+  box-shadow: none;
+  letter-spacing: .17em;
+}
+.eyebrow::before { background: var(--gold); }
+.panel {
+  background: linear-gradient(145deg, rgba(36, 41, 31, .98), rgba(23, 27, 21, .98));
+  border-color: var(--line);
+  border-radius: 5px;
+  box-shadow: var(--shadow-soft);
+}
+.panel::before { height: 1px; opacity: .65; }
+.panel--hover:hover { background: #252b20; }
+.btn { border-radius: 3px; text-transform: uppercase; letter-spacing: .08em; font-size: .82rem; }
+.btn--gold { color: #201b12; background: linear-gradient(180deg, #e2c27b, #bd8d3b); box-shadow: 0 12px 28px -16px rgba(215, 173, 91, .7); }
+.btn--gold:hover { color: #17150f; filter: brightness(1.08); }
+.btn--ghost { color: var(--ink); background: rgba(20, 24, 19, .72); border-color: rgba(221,206,164,.28); box-shadow: none; }
+.btn--ghost:hover { color: var(--gold-bright); border-color: var(--line-strong); }
+.nav { background: rgba(16, 19, 15, .9); border-color: var(--line); }
+.nav__brand { color: var(--ink); }
+.nav__links a { color: var(--text); border-radius: 2px; }
+.nav__links a:hover { color: var(--gold-bright); background: rgba(213, 173, 91, .08); }
+.nav__toggle { color: var(--ink); background: var(--bg-1); border-color: var(--line); border-radius: 3px; }
+.hero {
+  min-height: 650px;
+  padding-block: clamp(5rem, 12vw, 9rem) clamp(4rem, 8vw, 6rem);
+  background: linear-gradient(90deg, rgba(12,15,12,.94) 0%, rgba(12,15,12,.83) 43%, rgba(12,15,12,.2) 100%),
+    linear-gradient(0deg, var(--bg-0) 0%, transparent 34%),
+    url('https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2200&q=85') center 44% / cover;
+}
+.hero__bg { background: linear-gradient(180deg, rgba(10,13,10,.12), rgba(16,19,15,.46)); }
+.hero__moon { opacity: .55; }
+.hero__inner { grid-template-columns: minmax(0, 1.12fr) minmax(300px, .72fr); }
+.hero__inner > div { max-width: 650px; }
+.hero__kicker { margin: 0 0 1.2rem; color: var(--gold-bright); font-size: .76rem; font-weight: 700; letter-spacing: .22em; text-transform: uppercase; }
+.hero__title { font-size: clamp(2.8rem, 6.5vw, 5.8rem); letter-spacing: -.035em; text-shadow: 0 4px 25px rgba(0,0,0,.4); }
+.hero__title span { color: #ddc58b; font-family: var(--font-body); font-size: .17em; letter-spacing: .27em; }
+.hero__lead { max-width: 52ch; color: #ddd7c8; font-size: clamp(1.04rem, 1.5vw, 1.23rem); }
+.hero__inner p { margin-inline: 0; }
+.hero__inner .btn-row { margin-top: 2rem; }
+.hero__signature { display: flex; align-items: center; gap: .9rem; margin-top: 2.5rem; color: #d1c9b8; }
+.hero__sig-mark { display: grid; place-items: center; width: 38px; height: 38px; color: var(--gold-bright); border: 1px solid rgba(213,173,91,.38); transform: rotate(45deg); }
+.hero__sig-mark::first-letter { transform: rotate(-45deg); }
+.hero__signature b, .hero__signature small { display: block; }
+.hero__signature b { color: var(--ink); font: 600 .8rem var(--font-display); letter-spacing: .12em; text-transform: uppercase; }
+.hero__signature small { margin-top: .15rem; color: #b8b2a2; font-size: .75rem; }
+.hero__art { padding: .65rem; background: rgba(20,24,18,.82); border-color: rgba(226,194,123,.3); }
+.hero__art .art__caption { color: #c4bda9; }
+.hero__art-link { display: block; padding: .75rem .5rem .2rem; text-align: center; }
+.post-card__art { padding: .55rem .55rem 0; }
+.post-card__art svg, .race__art svg { border-radius: 2px; }
+.post-card__body { padding: 1.35rem 1.45rem 1.6rem; }
+.post-card h3 a { color: var(--ink); }
+.post-card h3 a:hover { color: var(--gold-bright); }
+.post-card p, .race p, .hero-card__body p { color: var(--muted); }
+.chip { color: var(--gold-bright); background: rgba(213,173,91,.1); border-color: rgba(213,173,91,.25); border-radius: 2px; }
+.chip--alliance { color: #a8c7e8; background: rgba(75,117,163,.15); border-color: rgba(114,149,186,.3); }
+.chip--horde { color: #e2a394; background: rgba(153,76,60,.16); border-color: rgba(187,110,92,.3); }
+.shot__frame { padding: .45rem; background: #1b2018; border-color: var(--line); border-radius: 3px; box-shadow: var(--shadow-soft); }
+.shot__frame svg, .shot__frame img { border-radius: 2px; }
+.shot figcaption { color: var(--muted); }
+.art { background: linear-gradient(145deg, #252b20, #171b15); border-radius: 4px; }
+.art svg { border-radius: 2px; }
+.art__caption { color: var(--muted); }
+.about__list dt, .race-page__traits dt { color: var(--gold-bright); }
+.footer { background: #0d100c; border-color: var(--line); color: var(--muted); }
+.footer small { color: #858475; }
+.article__lead { color: #d8d1c2; }
+.prose ul, .prose ol, .prose blockquote { color: var(--muted); }
+.nav__links a { transition: color .2s ease, background-color .2s ease; }
+
+@media (max-width: 940px) {
+  .hero { min-height: 0; background-position: 58% center; }
+  .hero__inner { grid-template-columns: 1fr; }
+  .hero__inner > div { margin-inline: auto; }
+  .hero__inner p { margin-inline: auto; }
+  .hero__signature { justify-content: center; }
+}
+@media (max-width: 900px) {
+  .nav__links { background: rgba(16,19,15,.98); border-color: var(--line); }
+}
+@media (max-width: 560px) {
+  .hero { padding-top: 5rem; background-position: 61% center; }
+  .hero__title { font-size: clamp(2.5rem, 13vw, 4rem); }
+  .hero__title br { display: none; }
+  .hero__title span { font-size: .18em; letter-spacing: .15em; }
+  .hero__signature { justify-content: flex-start; }
+  .section { padding-block: 4rem; }
+}

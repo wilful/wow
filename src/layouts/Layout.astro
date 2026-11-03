@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import '../styles/blog.css';
+import '../styles/redesign.css';
 
 interface Props {
   title?: string;
@@ -8,8 +9,8 @@ interface Props {
 }
 
 const {
-  title = 'WoW Forever — дневник игрока о новом патче',
-  description = 'WoW Forever — личный дневник фаната World of Warcraft: впечатления от нового патча, истории персонажей, скриншоты и видео.',
+  title = 'WoW Forever — фанатский портал об Азероте',
+  description = 'Фанатский уголок World of Warcraft: легенды Азерота, народы, герои, красивые места и истории приключений.',
 } = Astro.props;
 
 const base = import.meta.env.BASE_URL;
