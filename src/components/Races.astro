@@ -1,5 +1,4 @@
 ---
-import Artwork from './Artwork.astro';
 import { races } from '../data/races';
 
 const base = import.meta.env.BASE_URL;
@@ -22,7 +21,8 @@ const base = import.meta.env.BASE_URL;
           <article class="panel panel--hover race reveal">
             <a class="race__link" href={`${base}races/${race.slug}/`}>
               <div class="race__art">
-                <Artwork variant={race.art} label={`Портрет: ${race.name}`} />
+                <img src={race.image} alt={`Портрет персонажа: ${race.name}`} loading="lazy" />
+                <span class="race__crest" aria-hidden="true">{race.faction === 'alliance' ? '✦' : '⚔'}</span>
               </div>
               <div class="race__body">
                 <span class="race__faction">{race.factionLabel}</span>

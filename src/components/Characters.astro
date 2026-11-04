@@ -1,87 +1,44 @@
 ---
-/**
- * «Персонажи игры» — светлые дружелюбные иллюстрации с героями Азерота.
- * Каждый кадр нарисован в SVG прямо здесь: ноль веса и резкость на любом экране.
- */
-const heroes = [
-  {
-    title: 'Человек-паладин',
-    text: 'Свет в руках и доброе сердце. Стоит на страже Стормвинда.',
-    sky: ['#eaf1ff', '#cdddf9'],
-    tone: '#4f74c8',
-    accent: '#f0c766',
-    rune: 'M320 44v40M300 62h40',
-  },
-  {
-    title: 'Дворф-охотник',
-    text: 'Крепкая броня, верный медведь и отличное чувство юмора.',
-    sky: ['#fff4e3', '#f4dcb8'],
-    tone: '#a4703a',
-    accent: '#d5a34a',
-    rune: 'M300 48l14 10-14 10-14-10z',
-  },
-  {
-    title: 'Гном-маг',
-    text: 'Искры арканы, хитрая механика и очень много энтузиазма.',
-    sky: ['#f2ecff', '#d9cdf7'],
-    tone: '#7c5cf0',
-    accent: '#c9b4ff',
-    rune: 'M300 46v28M288 60h24',
-  },
-  {
-    title: 'Ворген-друид',
-    text: 'Свобода леса, лунная магия и взгляд, от которого мурашки.',
-    sky: ['#eafaf1', '#c9efd9'],
-    tone: '#3c8d6a',
-    accent: '#8fe0b8',
-    rune: 'M300 44c10 10 14 18 14 26a14 14 0 11-28 0c0-8 4-16 14-26z',
-  },
+import { races } from '../data/races';
+
+const classes = [
+  { name: 'Воин', role: 'Фронт боя', slug: 'warrior', race: 'humans', color: '#a94f3f', races: ['Люди', 'Орки', 'Дворфы'] },
+  { name: 'Паладин', role: 'Свет и защита', slug: 'paladin', race: 'humans', color: '#c6a35d', races: ['Люди', 'Дворфы', 'Дренеи', 'Кровавые эльфы'] },
+  { name: 'Охотник', role: 'Следопыт', slug: 'hunter', race: 'dwarves', color: '#78935b', races: ['Ночные эльфы', 'Орки', 'Таурены', 'Тролли'] },
+  { name: 'Разбойник', role: 'Тень и сталь', slug: 'rogue', race: 'undead', color: '#9c9b68', races: ['Люди', 'Гномы', 'Нежить', 'Тролли'] },
+  { name: 'Жрец', role: 'Исцеление и вера', slug: 'priest', race: 'draenei', color: '#d4c9b1', races: ['Люди', 'Ночные эльфы', 'Тролли', 'Дренеи'] },
+  { name: 'Шаман', role: 'Голос стихий', slug: 'shaman', race: 'orcs', color: '#6289a0', races: ['Орки', 'Таурены', 'Тролли', 'Дренеи'] },
+  { name: 'Маг', role: 'Тайные знания', slug: 'mage', race: 'gnomes', color: '#7289bb', races: ['Люди', 'Гномы', 'Тролли', 'Кровавые эльфы'] },
+  { name: 'Чернокнижник', role: 'Запретная магия', slug: 'warlock', race: 'orcs', color: '#a85a60', races: ['Люди', 'Гномы', 'Орки', 'Нежить'] },
+  { name: 'Друид', role: 'Сила природы', slug: 'druid', race: 'night-elves', color: '#639369', races: ['Ночные эльфы', 'Таурены'] },
 ];
 ---
-
 <section class="section section--alt" id="characters">
   <div class="container">
     <div class="section__head reveal">
-      <span class="eyebrow">Лица Азерота</span>
-      <h2>Каждый герой — начало истории</h2>
-      <p>Паладин, охотник или маг — кем бы ты ни стал, приключение начинается с первого шага.</p>
+      <span class="eyebrow">Пути героя</span>
+      <h2>Классы Азерота</h2>
+      <p>От стального щита до драконьего пламени — выбери путь, который станет твоей легендой.</p>
     </div>
-
-    <div class="heroes">
-      {
-        heroes.map((hero) => (
-          <figure class="panel panel--hover hero-card reveal">
-            <svg viewBox="0 0 600 380" role="img" aria-label={`Иллюстрация: ${hero.title}`}>
-              <defs>
-                <linearGradient id={`hg-${hero.tone.replace('#', '')}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color={hero.sky[0]} />
-                  <stop offset="1" stop-color={hero.sky[1]} />
-                </linearGradient>
-              </defs>
-              <rect width="600" height="380" fill={`url(#hg-${hero.tone.replace('#', '')})`} />
-              <circle cx="300" cy="150" r="150" fill={hero.tone} opacity="0.12" />
-              {/* плечи */}
-              <path d="M170 340c20-70 70-108 130-108s110 38 130 108z" fill={hero.tone} opacity="0.9" />
-              {/* голова */}
-              <circle cx="300" cy="150" r="66" fill={hero.tone} />
-              <circle cx="300" cy="150" r="66" fill="#fff" opacity="0.14" />
-              {/* глаза */}
-              <circle cx="278" cy="148" r="8" fill="#fff" />
-              <circle cx="322" cy="148" r="8" fill="#fff" />
-              {/* улыбка */}
-              <path d="M276 178c14 12 34 12 48 0" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round" />
-              {/* акцентный «топор/руна/свет» */}
-              <path d={hero.rune} stroke={hero.accent} stroke-width="7" fill="none" stroke-linecap="round" />
-              <circle cx="470" cy="90" r="26" fill={hero.accent} opacity="0.55" />
-              <path d="M0 356h600" stroke="#ffffff" stroke-width="2" opacity="0.5" />
-            </svg>
-            <figcaption class="hero-card__body">
-              <h3>{hero.title}</h3>
-              <p>{hero.text}</p>
-            </figcaption>
-          </figure>
-        ))
-      }
+    <div class="class-grid">
+      {classes.map((hero, i) => {
+        const race = races.find((candidate) => candidate.slug === hero.race) ?? races[i % races.length];
+        return (
+          <article class="class-card panel panel--hover reveal" style={`--class-accent:${hero.color}`}>
+            <div class="class-card__portrait">
+              <img src={race.image} alt={`${race.name} — ${hero.name}`} loading="lazy" />
+              <img class="class-card__icon" src={`https://wow.zamimg.com/images/wow/icons/large/classicon_${hero.slug}.jpg`} alt="" loading="lazy" />
+              <span class="class-card__number">0{i + 1}</span>
+            </div>
+            <div class="class-card__body">
+              <p class="class-card__role">{hero.role}</p>
+              <h3>{hero.name}</h3>
+              <p class="class-card__races">{hero.races.join(' · ')}</p>
+            </div>
+          </article>
+        );
+      })}
     </div>
+    <p class="class-note">Классы и доступные расы зависят от дополнения и версии игры.</p>
   </div>
 </section>

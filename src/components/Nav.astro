@@ -1,43 +1,32 @@
 ---
 const base = import.meta.env.BASE_URL;
 const links = [
-  { href: `${base}#lore`, label: 'Мир и лор' },
+  { href: `${base}#lore`, label: 'Хроники' },
   { href: `${base}#races`, label: 'Народы' },
+  { href: `${base}#characters`, label: 'Классы' },
   { href: `${base}#journal`, label: 'Истории' },
   { href: `${base}#gallery`, label: 'Галерея' },
 ];
 ---
-
 <header class="nav">
   <nav class="container nav__inner" aria-label="Основная навигация">
-    <a class="nav__brand" href={base}>
+    <a class="nav__brand" href={base} aria-label="WoW Forever — на главную">
       <svg viewBox="0 0 64 64" aria-hidden="true" focusable="false">
         <path d="M32 3 57 16.5v31L32 61 7 47.5v-31z" fill="rgba(216,180,106,.1)" stroke="#d8b46a" stroke-width="3" />
-        <path d="M32 16l10.5 6.5v13L32 48l-10.5-6.5v-13z" fill="none" stroke="#d8b46a" stroke-width="3" />
-        <path d="M32 25v13M25.5 31.5h13" stroke="#f5e3ad" stroke-width="3" stroke-linecap="round" />
+        <path d="M32 12 46 20v24L32 52 18 44V20z" fill="none" stroke="#d8b46a" stroke-width="2" />
+        <path d="M32 20 36 29l10 3-10 3-4 9-4-9-10-3 10-3z" fill="#d8b46a" />
       </svg>
-      <span>WoW&nbsp;Forever</span>
+      <span>WoW <i>Forever</i></span>
     </a>
-
     <button class="nav__toggle" type="button" data-nav-toggle aria-expanded="false" aria-controls="nav-links">
-      <span aria-hidden="true">☰</span>
-      <span class="visually-hidden">Меню</span>
+      <span aria-hidden="true">☰</span><span class="visually-hidden">Меню</span>
     </button>
-
     <ul class="nav__links" id="nav-links" data-nav-links>
-      {links.map((link) => (<li><a href={link.href}>{link.label}</a></li>))}
+      {links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
       <li><a class="btn btn--gold nav__cta" href={`${base}archive/`}>Все истории <span aria-hidden="true">↗</span></a></li>
     </ul>
   </nav>
 </header>
-
 <style>
-  .visually-hidden {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
-    clip: rect(0 0 0 0);
-    white-space: nowrap;
-  }
+.visually-hidden { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 </style>
