@@ -40,10 +40,14 @@ const base = import.meta.env.BASE_URL;
       <div class="hero__signature"><span class="hero__sig-mark">✦</span><span><b>Для своих</b><small>Фанатский взгляд на любимую вселенную</small></span></div>
     </div>
 
-    <aside class="panel art hero__art" aria-label="Иллюстрация журнала">
-      <Artwork variant="nightelf" label="Ночная эльфийка под луной" />
-      <p class="art__caption">Моя ночная эльфийка — с неё начинался этот дневник</p>
-      <a class="hero__art-link" href={`${base}posts/pervyy-vecher-v-patche/`}>Первая запись журнала →</a>
+    <aside class="panel art hero__art" aria-label="Портрет героя Азерота">
+      <div class="hero__portrait">
+        <img src="https://wow.zamimg.com/images/wow/icons/large/achievement_character_nightelf_male.jpg" alt="Ночной эльф, герой Азерота" />
+        <span class="hero__portrait-tag">Путеводитель по Азероту</span>
+      </div>
+      <div class="hero__factions"><span>Альянс</span><i>✦</i><span>Орда</span></div>
+      <p class="art__caption">Одна вселенная. Тысячи историй.</p>
+      <a class="hero__art-link" href={`${base}#races`}>Знакомься с народами →</a>
     </aside>
   </div>
 </section>

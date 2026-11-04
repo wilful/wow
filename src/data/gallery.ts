@@ -1,22 +1,15 @@
-/**
- * Галерея скриншотов.
- * Чтобы поставить свой кадр — положите файл в public/images/ и укажите путь
- * так: { src: '/images/elv-sunwell.jpg', caption: '...', art: 'nightelf' }.
- * Пока src нет, рисуется SVG-заглушка.
- */
+/** Curated game-world imagery for the fan gallery. */
 export interface Shot {
-  src?: string;
-  art: string;
+  src: string;
   caption: string;
+  place: string;
 }
 
 export const shots: Shot[] = [
-  { art: 'nightelf', caption: 'Ночная эльфийка в лунном свете — мой первый кадр из нового патча' },
-  { art: 'orc', caption: 'Орк-воин на выходе из подземелья' },
-  { art: 'undead', caption: 'Андед: тот самый момент, когда город ещё спит' },
-  { art: 'bloodelf', caption: 'Кровавая эльфийка и её солнечный клинок' },
-  { art: 'tauren', caption: 'Таурен-друид в Награнде' },
-  { art: 'troll', caption: 'Тролль-шаман: молнии, дым и немного хаоса' },
-  { art: 'banner', caption: 'Панорама Азерота с высоты полёта' },
-  { art: 'gallery', caption: 'Закат над морем — любимый скриншот из поездки по континенту' },
+  { src: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=85', caption: 'Древний лес в лунном свете', place: 'Дорога через лес' },
+  { src: 'https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=1200&q=85', caption: 'Вершины, которые касаются звёзд', place: 'Высокогорье' },
+  { src: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=1200&q=85', caption: 'Рассвет над золотыми равнинами', place: 'Новый день' },
+  { src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1200&q=85', caption: 'Тропы, уходящие за горизонт', place: 'На краю карты' },
+  { src: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=1200&q=85', caption: 'Тихое озеро среди гор', place: 'Перед привалом' },
+  { src: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=85', caption: 'Туман в сердце старого леса', place: 'Земли Калимдора' },
 ];

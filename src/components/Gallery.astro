@@ -1,16 +1,13 @@
 ---
-import Artwork from './Artwork.astro';
 import { shots } from '../data/gallery';
-
-const base = import.meta.env.BASE_URL;
 ---
 
 <section class="section" id="gallery">
   <div class="container">
     <div class="section__head reveal">
       <span class="eyebrow">Альбом путешественника</span>
-      <h2>Места, где хочется задержаться</h2>
-      <p>Тихие леса, древние руины и огни далёких городов — Азерот прекрасен в каждом кадре.</p>
+      <h2>Альбом странника</h2>
+      <p>Кадры из мира, который звал за следующий холм. Собери свою коллекцию воспоминаний.</p>
     </div>
 
     <div class="gallery">
@@ -18,11 +15,8 @@ const base = import.meta.env.BASE_URL;
         shots.map((shot) => (
           <figure class="shot reveal">
             <div class="shot__frame">
-              {shot.src ? (
-                <img src={`${base}${shot.src.replace(/^\//, '')}`} alt={shot.caption} loading="lazy" />
-              ) : (
-                <Artwork variant={shot.art} label={shot.caption} />
-              )}
+              <img src={shot.src} alt={shot.caption} loading="lazy" />
+              <span class="shot__place">{shot.place}</span>
             </div>
             <figcaption>{shot.caption}</figcaption>
           </figure>
