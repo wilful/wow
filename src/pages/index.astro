@@ -1,25 +1,47 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Nav from '../components/Nav.astro';
-import Hero from '../components/Hero.astro';
-import Lore from '../components/Lore.astro';
-import Races from '../components/Races.astro';
-import Characters from '../components/Characters.astro';
-import Journal from '../components/Journal.astro';
-import Gallery from '../components/Gallery.astro';
-import About from '../components/About.astro';
-import Footer from '../components/Footer.astro';
+// Единственная страница сайта: заглушка «в разработке».
+const title = 'Сайт находится в разработке';
 ---
-<Layout>
-  <Nav />
-  <main id="main">
-    <Hero />
-    <Lore />
-    <Races />
-    <Characters />
-    <Journal limit={3} />
-    <Gallery />
-    <About />
-  </main>
-  <Footer />
-</Layout>
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="robots" content="noindex" />
+    <meta name="generator" content={Astro.generator} />
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        background: #11140f;
+        color: #f2ead8;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0;
+        font-size: clamp(1.5rem, 6vw, 2.75rem);
+        line-height: 1.25;
+        font-weight: 600;
+        letter-spacing: 0.01em;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Сайт находится в разработке</h1>
+  </body>
+</html>
