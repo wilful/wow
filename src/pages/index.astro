@@ -1,5 +1,5 @@
 ---
-// Приветственная страница гильдии Durotar (World of Warcraft).
+// Приветственная страница гильдии Durotar (World of Warcraft: Forever).
 // Тёмный камень, золото, пергамент, шрифты в духе игры.
 // Фото подключаются с Wikimedia Commons (проверены на доступность).
 
@@ -39,17 +39,17 @@ const cards = [
     dir: '3/32',
     name: 'Antelope_Slot_Canyon_%2850508209447%29.jpg',
     alt: 'Узкий красный коридор каньона',
-    tag: 'Мифик+',
+    tag: 'Фарм',
     title: 'Подземелья',
-    text: 'Недельные ключи для любого уровня: подберём состав, подскажем ротации и поможем выбить нужный таймер вместе.',
+    text: 'В Forever 35 подземелий: собираем состав под уровень, фармим добычу и катаемся от первой подземелки до рейдовых входов.',
   },
   {
     dir: '2/23',
     name: 'Knight-in-Shining-Armour.jpg',
     alt: 'Рыцарь в латном доспехе',
     tag: 'PvP',
-    title: 'Арена и бг',
-    text: 'Сезонные цели, арена, боевые поля и дуэли у ворот. Кто любит сражаться лицом к лицу — тем точно будет, чем заняться.',
+    title: 'БГ и дуэли',
+    text: 'Поля сражений, фарм чести и дуэли у ворот. Кто любит сражаться лицом к лицу — тем точно будет, чем заняться.',
   },
   {
     dir: '6/6b',
@@ -69,10 +69,10 @@ const roles = ['Танки', 'Хилы', 'ДД'];
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Гильдия Durotar — World of Warcraft</title>
+    <title>Гильдия Durotar — World of Warcraft: Forever</title>
     <meta
       name="description"
-      content="Гильдия Durotar — русскоязычное сообщество игроков в World of Warcraft: рейды, мифик-ключи, PvP и открытый набор."
+      content="Гильдия Durotar — русскоязычное сообщество игроков в World of Warcraft: Forever (версия на основе Classic): рейды, подземелья, PvP и открытый набор."
     />
     <meta name="theme-color" content="#0c0906" />
     <meta name="generator" content={Astro.generator} />
@@ -846,7 +846,7 @@ const roles = ['Танки', 'Хилы', 'ДД'];
           </svg>
           <span>
             <b class="gold-text">DUROTAR</b>
-            <span>гильдия · World of Warcraft</span>
+            <span>гильдия · WoW: Forever</span>
           </span>
         </a>
 
@@ -909,8 +909,8 @@ const roles = ['Танки', 'Хилы', 'ДД'];
         <p class="hero-eyebrow">Добро пожаловать</p>
         <h1>DUROTAR</h1>
         <p class="hero-sub">
-          Русскоязычная гильдия в мире <strong>World of Warcraft</strong>: рейды, мифик-ключи,
-          PvP и люди, с которыми хочется возвращаться в игру.
+          Русскоязычная гильдия в мире <strong>World of Warcraft: Forever</strong>: классические
+          рейды, подземелья, PvP и люди, с которыми хочется возвращаться в игру.
         </p>
         <p class="hero-motto">«Все большие приключения начинаются в Дуратаре»</p>
         <div class="hero-cta">
@@ -921,7 +921,7 @@ const roles = ['Танки', 'Хилы', 'ДД'];
 
       <div class="hero-strip" aria-hidden="true">
         <span>Рейды</span>
-        <span>Мифик-ключи</span>
+        <span>Подземелья</span>
         <span>PvP</span>
         <span>Дружба</span>
       </div>
@@ -934,23 +934,24 @@ const roles = ['Танки', 'Хилы', 'ДД'];
           <p class="kicker">Приветствие</p>
           <h2>Рады видеть тебя!</h2>
           <p class="drop">
-            Мы — гильдия Durotar, русскоязычное сообщество игроков в World of Warcraft. Разные
-            классы, разные роли, одна цель: получать от игры удовольствие вместе, а не в одиночку
-            тащить недельные кейсы.
+            Мы — гильдия Durotar, русскоязычное сообщество игроков в World of Warcraft: Forever —
+            последней версии на основе Classic: уровни с 1 по 60, девять классов, знакомые
+            подземелья и рейды плюс новые таланты, заклинания и зоны. Наша цель — получать от
+            игры удовольствие вместе, а не в одиночку фармить впустую.
           </p>
           <p>
-            У нас проходят вечерние рейды, недельные ключи, арена и просто разговоры в Discord.
-            Неважно, новичок ты или ветеран со стажем — за нашим столом всегда найдется место.
+            У нас проходят вечерние рейды, подземелья, бг и просто разговоры в Discord. Неважно,
+            новичок ты или ветеран со стажем — за нашим столом всегда найдется место.
           </p>
           <p>
             Сайт только начинает расти: приветственная страница уже готова, а дальше появятся
             разделы со составом, расписанием и правилами гильдии.
           </p>
           <div class="chip-row">
-            <span class="chip">PvE</span>
-            <span class="chip">PvP</span>
+            <span class="chip">WoW: Forever</span>
+            <span class="chip">Уровни 1–60</span>
+            <span class="chip">35 подземелий</span>
             <span class="chip">Открытый набор</span>
-            <span class="chip">Discord-сообщество</span>
           </div>
         </div>
       </div>
@@ -1061,7 +1062,7 @@ const roles = ['Танки', 'Хилы', 'ДД'];
             </svg>
             <div>
               <b>DUROTAR</b><br />
-              <span>гильдия World of Warcraft</span>
+              <span>гильдия World of Warcraft: Forever</span>
             </div>
           </div>
 
@@ -1074,9 +1075,11 @@ const roles = ['Танки', 'Хилы', 'ДД'];
         </div>
 
         <p class="foot-note">
-          © {new Date().getFullYear()} Гильдия Durotar. World of Warcraft и Warcraft® — товарные
-          знаки Blizzard Entertainment; этот сайт — любительский фанатский проект и не связан с
-          Blizzard. Фотографии: <a href="https://commons.wikimedia.org/" rel="noopener">Wikimedia Commons</a>.
+          © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
+          Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
+          Проект любительский и не связан с Blizzard. Фотографии: <a
+            href="https://commons.wikimedia.org/"
+            rel="noopener">Wikimedia Commons</a>.
         </p>
       </div>
     </footer>
