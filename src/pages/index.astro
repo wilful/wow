@@ -30,6 +30,13 @@ const orc = {
   src: `${base}img/orc-grom.png`,
   alt: 'Гром Адовый Крик — орк-воин с большим топором, концепт-арт Warcraft III',
 };
+
+// Нежить-фурсейкен для левой стороны героя: тот же стиль вырезанного рендера
+// (Warcraft III Reforged, прозрачный фон), warcraft.wiki.gg → public/img/.
+const undead = {
+  src: `${base}img/undead-forsaken.png`,
+  alt: 'Форсейкен — нежить-воительница Warcraft III с оружием в руках',
+};
 ---
 
 <!doctype html>
@@ -489,6 +496,28 @@ const orc = {
         }
       }
 
+      @keyframes orcIdleL {
+        from {
+          transform: translateY(0) rotate(0deg);
+        }
+        to {
+          transform: translateY(-12px) rotate(1.2deg);
+        }
+      }
+
+      /* левая фигура — та же модель, зеркальная постановка */
+      .hero-fig--left {
+        right: auto;
+        left: clamp(-26px, 1vw, 26px);
+        height: min(62%, 560px);
+        animation-delay: 1.1s;
+      }
+
+      .hero-fig--left .hero-fig-img {
+        animation-name: orcIdleL;
+        max-width: 46vw;
+      }
+
       /* ── разделы: заголовок с орнаментом ────────────── */
       .sec-title {
         text-align: center;
@@ -828,10 +857,15 @@ const orc = {
           width: 52px;
           height: 52px;
         }
-        .hero-fig {
+        .hero-fig:not(.hero-fig--left) {
           height: min(58%, 470px);
           right: -7%;
           opacity: 0.92;
+        }
+        .hero-fig--left {
+          height: min(46%, 360px);
+          left: -12%;
+          opacity: 0.88;
         }
       }
 
@@ -852,10 +886,15 @@ const orc = {
         .hero-strip span {
           gap: 16px;
         }
-        .hero-fig {
+        .hero-fig:not(.hero-fig--left) {
           height: min(46%, 330px);
           right: -14%;
           opacity: 0.78;
+        }
+        .hero-fig--left {
+          height: min(34%, 250px);
+          left: -18%;
+          opacity: 0.7;
         }
         .parchment {
           outline-offset: 3px;
@@ -944,6 +983,14 @@ const orc = {
           src={orc.src}
           alt={orc.alt}
           fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+      <figure class="hero-fig hero-fig--left">
+        <img
+          class="hero-fig-img"
+          src={undead.src}
+          alt={undead.alt}
           decoding="async"
         />
       </figure>
