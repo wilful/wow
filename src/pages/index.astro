@@ -32,9 +32,6 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Гильдия Durotar — World of Warcraft: Forever</title>
     <meta
@@ -118,6 +115,15 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         margin-inline: auto;
       }
 
+      .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
       .gold-text {
         background: var(--gold-grad);
         -webkit-background-clip: text;
@@ -161,16 +167,6 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         }
       }
 
-      .js .rv {
-        opacity: 0;
-        transform: translateY(24px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-      }
-
-      .js .rv.in {
-        opacity: 1;
-        transform: none;
-      }
 
       /* ── шапка ──────────────────────────────────────── */
       .topbar {
@@ -367,29 +363,11 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         max-width: 880px;
       }
 
-      .hero-eyebrow {
-        display: inline-flex;
-        align-items: center;
-        gap: 14px;
-        margin: 0 0 22px;
-        color: var(--gold-lt);
-        font-family: var(--font-head);
-        font-size: clamp(0.85rem, 2vw, 1.05rem);
-        letter-spacing: 0.42em;
-        text-transform: uppercase;
-        text-shadow: 0 2px 10px rgba(0, 0, 0, 0.8);
-      }
-
-      .hero-eyebrow::before,
-      .hero-eyebrow::after {
-        content: '';
-        width: clamp(30px, 8vw, 70px);
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--gold));
-      }
-
-      .hero-eyebrow::after {
-        background: linear-gradient(270deg, transparent, var(--gold));
+      .hero-ornament {
+        display: block;
+        width: min(320px, 66%);
+        margin: 6px auto 0;
+        color: var(--gold);
       }
 
       .hero h1 {
@@ -496,6 +474,8 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
 
       .parchment {
         position: relative;
+        max-width: 940px;
+        margin-inline: auto;
         padding: clamp(30px, 5vw, 56px);
         color: var(--ink);
         background:
@@ -519,6 +499,30 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         pointer-events: none;
       }
 
+      .seal {
+        position: absolute;
+        right: -20px;
+        bottom: 34px;
+        display: grid;
+        place-items: center;
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 32% 28%, #c04536, #8e2118 58%, #64150f);
+        box-shadow:
+          inset 0 2px 6px rgba(255, 255, 255, 0.25),
+          inset 0 -6px 10px rgba(0, 0, 0, 0.45),
+          0 10px 18px -8px rgba(0, 0, 0, 0.65);
+        transform: rotate(-9deg);
+        pointer-events: none;
+      }
+
+      .seal svg {
+        width: 50px;
+        height: 58px;
+        filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.16));
+      }
+
       .parchment h2 {
         margin: 0 0 6px;
         font-family: var(--font-head);
@@ -527,17 +531,9 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         color: #2c1f0c;
       }
 
-      .parchment .kicker {
-        margin: 0 0 20px;
-        color: #8a6a22;
-        font-family: var(--font-head);
-        letter-spacing: 0.3em;
-        text-transform: uppercase;
-        font-size: 0.82rem;
-      }
-
       .parchment p {
         margin: 0 0 16px;
+        max-width: 64ch;
         font-size: 1.04rem;
       }
 
@@ -709,35 +705,35 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         text-underline-offset: 3px;
       }
 
-      /* ── появление и микроанимации ──────────────────── */
-      .hero-eyebrow {
-        animation: rise 0.8s 0.05s both ease-out;
-      }
-
+      /* ── сцена появления героя ───────────────────────── */
       .hero h1 {
         background: linear-gradient(100deg, #a37c26 0%, #eccb6b 30%, #fff8e2 50%, #eccb6b 70%, #a37c26 100%);
         background-size: 200% 100%;
         -webkit-background-clip: text;
         background-clip: text;
         animation:
-          rise 0.9s 0.15s both ease-out,
+          rise 0.9s 0.1s both ease-out,
           sheen 8s 1.6s linear infinite;
       }
 
+      .hero-ornament {
+        animation: rise 0.8s 0.34s both ease-out;
+      }
+
       .hero-sub {
-        animation: rise 0.8s 0.3s both ease-out;
+        animation: rise 0.8s 0.46s both ease-out;
       }
 
       .hero-motto {
-        animation: rise 0.8s 0.45s both ease-out;
+        animation: rise 0.8s 0.58s both ease-out;
       }
 
       .hero-cta {
-        animation: rise 0.8s 0.6s both ease-out;
+        animation: rise 0.8s 0.7s both ease-out;
       }
 
       .hero-strip {
-        animation: rise 0.8s 0.8s both ease-out;
+        animation: rise 0.8s 0.84s both ease-out;
       }
 
       .topbar {
@@ -817,6 +813,9 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         .parchment {
           outline-offset: 3px;
         }
+        .seal {
+          display: none;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -829,14 +828,11 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
           transition: none !important;
           animation: none !important;
         }
-        .js .rv {
-          opacity: 1 !important;
-          transform: none !important;
-        }
       }
     </style>
   </head>
   <body>
+    <div class="grain" aria-hidden="true"></div>
     <!-- ══ шапка ══ -->
     <header class="topbar">
       <div class="shell topbar-inner">
@@ -933,8 +929,15 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
       </div>
 
       <div class="hero-inner">
-        <p class="hero-eyebrow">Добро пожаловать</p>
         <h1>DUROTAR</h1>
+        <svg class="hero-ornament" viewBox="0 0 320 24" fill="none" stroke="currentColor" aria-hidden="true">
+          <path d="M0 12h110" stroke-width="1.2" opacity="0.7" />
+          <path d="M210 12h110" stroke-width="1.2" opacity="0.7" />
+          <path d="M160 4c-14 0-22 4-30 8 8 4 16 8 30 8s22-4 30-8c-8-4-16-8-30-8z" stroke-width="1.4" />
+          <circle cx="160" cy="12" r="3" fill="currentColor" stroke="none" />
+          <path d="M124 12c8-6 14-8 20-8M196 12c-8-6-14-8-20-8" stroke-width="1.1" opacity="0.8" />
+          <path d="M124 12c8 6 14 8 20 8M196 12c8 6 14 8 20 8" stroke-width="1.1" opacity="0.8" />
+        </svg>
         <p class="hero-sub">
           Русскоязычная гильдия в мире <strong>World of Warcraft: Forever</strong>: классические
           рейды, подземелья, PvP и люди, с которыми хочется возвращаться в игру.
@@ -957,8 +960,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
     <!-- ══ приветствие ══ -->
     <section class="about" id="about">
       <div class="shell">
-        <div class="parchment rv">
-          <p class="kicker">Приветствие</p>
+        <div class="parchment">
           <h2>Рады видеть тебя!</h2>
           <p class="drop">
             Мы — гильдия Durotar, русскоязычное сообщество игроков в World of Warcraft: Forever —
@@ -980,6 +982,28 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
             <span class="chip">35 подземелий</span>
             <span class="chip">Открытый набор</span>
           </div>
+          <div class="seal" aria-hidden="true">
+            <svg viewBox="0 0 48 56">
+              <path
+                d="M24 2 44 9v17c0 14-8.6 23.4-20 28C12.6 49.4 4 40 4 26V9Z"
+                fill="rgba(0, 0, 0, 0.32)"
+                stroke="rgba(0, 0, 0, 0.28)"
+                stroke-width="1.5"></path>
+              <path
+                d="M24 7 39 12v14c0 11-6.6 18.6-15 22C14.6 44.6 9 39.1 9 32V12Z"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.14)"
+                stroke-width="1.2"></path>
+              <text
+                x="24"
+                y="36"
+                text-anchor="middle"
+                font-family="Cinzel Decorative, serif"
+                font-size="22"
+                font-weight="700"
+                fill="rgba(255, 255, 255, 0.16)">D</text>
+            </svg>
+          </div>
         </div>
       </div>
     </section>
@@ -991,10 +1015,10 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
       .patch-bar a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
     </style>
 
-    <div class="patch-bar rv">
+    <div class="patch-bar">
       <b>{patch.title}</b>
       <span>— {patch.note}</span>
-      <a href={patch.link} rel="noopener">список изменений →</a>
+      <a href={patch.link} rel="noopener">список изменений</a>
     </div>
 
     <!-- ══ набор ══ -->
@@ -1006,7 +1030,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         loading="lazy"
         decoding="async"
       />
-      <div class="recruit-inner rv">
+      <div class="recruit-inner">
         <div class="sec-title" style="margin-bottom: 0">
           <h2 class="gold-text">Нам нужны герои</h2>
           <svg class="fleuron" viewBox="0 0 320 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -1182,26 +1206,6 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         onScroll();
       }
 
-      // Плавное появление блоков при прокрутке.
-      const revealTargets = document.querySelectorAll<HTMLElement>('.rv');
-      if (revealTargets.length) {
-        if (reduceMotion || !('IntersectionObserver' in window)) {
-          revealTargets.forEach((el) => el.classList.add('in'));
-        } else {
-          const io = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                if (entry.isIntersecting) {
-                  entry.target.classList.add('in');
-                  io.unobserve(entry.target);
-                }
-              }
-            },
-            { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
-          );
-          revealTargets.forEach((el) => io.observe(el));
-        }
-      }
     </script>
   </body>
 </html>
