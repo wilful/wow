@@ -62,9 +62,6 @@ const cities = [
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Города Азерота — Гильдия Durotar</title>
     <meta
@@ -134,16 +131,6 @@ const cities = [
         to { background-position: 200% 50%; }
       }
 
-      .js .rv {
-        opacity: 0;
-        transform: translateY(24px);
-        transition: opacity 0.7s ease, transform 0.7s ease;
-      }
-
-      .js .rv.in {
-        opacity: 1;
-        transform: none;
-      }
 
       body {
         margin: 0;
@@ -160,6 +147,15 @@ const cities = [
       h1, h2, h3 { font-weight: 400; }
 
       .shell { width: min(1140px, 100% - 40px); margin-inline: auto; }
+
+      .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
 
       .gold-text {
         background: var(--gold-grad);
@@ -382,10 +378,10 @@ const cities = [
         border: 1px solid var(--line-soft);
         border-radius: 10px;
         background: linear-gradient(180deg, var(--stone-2), var(--stone));
-        transition: border-color 0.18s ease, transform 0.18s ease;
+        transition: border-color 0.18s ease;
       }
 
-      .event:hover { border-color: var(--line); transform: translateX(4px); }
+      .event:hover { border-color: var(--line); }
 
       .event::before {
         content: attr(data-year);
@@ -472,11 +468,11 @@ const cities = [
 
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { transition: none !important; animation: none !important; }
-        .js .rv { opacity: 1 !important; transform: none !important; }
       }
     </style>
   </head>
   <body>
+    <div class="grain" aria-hidden="true"></div>
     <!-- ══ шапка ══ -->
     <header class="topbar">
       <div class="shell topbar-inner">
@@ -524,7 +520,7 @@ const cities = [
     <section class="shell cities">
       {
         cities.map((c, i) => (
-          <article class:list={['city', 'rv', i % 2 === 1 && 'alt']} id={c.id}>
+          <article class:list={['city', i % 2 === 1 && 'alt']} id={c.id}>
             <div class="city-media">
               <div class="city-shot">
                 <img
@@ -621,33 +617,12 @@ const cities = [
     </footer>
 
     <script>
-      // Шапка и плавное появление блоков при прокрутке.
+      // Шапка мягко отбрасывает тень, когда страница прокручена.
       const topbar = document.querySelector<HTMLElement>('.topbar');
       if (topbar) {
         const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 10);
         window.addEventListener('scroll', onScroll, { passive: true });
         onScroll();
-      }
-
-      const revealTargets = document.querySelectorAll<HTMLElement>('.rv');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      if (revealTargets.length) {
-        if (reduceMotion || !('IntersectionObserver' in window)) {
-          revealTargets.forEach((el) => el.classList.add('in'));
-        } else {
-          const io = new IntersectionObserver(
-            (entries) => {
-              for (const entry of entries) {
-                if (entry.isIntersecting) {
-                  entry.target.classList.add('in');
-                  io.unobserve(entry.target);
-                }
-              }
-            },
-            { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
-          );
-          revealTargets.forEach((el) => io.observe(el));
-        }
       }
     </script>
   </body>
