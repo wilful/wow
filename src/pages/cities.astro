@@ -1,11 +1,7 @@
 ---
 // Страница «Города Азерота» — Оргриммар (Орда) и Штормград (Альянс).
 // Стиль совпадает с главной: тёмный камень, золото, пергамент.
-// Фото — настроение городов с Wikimedia Commons (проверены на доступность),
-// игровые скриншоты заменим, когда появятся.
-
-const commons = (dir: string, name: string, width: number) =>
-  `https://upload.wikimedia.org/wikipedia/commons/thumb/${dir}/${name}/${width}px-${name}`;
+// Фото — игровые скриншоты городов, скачаны с warcraft.wiki.gg и лежат в public/cities/.
 
 const base = import.meta.env.BASE_URL;
 
@@ -22,11 +18,10 @@ const cities = [
     name: 'ОРГРИММАР',
     subtitle: 'Столица Орды · Дуротар, Калимдор',
     img: {
-      dir: '9/96',
-      name: 'Canyon_de_Chelly_White_House_Ruin_Close_View_2006_09_07.jpg',
-      alt: 'Красные скальные стены каньона — настроение Оргриммара',
+      src: `${base}cities/orgrimmar.jpg`,
+      alt: 'Оргриммар с высоты: красные стены и врата города в каньонах Дуротара',
     },
-    caption: 'Настроение города: красные стены каньонов — как утёсы Дуротара. Пока фото-заглушка, заменим на игровой скриншот.',
+    caption: 'Игровой скриншот: Оргриммар с высоты. Источник: warcraft.wiki.gg.',
     text: [
       'Оргриммар вырублен прямо в скалах Дуротара: двухъярусный город над сухим каньоном, с боевыми воротами, рынком, кузницей и тренировочными площадками. Здесь бьётся сердце Орды — отсюда уходят в подземелья и на кладбища Азерота.',
       'Для наших орда-персонажей это родные ворота: банк, аукцион, тренеры и почта — всё в шаговой доступности, а над входом статуя Оргримма, в честь которого назван город.',
@@ -45,11 +40,10 @@ const cities = [
     name: 'ШТОРМГРАД',
     subtitle: 'Столица Альянса · Эостровые королевства',
     img: {
-      dir: '2/25',
-      name: '1_carcassonne_aerial_2016.jpg',
-      alt: 'Средневековый город за крепостными стенами с высоты — настроение Штормграда',
+      src: `${base}cities/stormwind.jpg`,
+      alt: 'Штормград из игры: собор, крепостные стены и крыши столицы Альянса',
     },
-    caption: 'Настроение города: древний город за стенами — как Штормград с его собором и крепостными воротами. Фото-заглушка, будет заменено на скриншот.',
+    caption: 'Игровой скриншот: Штормград в классическом виде. Источник: warcraft.wiki.gg.',
     text: [
       'Штормград — старейшая столица людей: дворец короля, великий Собор Света, порт с торговыми кораблями и دائمый гул на рыночной площади. Говорят, город отстроен заново после Второй войны — и теперь стоит ещё крепче.',
       'Тут начинается путь многих героев Альянса: за стенами города прячутся тайные общества, а во дворце когда-то вершились дела нехорошие — так что прогулка по дворцу тоже может стать приключением.',
@@ -81,7 +75,7 @@ const cities = [
     <meta property="og:type" content="website" />
     <meta
       property="og:image"
-      content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/1_carcassonne_aerial_2016.jpg/1920px-1_carcassonne_aerial_2016.jpg"
+      content={`${import.meta.env.SITE}${base}cities/orgrimmar.jpg`}
     />
     <meta name="generator" content={Astro.generator} />
 
@@ -458,8 +452,8 @@ const cities = [
         <h1>ГОРОДА АЗЕРОТА</h1>
         <p>
           Две столицы, между которыми живёт вся история мира: красные утёсы Оргриммара
-          и белые стены Штормграда. Фото-настроение, описание и ключевые события — коротко
-          и по делу.
+          и белые стены Штормграда. Настоящие игровые скриншоты, описание и ключевые
+          события — коротко и по делу.
         </p>
       </div>
     </section>
@@ -472,9 +466,7 @@ const cities = [
             <div class="city-media">
               <div class="city-shot">
                 <img
-                  src={commons(c.img.dir, c.img.name, 960)}
-                  srcset={`${commons(c.img.dir, c.img.name, 960)} 960w, ${commons(c.img.dir, c.img.name, 1920)} 1920w`}
-                  sizes="(max-width: 900px) 100vw, 50vw"
+                  src={c.img.src}
                   alt={c.img.alt}
                   loading={i === 0 ? 'eager' : 'lazy'}
                   decoding="async"
@@ -560,9 +552,9 @@ const cities = [
         <p class="foot-note">
           © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
           Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
-          Проект любительский и не связан с Blizzard. Фотографии: <a
-            href="https://commons.wikimedia.org/"
-            rel="noopener">Wikimedia Commons</a>.
+          Проект любительский и не связан с Blizzard. Скриншоты городов: <a
+            href="https://warcraft.wiki.gg/"
+            rel="noopener">warcraft.wiki.gg</a>.
         </p>
       </div>
     </footer>
