@@ -32,6 +32,9 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Гильдия Durotar — World of Warcraft: Forever</title>
     <meta
@@ -83,6 +86,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
 
       html {
         scroll-behavior: smooth;
+        scroll-padding-top: 76px;
       }
 
       body {
@@ -119,6 +123,53 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         -webkit-background-clip: text;
         background-clip: text;
         color: transparent;
+      }
+
+      ::selection {
+        background: rgba(212, 175, 55, 0.32);
+        color: #fff8e6;
+      }
+
+      a:focus-visible,
+      .btn:focus-visible {
+        outline: 2px solid var(--gold-lt);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      .btn:active {
+        transform: translateY(0) scale(0.98);
+      }
+
+      @keyframes rise {
+        from {
+          opacity: 0;
+          transform: translateY(26px);
+        }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
+
+      @keyframes sheen {
+        from {
+          background-position: 0% 50%;
+        }
+        to {
+          background-position: 200% 50%;
+        }
+      }
+
+      .js .rv {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+
+      .js .rv.in {
+        opacity: 1;
+        transform: none;
       }
 
       /* ── шапка ──────────────────────────────────────── */
@@ -658,6 +709,80 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         text-underline-offset: 3px;
       }
 
+      /* ── появление и микроанимации ──────────────────── */
+      .hero-eyebrow {
+        animation: rise 0.8s 0.05s both ease-out;
+      }
+
+      .hero h1 {
+        background: linear-gradient(100deg, #a37c26 0%, #eccb6b 30%, #fff8e2 50%, #eccb6b 70%, #a37c26 100%);
+        background-size: 200% 100%;
+        -webkit-background-clip: text;
+        background-clip: text;
+        animation:
+          rise 0.9s 0.15s both ease-out,
+          sheen 8s 1.6s linear infinite;
+      }
+
+      .hero-sub {
+        animation: rise 0.8s 0.3s both ease-out;
+      }
+
+      .hero-motto {
+        animation: rise 0.8s 0.45s both ease-out;
+      }
+
+      .hero-cta {
+        animation: rise 0.8s 0.6s both ease-out;
+      }
+
+      .hero-strip {
+        animation: rise 0.8s 0.8s both ease-out;
+      }
+
+      .topbar {
+        transition: box-shadow 0.25s ease;
+      }
+
+      .topbar.scrolled {
+        box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.9);
+      }
+
+      .chip,
+      .role {
+        transition:
+          transform 0.18s ease,
+          box-shadow 0.18s ease,
+          border-color 0.18s ease,
+          background 0.18s ease;
+      }
+
+      .chip:hover {
+        transform: translateY(-2px);
+        border-color: rgba(122, 88, 30, 0.9);
+        box-shadow: 0 8px 16px -10px rgba(0, 0, 0, 0.55);
+      }
+
+      .role:hover {
+        transform: translateY(-2px);
+        border-color: var(--gold);
+        background: rgba(212, 175, 55, 0.12);
+        box-shadow: 0 10px 22px -14px rgba(212, 175, 55, 0.8);
+      }
+
+      .patch-bar {
+        transition:
+          border-color 0.2s ease,
+          background 0.2s ease,
+          box-shadow 0.2s ease;
+      }
+
+      .patch-bar:hover {
+        border-color: var(--line);
+        background: rgba(212, 175, 55, 0.12);
+        box-shadow: 0 10px 26px -14px rgba(212, 175, 55, 0.7);
+      }
+
       /* ── адаптив ────────────────────────────────────── */
       @media (max-width: 900px) {
         .topnav {
@@ -703,6 +828,10 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         *::after {
           transition: none !important;
           animation: none !important;
+        }
+        .js .rv {
+          opacity: 1 !important;
+          transform: none !important;
         }
       }
     </style>
@@ -828,7 +957,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
     <!-- ══ приветствие ══ -->
     <section class="about" id="about">
       <div class="shell">
-        <div class="parchment">
+        <div class="parchment rv">
           <p class="kicker">Приветствие</p>
           <h2>Рады видеть тебя!</h2>
           <p class="drop">
@@ -862,7 +991,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
       .patch-bar a{color:var(--gold);text-decoration:underline;text-underline-offset:3px}
     </style>
 
-    <div class="patch-bar">
+    <div class="patch-bar rv">
       <b>{patch.title}</b>
       <span>— {patch.note}</span>
       <a href={patch.link} rel="noopener">список изменений →</a>
@@ -877,7 +1006,7 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
         loading="lazy"
         decoding="async"
       />
-      <div class="recruit-inner">
+      <div class="recruit-inner rv">
         <div class="sec-title" style="margin-bottom: 0">
           <h2 class="gold-text">Нам нужны герои</h2>
           <svg class="fleuron" viewBox="0 0 320 24" fill="none" stroke="currentColor" aria-hidden="true">
@@ -1042,6 +1171,35 @@ const patch = { title: 'Актуальный патч Forever', note: 'хотф�
           document.addEventListener('visibilitychange', apply);
           window.setInterval(apply, 30000);
           apply();
+        }
+      }
+
+      // Шапка мягко отбрасывает тень, когда страница прокручена.
+      const topbar = document.querySelector<HTMLElement>('.topbar');
+      if (topbar) {
+        const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 10);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      // Плавное появление блоков при прокрутке.
+      const revealTargets = document.querySelectorAll<HTMLElement>('.rv');
+      if (revealTargets.length) {
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealTargets.forEach((el) => el.classList.add('in'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('in');
+                  io.unobserve(entry.target);
+                }
+              }
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
+          );
+          revealTargets.forEach((el) => io.observe(el));
         }
       }
     </script>

@@ -62,6 +62,9 @@ const cities = [
 <html lang="ru">
   <head>
     <meta charset="UTF-8" />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Города Азерота — Гильдия Durotar</title>
     <meta
@@ -106,6 +109,41 @@ const cities = [
       }
 
       *, *::before, *::after { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 76px;
+      }
+
+      ::selection { background: rgba(212, 175, 55, 0.32); color: #fff8e6; }
+
+      a:focus-visible,
+      .btn:focus-visible {
+        outline: 2px solid var(--gold-lt);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      @keyframes rise {
+        from { opacity: 0; transform: translateY(26px); }
+        to { opacity: 1; transform: none; }
+      }
+
+      @keyframes sheen {
+        from { background-position: 0% 50%; }
+        to { background-position: 200% 50%; }
+      }
+
+      .js .rv {
+        opacity: 0;
+        transform: translateY(24px);
+        transition: opacity 0.7s ease, transform 0.7s ease;
+      }
+
+      .js .rv.in {
+        opacity: 1;
+        transform: none;
+      }
 
       body {
         margin: 0;
@@ -394,6 +432,29 @@ const cities = [
       .foot-note { margin: 20px 0 0; max-width: 76ch; line-height: 1.6; }
       .foot-note a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
 
+      /* ── появление и микроанимации ── */
+      .page-eyebrow { animation: rise 0.8s 0.05s both ease-out; }
+      .page-head h1 { animation: rise 0.9s 0.18s both ease-out; }
+      .page-head p { animation: rise 0.8s 0.34s both ease-out; }
+
+      .topbar { transition: box-shadow 0.25s ease; }
+      .topbar.scrolled { box-shadow: 0 14px 34px -18px rgba(0, 0, 0, 0.9); }
+
+      .btn:active { transform: translateY(0) scale(0.98); }
+
+      .city-shot img { transition: transform 0.6s ease, filter 0.6s ease; }
+      .city-media:hover .city-shot img {
+        transform: scale(1.05);
+        filter: saturate(1.12) contrast(1.05) brightness(1.06);
+      }
+
+      .facts li { transition: transform 0.18s ease, border-color 0.18s ease, background 0.18s ease; }
+      .facts li:hover {
+        transform: translateY(-2px);
+        border-color: var(--line);
+        background: rgba(212, 175, 55, 0.12);
+      }
+
       /* ── адаптив ── */
       @media (max-width: 900px) {
         .topnav { display: none; }
@@ -411,6 +472,7 @@ const cities = [
 
       @media (prefers-reduced-motion: reduce) {
         *, *::before, *::after { transition: none !important; animation: none !important; }
+        .js .rv { opacity: 1 !important; transform: none !important; }
       }
     </style>
   </head>
@@ -462,7 +524,7 @@ const cities = [
     <section class="shell cities">
       {
         cities.map((c, i) => (
-          <article class:list={['city', i % 2 === 1 && 'alt']} id={c.id}>
+          <article class:list={['city', 'rv', i % 2 === 1 && 'alt']} id={c.id}>
             <div class="city-media">
               <div class="city-shot">
                 <img
@@ -557,5 +619,36 @@ const cities = [
         </p>
       </div>
     </footer>
+
+    <script>
+      // Шапка и плавное появление блоков при прокрутке.
+      const topbar = document.querySelector<HTMLElement>('.topbar');
+      if (topbar) {
+        const onScroll = () => topbar.classList.toggle('scrolled', window.scrollY > 10);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        onScroll();
+      }
+
+      const revealTargets = document.querySelectorAll<HTMLElement>('.rv');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (revealTargets.length) {
+        if (reduceMotion || !('IntersectionObserver' in window)) {
+          revealTargets.forEach((el) => el.classList.add('in'));
+        } else {
+          const io = new IntersectionObserver(
+            (entries) => {
+              for (const entry of entries) {
+                if (entry.isIntersecting) {
+                  entry.target.classList.add('in');
+                  io.unobserve(entry.target);
+                }
+              }
+            },
+            { threshold: 0.15, rootMargin: '0px 0px -40px 0px' },
+          );
+          revealTargets.forEach((el) => io.observe(el));
+        }
+      }
+    </script>
   </body>
 </html>
