@@ -19,9 +19,12 @@ const lava = {
   alt: 'Ночное извержение вулкана',
 };
 
+const base = import.meta.env.BASE_URL;
+
 const nav = [
   { label: 'О нас', href: '#about' },
   { label: 'Чем живём', href: '#life' },
+  { label: 'Города', href: `${base}cities/` },
   { label: 'Набор', href: '#recruit' },
   { label: 'Новичку', href: '#join' },
   { label: 'Контакты', href: '#contacts' },
@@ -851,7 +854,7 @@ const quotes = [
     <!-- ══ шапка ══ -->
     <header class="topbar">
       <div class="shell topbar-inner">
-        <a class="brand" href="/" aria-label="Гильдия Durotar — на главную">
+        <a class="brand" href={base} aria-label="Гильдия Durotar — на главную">
           <svg viewBox="0 0 48 56" aria-hidden="true">
             <defs>
               <linearGradient id="crestG" x1="0" y1="0" x2="0" y2="1">
@@ -1222,6 +1225,7 @@ const quotes = [
           <nav class="foot-links" aria-label="Ссылки подвала">
             <a href="#about">О нас</a>
             <a href="#life">Чем живём</a>
+            <a href={`${import.meta.env.BASE_URL}cities/`}>Города</a>
             <a href="#recruit">Набор</a>
             <a href="#recruit">Discord</a>
           </nav>
