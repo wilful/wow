@@ -1,0 +1,570 @@
+---
+// Страница «Города Азерота» — Оргриммар (Орда) и Штормград (Альянс).
+// Стиль совпадает с главной: тёмный камень, золото, пергамент.
+// Фото — настроение городов с Wikimedia Commons (проверены на доступность),
+// игровые скриншоты заменим, когда появятся.
+
+const commons = (dir: string, name: string, width: number) =>
+  `https://upload.wikimedia.org/wikipedia/commons/thumb/${dir}/${name}/${width}px-${name}`;
+
+const base = import.meta.env.BASE_URL;
+
+const nav = [
+  { label: 'Главная', href: base, active: false },
+  { label: 'Города', href: `${base}cities/`, active: true },
+];
+
+const cities = [
+  {
+    id: 'orgrimmar',
+    faction: 'Орда',
+    fcolor: '#c0392b',
+    name: 'ОРГРИММАР',
+    subtitle: 'Столица Орды · Дуротар, Калимдор',
+    img: {
+      dir: '9/96',
+      name: 'Canyon_de_Chelly_White_House_Ruin_Close_View_2006_09_07.jpg',
+      alt: 'Красные скальные стены каньона — настроение Оргриммара',
+    },
+    caption: 'Настроение города: красные стены каньонов — как утёсы Дуротара. Пока фото-заглушка, заменим на игровой скриншот.',
+    text: [
+      'Оргриммар вырублен прямо в скалах Дуротара: двухъярусный город над сухим каньоном, с боевыми воротами, рынком, кузницей и тренировочными площадками. Здесь бьётся сердце Орды — отсюда уходят в подземелья и на кладбища Азерота.',
+      'Для наших орда-персонажей это родные ворота: банк, аукцион, тренеры и почта — всё в шаговой доступности, а над входом статуя Оргримма, в честь которого назван город.',
+    ],
+    facts: ['Столица Орды', 'Население: орки, троллы, таурены, нежить', 'Лидер: Вождь Орды'],
+    events: [
+      { year: 'Исход', title: 'Исход Орды', text: 'Тралв вывел освобождённых орков из лагерей и через море — к берегам Калимдора.' },
+      { year: 'Основание', title: 'Город-крепость в каньоне', text: 'Столица названа в честь Оргримма Молота Дуротара; под её знаменем собрались все кланы.' },
+      { year: 'Испытание', title: 'Осада Оргриммара', text: 'Город пережил великую осаду и остался неприступной твердыней Орды — даже когда ворота штурмовали изнутри.' },
+    ],
+  },
+  {
+    id: 'stormwind',
+    faction: 'Альянс',
+    fcolor: '#3d7ff0',
+    name: 'ШТОРМГРАД',
+    subtitle: 'Столица Альянса · Эостровые королевства',
+    img: {
+      dir: '2/25',
+      name: '1_carcassonne_aerial_2016.jpg',
+      alt: 'Средневековый город за крепостными стенами с высоты — настроение Штормграда',
+    },
+    caption: 'Настроение города: древний город за стенами — как Штормград с его собором и крепостными воротами. Фото-заглушка, будет заменено на скриншот.',
+    text: [
+      'Штормград — старейшая столица людей: дворец короля, великий Собор Света, порт с торговыми кораблями и دائمый гул на рыночной площади. Говорят, город отстроен заново после Второй войны — и теперь стоит ещё крепче.',
+      'Тут начинается путь многих героев Альянса: за стенами города прячутся тайные общества, а во дворце когда-то вершились дела нехорошие — так что прогулка по дворцу тоже может стать приключением.',
+    ],
+    facts: ['Столица Альянса', 'Население: люди, дворфы, эльфы, гномы', 'Лидер: Король Альянса'],
+    events: [
+      { year: 'Вторая война', title: 'Падение Штормграда', text: 'Измена Артекса Песни Войны открыла ворота — ордынская армия ворвалась в город, и Альянс бежал.' },
+      { year: 'Тёмные годы', title: 'Ониксия у трона', text: 'Пока король Вариан пропадал без вести, обманутый двор правил самозванка — хитрая Ониксия в облике леди Катраны Престор.' },
+      { year: 'Возвращение', title: 'Король вернулся', text: 'Вариан вернулся, объединил расколотый город, и Штормград снова стал сердцем Альянса.' },
+    ],
+  },
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Города Азерота — Гильдия Durotar</title>
+    <meta
+      name="description"
+      content="Оргриммар и Штормград: фотографии, описание и ключевые события двух столиц Азерота — на сайте гильдии Durotar (World of Warcraft: Forever)."
+    />
+    <meta name="theme-color" content="#0c0906" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta property="og:title" content="Города Азерота — Гильдия Durotar" />
+    <meta property="og:description" content="Оргриммар и Штормград: фото, описание и ключевые события столиц Альянса и Орды." />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/1_carcassonne_aerial_2016.jpg/1920px-1_carcassonne_aerial_2016.jpg"
+    />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+    />
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --night: #0c0906;
+        --stone: #17120c;
+        --stone-2: #1f1811;
+        --gold: #d4af37;
+        --gold-lt: #f6e3a1;
+        --gold-dk: #8a6a22;
+        --text: #e9ddc4;
+        --muted: #a99a7d;
+        --line: rgba(212, 175, 55, 0.34);
+        --line-soft: rgba(212, 175, 55, 0.16);
+        --font-display: 'Cinzel Decorative', 'Times New Roman', serif;
+        --font-head: 'Forum', 'Palatino Linotype', Georgia, serif;
+        --font-body: 'PT Serif', Georgia, 'Times New Roman', serif;
+        --gold-grad: linear-gradient(180deg, #fff6d8 8%, #eccb6b 48%, #a37c26 92%);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        background: var(--night);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      h1, h2, h3 { font-weight: 400; }
+
+      .shell { width: min(1140px, 100% - 40px); margin-inline: auto; }
+
+      .gold-text {
+        background: var(--gold-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      /* ── шапка ── */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: linear-gradient(180deg, rgba(12, 9, 6, 0.96), rgba(12, 9, 6, 0.88));
+        border-bottom: 1px solid var(--line-soft);
+        backdrop-filter: blur(8px);
+      }
+
+      .topbar-inner { display: flex; align-items: center; gap: 18px; padding: 10px 0; }
+      .brand { display: flex; align-items: center; gap: 12px; }
+      .brand svg { width: 34px; height: 40px; filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6)); }
+      .brand b { display: block; font-family: var(--font-display); font-size: 1.05rem; letter-spacing: 0.14em; line-height: 1.1; }
+      .brand span { display: block; color: var(--muted); font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; }
+
+      .topnav { display: flex; gap: 4px; margin-left: auto; }
+
+      .topnav a {
+        padding: 8px 14px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+        transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      }
+
+      .topnav a:hover, .topnav a:focus-visible {
+        color: var(--gold-lt);
+        border-color: var(--line-soft);
+        background: rgba(212, 175, 55, 0.07);
+      }
+
+      .topnav a.active { color: var(--gold-lt); border-color: var(--line); background: rgba(212, 175, 55, 0.1); }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 13px 26px;
+        border-radius: 6px;
+        font-family: var(--font-head);
+        font-size: 1.02rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      }
+
+      .btn-gold {
+        color: #241905;
+        background: linear-gradient(180deg, #f3dd93, #d4af37 55%, #a37c26);
+        border: 1px solid #6f5518;
+        box-shadow: inset 0 1px 0 rgba(255, 249, 220, 0.8), 0 10px 24px -12px rgba(212, 175, 55, 0.7);
+      }
+
+      .btn-gold:hover { transform: translateY(-2px); }
+      .btn-sm { padding: 9px 18px; font-size: 0.9rem; }
+
+      /* ── заголовок страницы ── */
+      .page-head {
+        position: relative;
+        padding: 76px 0 26px;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .page-head::before {
+        content: '';
+        position: absolute;
+        inset: -40% -20% auto;
+        height: 340px;
+        background: radial-gradient(60% 100% at 50% 0%, rgba(212, 175, 55, 0.14), transparent 70%);
+        pointer-events: none;
+      }
+
+      .page-eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 16px;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.95rem;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+      }
+
+      .page-eyebrow::before, .page-eyebrow::after {
+        content: '';
+        width: 46px;
+        height: 1px;
+        background: linear-gradient(90deg, transparent, var(--gold));
+      }
+
+      .page-eyebrow::after { background: linear-gradient(270deg, transparent, var(--gold)); }
+
+      .page-head h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2.2rem, 7vw, 4.4rem);
+        letter-spacing: 0.08em;
+        line-height: 1.05;
+        background: var(--gold-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .page-head p { margin: 16px auto 0; max-width: 62ch; color: var(--muted); }
+
+      /* ── города ── */
+      .cities { padding: 30px 0 60px; display: grid; gap: 70px; }
+
+      .city { display: grid; grid-template-columns: 1.05fr 1fr; gap: 34px; align-items: start; }
+      .city.alt .city-media { order: 2; }
+      .city.alt .city-body { order: 1; }
+
+      .city-media { position: relative; }
+
+      .city-shot {
+        position: relative;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 34px 60px -36px rgba(0, 0, 0, 1);
+        aspect-ratio: 4 / 3;
+      }
+
+      .city-shot img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(1.02) contrast(1.03) brightness(0.94);
+      }
+
+      .city-shot::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(180deg, transparent 55%, rgba(12, 9, 6, 0.6) 100%);
+        pointer-events: none;
+      }
+
+      .city-shot .corner {
+        position: absolute;
+        width: 56px;
+        height: 56px;
+        color: var(--gold);
+        opacity: 0.85;
+        pointer-events: none;
+      }
+
+      .city-shot .corner svg { width: 100%; height: 100%; }
+      .city-shot .corner.tl { top: 6px; left: 6px; }
+      .city-shot .corner.br { bottom: 6px; right: 6px; transform: scale(-1, -1); }
+
+      .shot-note { margin: 10px 2px 0; color: var(--muted); font-size: 0.82rem; font-style: italic; }
+
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 6px 16px;
+        border: 1px solid var(--fc);
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--fc) 14%, transparent);
+        color: var(--fc);
+        font-family: var(--font-head);
+        font-size: 0.88rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      .badge::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--fc); box-shadow: 0 0 8px var(--fc); }
+
+      .city-body h2 {
+        margin: 14px 0 4px;
+        font-family: var(--font-display);
+        font-size: clamp(1.8rem, 5vw, 2.9rem);
+        letter-spacing: 0.08em;
+        background: var(--gold-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .city-sub { margin: 0 0 16px; color: var(--muted); font-family: var(--font-head); letter-spacing: 0.14em; text-transform: uppercase; font-size: 0.86rem; }
+
+      .city-body p { margin: 0 0 14px; }
+
+      .facts { display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 24px; padding: 0; list-style: none; }
+      .facts li {
+        padding: 6px 14px;
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        background: rgba(212, 175, 55, 0.06);
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.88rem;
+        letter-spacing: 0.06em;
+      }
+
+      .events { margin: 0; padding: 0; list-style: none; display: grid; gap: 14px; }
+
+      .event {
+        position: relative;
+        padding: 16px 18px 16px 62px;
+        border: 1px solid var(--line-soft);
+        border-radius: 10px;
+        background: linear-gradient(180deg, var(--stone-2), var(--stone));
+        transition: border-color 0.18s ease, transform 0.18s ease;
+      }
+
+      .event:hover { border-color: var(--line); transform: translateX(4px); }
+
+      .event::before {
+        content: attr(data-year);
+        position: absolute;
+        left: 14px;
+        top: 16px;
+        width: 36px;
+        height: 36px;
+        display: grid;
+        place-items: center;
+        border-radius: 50%;
+        border: 2px solid var(--gold);
+        background: rgba(212, 175, 55, 0.08);
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.58rem;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        text-align: center;
+        line-height: 1.05;
+        overflow: hidden;
+      }
+
+      .event b { display: block; font-family: var(--font-head); font-size: 1.06rem; letter-spacing: 0.04em; margin-bottom: 4px; }
+      .event span { color: var(--muted); font-size: 0.93rem; }
+
+      .events-title { margin: 26px 0 12px; font-family: var(--font-head); letter-spacing: 0.2em; text-transform: uppercase; font-size: 0.92rem; color: var(--gold-lt); }
+
+      .city-cta { text-align: center; padding: 8px 0 4px; }
+      .city-cta p { color: var(--muted); max-width: 54ch; margin: 0 auto 18px; }
+
+      /* ── подвал ── */
+      footer { padding: 46px 0 40px; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--line-soft); }
+
+      .foot-grid { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 18px 40px; padding-bottom: 24px; border-bottom: 1px solid var(--line-soft); }
+      .foot-brand { display: flex; align-items: center; gap: 12px; color: var(--text); }
+      .foot-brand svg { width: 30px; height: 35px; }
+      .foot-brand b { font-family: var(--font-display); letter-spacing: 0.14em; font-size: 1rem; }
+
+      .foot-links { display: flex; flex-wrap: wrap; gap: 8px 24px; align-items: center; }
+      .foot-links a { font-family: var(--font-head); letter-spacing: 0.08em; text-transform: uppercase; font-size: 0.92rem; }
+      .foot-links a:hover { color: var(--gold-lt); }
+
+      .foot-note { margin: 20px 0 0; max-width: 76ch; line-height: 1.6; }
+      .foot-note a { color: var(--gold); text-decoration: underline; text-underline-offset: 3px; }
+
+      /* ── адаптив ── */
+      @media (max-width: 900px) {
+        .topnav { display: none; }
+        .city { grid-template-columns: 1fr; gap: 22px; }
+        .city.alt .city-media { order: 1; }
+        .city.alt .city-body { order: 2; }
+      }
+
+      @media (max-width: 560px) {
+        body { font-size: 16px; }
+        .topbar .btn { display: none; }
+        .event { padding-left: 16px; }
+        .event::before { position: static; margin-bottom: 8px; width: auto; height: auto; padding: 3px 10px; border-radius: 4px; display: inline-grid; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after { transition: none !important; animation: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══ шапка ══ -->
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href={base} aria-label="Гильдия Durotar — на главную">
+          <svg viewBox="0 0 48 56" aria-hidden="true">
+            <defs>
+              <linearGradient id="crestG" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0" stop-color="#f3dd93" />
+                <stop offset="0.5" stop-color="#d4af37" />
+                <stop offset="1" stop-color="#8a6a22" />
+              </linearGradient>
+            </defs>
+            <path d="M24 2 44 9v17c0 14-8.6 23.4-20 28C12.6 49.4 4 40 4 26V9Z" fill="#7e1a15" stroke="url(#crestG)" stroke-width="3" />
+            <path d="M24 7 39 12v14c0 11-6.6 18.6-15 22.4C15.6 44.6 9 37 9 26V12Z" fill="none" stroke="url(#crestG)" stroke-width="1.2" opacity="0.75" />
+            <text x="24" y="36" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="24" font-weight="700" fill="url(#crestG)">D</text>
+          </svg>
+          <span>
+            <b class="gold-text">DUROTAR</b>
+            <span>гильдия · WoW: Forever</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Основная навигация">
+          {nav.map((item) => <a href={item.href} class={item.active ? 'active' : undefined}>{item.label}</a>)}
+        </nav>
+
+        <a class="btn btn-gold btn-sm" href={`${base}#recruit`}>В гильдию</a>
+      </div>
+    </header>
+
+    <!-- ══ заголовок ══ -->
+    <section class="page-head">
+      <div class="shell">
+        <p class="page-eyebrow">Два трона · один мир</p>
+        <h1>ГОРОДА АЗЕРОТА</h1>
+        <p>
+          Две столицы, между которыми живёт вся история мира: красные утёсы Оргриммара
+          и белые стены Штормграда. Фото-настроение, описание и ключевые события — коротко
+          и по делу.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══ города ══ -->
+    <section class="shell cities">
+      {
+        cities.map((c, i) => (
+          <article class:list={['city', i % 2 === 1 && 'alt']} id={c.id}>
+            <div class="city-media">
+              <div class="city-shot">
+                <img
+                  src={commons(c.img.dir, c.img.name, 960)}
+                  srcset={`${commons(c.img.dir, c.img.name, 960)} 960w, ${commons(c.img.dir, c.img.name, 1920)} 1920w`}
+                  sizes="(max-width: 900px) 100vw, 50vw"
+                  alt={c.img.alt}
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                  decoding="async"
+                />
+                <span class="corner tl">
+                  <svg viewBox="0 0 74 74" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M2 72V22C2 11 11 2 22 2h50" />
+                    <path d="M10 72V26c0-9 7-16 16-16h46" opacity="0.5" />
+                    <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none" />
+                  </svg>
+                </span>
+                <span class="corner br">
+                  <svg viewBox="0 0 74 74" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <path d="M2 72V22C2 11 11 2 22 2h50" />
+                    <path d="M10 72V26c0-9 7-16 16-16h46" opacity="0.5" />
+                    <circle cx="24" cy="24" r="3" fill="currentColor" stroke="none" />
+                  </svg>
+                </span>
+              </div>
+              <p class="shot-note">{c.caption}</p>
+            </div>
+
+            <div class="city-body">
+              <span class="badge" style={`--fc:${c.fcolor}`}>{c.faction}</span>
+              <h2>{c.name}</h2>
+              <p class="city-sub">{c.subtitle}</p>
+              {c.text.map((t) => <p>{t}</p>)}
+              <ul class="facts">
+                {c.facts.map((f) => <li>{f}</li>)}
+              </ul>
+
+              <p class="events-title">Ключевые события</p>
+              <ul class="events">
+                {c.events.map((e) => (
+                  <li class="event" data-year={e.year}>
+                    <b>{e.title}</b>
+                    <span>{e.text}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))
+      }
+
+      <div class="city-cta">
+        <p>Какой город ближе твоему сердцу? У нас играют герои обеих сторон — выбирай фракцию и заходи.</p>
+        <a class="btn btn-gold" href={`${base}#recruit`}>Присоединиться</a>
+      </div>
+    </section>
+
+    <!-- ══ подвал ══ -->
+    <footer>
+      <div class="shell">
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <svg viewBox="0 0 48 56" aria-hidden="true">
+              <defs>
+                <linearGradient id="crestF" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#f3dd93" />
+                  <stop offset="0.5" stop-color="#d4af37" />
+                  <stop offset="1" stop-color="#8a6a22" />
+                </linearGradient>
+              </defs>
+              <path d="M24 2 44 9v17c0 14-8.6 23.4-20 28C12.6 49.4 4 40 4 26V9Z" fill="#7e1a15" stroke="url(#crestF)" stroke-width="3" />
+              <text x="24" y="36" text-anchor="middle" font-family="Cinzel Decorative, serif" font-size="24" font-weight="700" fill="url(#crestF)">D</text>
+            </svg>
+            <div>
+              <b>DUROTAR</b><br />
+              <span>гильдия World of Warcraft: Forever</span>
+            </div>
+          </div>
+
+          <nav class="foot-links" aria-label="Ссылки подвала">
+            <a href={base}>Главная</a>
+            <a href={`${base}#about`}>О нас</a>
+            <a href={`${base}#life`}>Чем живём</a>
+            <a href={`${base}#recruit`}>Набор</a>
+            <a href={`${base}#contacts`}>Discord</a>
+          </nav>
+        </div>
+
+        <p class="foot-note">
+          © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
+          Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
+          Проект любительский и не связан с Blizzard. Фотографии: <a
+            href="https://commons.wikimedia.org/"
+            rel="noopener">Wikimedia Commons</a>.
+        </p>
+      </div>
+    </footer>
+  </body>
+</html>
