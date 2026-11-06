@@ -1,25 +1,20 @@
 ---
 // Приветственная страница гильдии Durotar (World of Warcraft: Forever).
 // Тёмный камень, золото, пергамент, шрифты в духе игры.
-// Фото подключаются с Wikimedia Commons (проверены на доступность).
+// Все изображения — из игры World of Warcraft (скриншоты/арт, источник — warcraft.wiki.gg),
+// лежат в public/img/ и подключаются локально.
 
-// URL карточки Wikimedia Commons: имя файла в URL-кодировке, одинаково в обоих сегментах.
-const commons = (dir: string, name: string, width: number) =>
-  `https://upload.wikimedia.org/wikipedia/commons/thumb/${dir}/${name}/${width}px-${name}`;
+const base = import.meta.env.BASE_URL;
 
 const hero = {
-  dir: 'd/de',
-  name: 'West_Mitten_Butte_-_Monument_Valley_Luca_Galuzzi_2007.jpg',
-  alt: 'Красные скалы пустыни на закате',
+  src: `${base}img/hero-durotar.jpg`,
+  alt: 'Пустыня Дуротар в игре World of Warcraft',
 };
 
 const lava = {
-  dir: 'b/bb',
-  name: 'K%C4%ABlauea_-_Volcano_eruption_%28night%29.jpg',
-  alt: 'Ночное извержение вулкана',
+  src: `${base}img/recruit-blackrock.jpg`,
+  alt: 'Черная гора — вход в подземелья Огненного Неба',
 };
-
-const base = import.meta.env.BASE_URL;
 
 const nav = [
   { label: 'О нас', href: '#about' },
@@ -32,33 +27,29 @@ const nav = [
 
 const cards = [
   {
-    dir: 'd/d0',
-    name: 'Albert_Bierstadt_-_A_Storm_in_the_Rocky_Mountains%2C_Mt._Rosalie_-_Google_Art_Project.jpg',
-    alt: 'Грозовой шторм над горными вершинами',
+    img: `${base}img/raid-ragnaros.jpg`,
+    alt: 'Рагнарос, повелитель огня — босс Классики',
     tag: 'PvE',
     title: 'Рейды',
     text: 'Собираемся по вечерам, разбираем тактики и забираем боссов. Разбор — спокойный и по делу, без токсика и крика в голосовой чат.',
   },
   {
-    dir: '3/32',
-    name: 'Antelope_Slot_Canyon_%2850508209447%29.jpg',
-    alt: 'Узкий красный коридор каньона',
+    img: `${base}img/dungeon-deadmines.jpg`,
+    alt: 'Внутри подземелья Мёртвые копи',
     tag: 'Фарм',
     title: 'Подземелья',
     text: 'В Forever 35 подземелий: собираем состав под уровень, фармим добычу и катаемся от первой подземелки до рейдовых входов.',
   },
   {
-    dir: '2/23',
-    name: 'Knight-in-Shining-Armour.jpg',
-    alt: 'Рыцарь в латном доспехе',
+    img: `${base}img/pvp-warsong.jpg`,
+    alt: 'Ущелье Песни Войны — поле боя в игре',
     tag: 'PvP',
     title: 'БГ и дуэли',
     text: 'Поля сражений, фарм чести и дуэли у ворот. Кто любит сражаться лицом к лицу — тем точно будет, чем заняться.',
   },
   {
-    dir: '6/6b',
-    name: 'Interior_of_Stirling_Castle_Great_Hall.jpg',
-    alt: 'Тёплый свет большого зала замка',
+    img: `${base}img/community-goldshire.jpg`,
+    alt: 'Золотая роща — таверна у дороги',
     tag: 'Сообщество',
     title: 'За одним столом',
     text: 'Ивенты, конкурсы и разговоры в Discord до утра. Гильдия — это в первую очередь люди, а не прогресс на панели.',
@@ -83,14 +74,14 @@ const classes = [
   { name: 'Друид', letter: 'D', color: '#FF7D0A', roles: 'хил · танк · дд' },
 ];
 
-// Галерея: настроение Азерота (заглушки — заменяются на скриншоты гильдии).
+// Галерея: игровые локации Азерота (скриншоты из игры).
 const gallery = [
-  { dir: 'f/fa', name: 'Misty_Morning_%28198493451%29.jpeg', alt: 'Туманный лес на рассвете' },
-  { dir: '4/4c', name: 'Under_stars_and_snows.jpg', alt: 'Снежные вершины под звёздами' },
-  { dir: '3/30', name: 'Fossil_Creek_Waterfall_%2825266154261%29.jpg', alt: 'Водопад в зелёном каньоне' },
-  { dir: 'c/c9', name: 'Gornergletscher_at_night%2C_Switzerland.jpg', alt: 'Ледник в ночном свете' },
-  { dir: 'a/a9', name: 'Night_In_Paradise_%28138497861%29.jpeg', alt: 'Северное сияние над холмами' },
-  { dir: '0/04', name: 'D%C3%BClmen%2C_Kirchspiel%2C_B%C3%B6rnste%2C_Felder_und_B%C3%A4ume_--_2017_--_3160-6.jpg', alt: 'Равнина в золотом свете' },
+  { src: `${base}img/g-elwynn.jpg`, alt: 'Лес Элвинн в игре' },
+  { src: `${base}img/g-dunmorogh.jpg`, alt: 'Дун Морог — снежные просторы' },
+  { src: `${base}img/g-winterspring.jpg`, alt: 'Зимние Ключи — северный снег' },
+  { src: `${base}img/g-tanaris.jpg`, alt: 'Танарис — пески пустыни' },
+  { src: `${base}img/g-silithus.jpg`, alt: 'Силитус — земли скорпидов' },
+  { src: `${base}img/g-tirisfal.jpg`, alt: 'Тирисфальские леса — мрак у берегов' },
 ];
 
 // Цитаты гильдейцев — заглушки, заменяются на настоящие.
@@ -116,7 +107,7 @@ const quotes = [
     <meta property="og:title" content="Гильдия Durotar — World of Warcraft: Forever" />
     <meta property="og:description" content="Русскоязычная гильдия: рейды, подземелья, PvP, открытый набор." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/thumb/d/de/West_Mitten_Butte_-_Monument_Valley_Luca_Galuzzi_2007.jpg/1920px-West_Mitten_Butte_-_Monument_Valley_Luca_Galuzzi_2007.jpg" />
+    <meta property="og:image" content={`${import.meta.env.SITE}${base}img/hero-durotar.jpg`} />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -904,9 +895,7 @@ const quotes = [
     <section class="hero" aria-label="Приветствие">
       <img
         class="hero-bg"
-        src={commons(hero.dir, hero.name, 1920)}
-        srcset={`${commons(hero.dir, hero.name, 960)} 960w, ${commons(hero.dir, hero.name, 1920)} 1920w`}
-        sizes="100vw"
+        src={hero.src}
         alt={hero.alt}
         fetchpriority="high"
         decoding="async"
@@ -1021,9 +1010,7 @@ const quotes = [
               <li class="card">
                 <div class="card-img">
                   <img
-                    src={commons(c.dir, c.name, 960)}
-                    srcset={`${commons(c.dir, c.name, 960)} 960w, ${commons(c.dir, c.name, 1920)} 1920w`}
-                    sizes="(max-width: 900px) 100vw, 50vw"
+                    src={c.img}
                     alt={c.alt}
                     loading="lazy"
                     decoding="async"
@@ -1102,14 +1089,14 @@ const quotes = [
       <div class="shell">
         <div class="sec-title">
           <h2 class="gold-text">Краски Азерота</h2>
-          <p>Настроение мира, пока здесь временные картинки — присылай свои скриншоты, заменим.</p>
+          <p>Шесть локаций Азерота, как их запомнили игроки. Присылай свои скриншоты — заменим.</p>
         </div>
         <ul class="gal">
           {
             gallery.map((g) => (
               <li>
-                <a href={commons(g.dir, g.name, 1920)} target="_blank" rel="noopener">
-                  <img src={commons(g.dir, g.name, 960)} alt={g.alt} loading="lazy" decoding="async" />
+                <a href={g.src} target="_blank" rel="noopener">
+                  <img src={g.src} alt={g.alt} loading="lazy" decoding="async" />
                 </a>
               </li>
             ))
@@ -1159,7 +1146,7 @@ const quotes = [
     <section class="recruit" id="recruit">
       <img
         class="recruit-bg"
-        src={commons(lava.dir, lava.name, 1920)}
+        src={lava.src}
         alt={lava.alt}
         loading="lazy"
         decoding="async"
@@ -1234,9 +1221,10 @@ const quotes = [
         <p class="foot-note">
           © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
           Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
-          Проект любительский и не связан с Blizzard. Фотографии: <a
-            href="https://commons.wikimedia.org/"
-            rel="noopener">Wikimedia Commons</a>.
+          Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
+          материалы World of Warcraft — <a
+            href="https://warcraft.wiki.gg/"
+            rel="noopener">warcraft.wiki.gg</a>.
         </p>
       </div>
     </footer>

@@ -8,7 +8,7 @@
 
 - [Astro](https://astro.build) (статическая генерация)
 - единственная страница `src/pages/index.astro` со встроенными стилями
-- фото подключаются с [Wikimedia Commons](https://commons.wikimedia.org/), шрифты — Google Fonts
+- все изображения — из игры World of Warcraft (скриншоты с [warcraft.wiki.gg](https://warcraft.wiki.gg/), лежат в `public/img/` и `public/cities/`), шрифты — Google Fonts
 - публикация на GitHub Pages через GitHub Actions (`.github/workflows/deploy.yml`)
 
 ## Локальный запуск
