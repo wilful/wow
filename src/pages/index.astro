@@ -31,11 +31,11 @@ const orc = {
   alt: 'Гром Адовый Крик — орк-воин с большим топором, концепт-арт Warcraft III',
 };
 
-// Нежить-заклинатель для левой стороны героя: вырезанный рендер Warcraft III
-// Reforged (прозрачный фон, фон вырезан вручную), warcraft.wiki.gg → public/img/.
+// Нежить для левой стороны героя: Сильвана, тёмный следопыт (Warcraft III Reforged),
+// рендер с прозрачным фоном, источник — warcraft.wiki.gg, лежит в public/img/.
 const undead = {
-  src: `${base}img/undead-priest.png`,
-  alt: 'Нежить (Forsaken) World of Warcraft — модель персонажа в тёмно-фиолетовых одеждах',
+  src: `${base}img/undead-dark-ranger.png`,
+  alt: 'Сильвана Ветрокрылая — тёмный следопыт Нежити, модель Warcraft III Reforged',
 };
 ---
 
@@ -516,6 +516,8 @@ const undead = {
       .hero-fig--left .hero-fig-img {
         animation-name: orcIdleL;
         max-width: 46vw;
+        object-fit: contain;
+        object-position: bottom;
       }
 
       /* ── разделы: заголовок с орнаментом ────────────── */
