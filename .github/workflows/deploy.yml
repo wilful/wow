@@ -29,14 +29,10 @@ jobs:
 
       - name: Compute base path and site URL
         run: |
-          REPO="${GITHUB_REPOSITORY##*/}"
-          OWNER="${GITHUB_REPOSITORY_OWNER}"
-          if [[ "$REPO" == *.github.io ]]; then
-            echo "BASE_PATH=/" >> "$GITHUB_ENV"
-          else
-            echo "BASE_PATH=/$REPO" >> "$GITHUB_ENV"
-          fi
-          echo "SITE_URL=https://${OWNER}.github.io" >> "$GITHUB_ENV"
+          # Сайт публикуется на кастомном домене durotar.0ae.ru (корень домена),
+          # поэтому base всегда '/', а site — домен проекта (см. public/CNAME).
+          echo "BASE_PATH=/" >> "$GITHUB_ENV"
+          echo "SITE_URL=https://durotar.0ae.ru" >> "$GITHUB_ENV"
 
       - name: Install dependencies
         run: npm ci

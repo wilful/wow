@@ -6,7 +6,7 @@ import { defineConfig } from 'astro/config';
 const rawBase = process.env.BASE_PATH || '/';
 // Astro ждёт base со слэшем на конце, иначе import.meta.env.BASE_URL склеит пути без разделителя.
 const base = rawBase.endsWith('/') ? rawBase : `${rawBase}/`;
-const site = process.env.SITE_URL || 'https://example.github.io';
+const site = process.env.SITE_URL || 'https://durotar.0ae.ru';
 
 export default defineConfig({
   site,
