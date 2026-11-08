@@ -10,6 +10,33 @@ export type Officer = {
   code: string;
 };
 
+export type RoleCode = 'TANK' | 'HEAL' | 'DD';
+
+export type ApplicationClass = {
+  code: string;
+  label: string;
+  roles: RoleCode[];
+};
+
+export const applicationRoles: { code: RoleCode; label: string }[] = [
+  { code: 'TANK', label: 'Танк' },
+  { code: 'HEAL', label: 'Хил' },
+  { code: 'DD', label: 'ДД' },
+];
+
+// Доступные роли в заявке по классу для WoW: Forever.
+export const applicationClasses: ApplicationClass[] = [
+  { code: 'WAR', label: 'Воин', roles: ['TANK', 'DD'] },
+  { code: 'PAL', label: 'Паладин', roles: ['TANK', 'HEAL', 'DD'] },
+  { code: 'HUN', label: 'Охотник', roles: ['DD'] },
+  { code: 'ROG', label: 'Разбойник', roles: ['DD'] },
+  { code: 'PRI', label: 'Жрец', roles: ['HEAL', 'DD'] },
+  { code: 'SHA', label: 'Шаман', roles: ['HEAL', 'DD'] },
+  { code: 'MAG', label: 'Маг', roles: ['DD'] },
+  { code: 'WLK', label: 'Чернокнижник', roles: ['DD'] },
+  { code: 'DRU', label: 'Друид', roles: ['TANK', 'HEAL', 'DD'] },
+];
+
 export const guild: {
   name: string;
   realm: string;

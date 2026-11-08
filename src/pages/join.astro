@@ -2,28 +2,14 @@
 // Страница заявки: форма собирает код DUR1-... и строку /w для игры.
 // Код разбирает аддон Durotar (папка AddOns/Durotar): он слушает шёпот
 // и показывает офицеру карточку с кнопкой «Пригласить».
-import guild from '../data/guild';
+import guild, { applicationClasses, applicationRoles } from '../data/guild';
 import type { Officer } from '../data/guild';
 
 const base = import.meta.env.BASE_URL;
 
-const classes = [
-  { code: 'WAR', label: 'Воин' },
-  { code: 'PAL', label: 'Паладин' },
-  { code: 'HUN', label: 'Охотник' },
-  { code: 'ROG', label: 'Разбойник' },
-  { code: 'PRI', label: 'Жрец' },
-  { code: 'SHA', label: 'Шаман' },
-  { code: 'MAG', label: 'Маг' },
-  { code: 'WLK', label: 'Чернокнижник' },
-  { code: 'DRU', label: 'Друид' },
-];
-
-const roles = [
-  { code: 'TANK', label: 'Танк' },
-  { code: 'HEAL', label: 'Хил' },
-  { code: 'DD', label: 'ДД' },
-];
+const classes = applicationClasses;
+const roles = applicationRoles;
+const roleMap = Object.fromEntries(classes.map(({ code, roles: allowed }) => [code, allowed]));
 
 const officers: Officer[] = guild.officers.length
   ? guild.officers
@@ -36,7 +22,7 @@ const refOf = (code: string) =>
 const defaultOfficer = officers[0];
 const defaultRef = refOf(defaultOfficer.code);
 const defaultClass = classes[0];
-const defaultRole = roles[0];
+const defaultRole = roles.find((role) => defaultClass.roles.includes(role.code)) || roles[0];
 const defaultLevel = 60;
 const defaultCode = `DUR1-${defaultClass.code}-${defaultRole.code}-${defaultLevel}-${defaultRef}-0000`;
 const defaultGameLine = `/w ${defaultOfficer.name} Привет! Заявка в Durotar: ${defaultCode}`;
@@ -573,7 +559,13 @@ const nav = [
           <div class="fields">
             <label class="field">
               <span>Класс</span>
-              <select id="class" name="class" aria-label="Класс">
+              <select
+                id="class"
+                name="class"
+                aria-label="Класс"
+                data-role-map={JSON.stringify(roleMap)}
+                data-role-options={JSON.stringify(roles)}
+              >
                 {classes.map((c) => <option value={c.code}>{c.label}</option>)}
               </select>
             </label>
@@ -581,7 +573,9 @@ const nav = [
             <label class="field">
               <span>Роль</span>
               <select id="role" name="role" aria-label="Роль">
-                {roles.map((r) => <option value={r.code}>{r.label}</option>)}
+                {roles
+                  .filter((role) => defaultClass.roles.includes(role.code))
+                  .map((role) => <option value={role.code}>{role.label}</option>)}
               </select>
             </label>
 
@@ -695,6 +689,32 @@ const nav = [
         const sanitizeRef = (value: string) =>
           (value || 'OFF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6) || 'OFF';
 
+        const roleMap = JSON.parse(classSelect.dataset.roleMap || '{}') as Record<string, string[]>;
+        const roleOptions = JSON.parse(classSelect.dataset.roleOptions || '[]') as {
+          code: string;
+          label: string;
+        }[];
+
+        const updateRoles = () => {
+          const allowed = roleMap[classSelect.value] || [];
+          const previousRole = roleSelect.value;
+          const availableRoles = roleOptions.filter((role) => allowed.includes(role.code));
+
+          roleSelect.replaceChildren();
+          for (const role of availableRoles) {
+            const option = document.createElement('option');
+            option.value = role.code;
+            option.textContent = role.label;
+            roleSelect.append(option);
+          }
+
+          if (allowed.includes(previousRole)) {
+            roleSelect.value = previousRole;
+          } else if (availableRoles.length > 0) {
+            roleSelect.value = availableRoles[0].code;
+          }
+        };
+
         const update = () => {
           const officerName = selectedText(officerSelect) || 'Офицер';
           const level = clampLevel(Number.parseInt(levelInput.value, 10));
@@ -748,9 +768,11 @@ const nav = [
         }
 
         form.addEventListener('submit', (event) => event.preventDefault());
-        [classSelect, roleSelect, officerSelect].forEach((el) =>
-          el.addEventListener('change', update),
-        );
+        classSelect.addEventListener('change', () => {
+          updateRoles();
+          update();
+        });
+        [roleSelect, officerSelect].forEach((el) => el.addEventListener('change', update));
         levelInput.addEventListener('input', update);
         levelInput.addEventListener('blur', () => {
           levelInput.value = String(clampLevel(Number.parseInt(levelInput.value, 10)));
@@ -761,6 +783,7 @@ const nav = [
           copyText(gameEl.textContent || '', copyGame),
         );
 
+        updateRoles();
         update();
       }
     </script>
