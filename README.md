@@ -2,14 +2,25 @@
 
 Приветственная (первая) страница гильдейского сайта под **World of Warcraft: Forever** (версия
 на основе Classic: уровни 1–60, без мификов): тёмный камень, золото и пергамент в духе игры.
-Следующими появятся разделы со составом, расписанием и правилами.
+Сейчас есть главная и заявка; дальше — состав, расписание и правила.
 
 ## Стек
 
 - [Astro](https://astro.build) (статическая генерация)
-- единственная страница `src/pages/index.astro` со встроенными стилями
-- все изображения — из игры World of Warcraft (скриншоты с [warcraft.wiki.gg](https://warcraft.wiki.gg/), лежат в `public/img/` и `public/cities/`); шрифты (Cinzel Decorative, Forum, PT Serif) скачаны с Google Fonts и лежат локально в `public/fonts/` — сторонних запросов со страницы нет
+- страницы `src/pages/index.astro` и `join.astro` со встроенными стилями
+- все изображения — из игры World of Warcraft (скриншоты с [warcraft.wiki.gg](https://warcraft.wiki.gg/), лежат в `public/img/`); шрифты (Cinzel Decorative, Forum, PT Serif) скачаны с Google Fonts и лежат локально в `public/fonts/` — сторонних запросов со страницы нет
 - публикация на GitHub Pages через GitHub Actions (`.github/workflows/deploy.yml`)
+
+## Заявка в гильдию (`/join/`)
+
+Страница `src/pages/join.astro` собирает код заявки `DUR1-...` и готовую строку
+`/w <офицер> ...` для чата WoW. Данные гильдии — реалм, фракция и
+офицеры — лежат в `src/data/guild.ts`.
+
+Код разбирает аддон Durotar из соседнего репозитория `AddOns/Durotar`: он
+слушает шёпот, показывает карточку и умеет пригласить игрока. Ссылка
+`?ref=VIL` запоминает, кто пригласил. У офицера в `guild.ts` есть `name` —
+оно же подставляется в `/w` — и `code` (например, `VIL`).
 
 ## Локальный запуск
 

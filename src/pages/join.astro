@@ -1,0 +1,768 @@
+---
+// Страница заявки: форма собирает код DUR1-... и строку /w для игры.
+// Код разбирает аддон Durotar (папка AddOns/Durotar): он слушает шёпот
+// и показывает офицеру карточку с кнопкой «Пригласить».
+import guild from '../data/guild';
+import type { Officer } from '../data/guild';
+
+const base = import.meta.env.BASE_URL;
+
+const classes = [
+  { code: 'WAR', label: 'Воин' },
+  { code: 'PAL', label: 'Паладин' },
+  { code: 'HUN', label: 'Охотник' },
+  { code: 'ROG', label: 'Разбойник' },
+  { code: 'PRI', label: 'Жрец' },
+  { code: 'SHA', label: 'Шаман' },
+  { code: 'MAG', label: 'Маг' },
+  { code: 'WLK', label: 'Чернокнижник' },
+  { code: 'DRU', label: 'Друид' },
+];
+
+const roles = [
+  { code: 'TANK', label: 'Танк' },
+  { code: 'HEAL', label: 'Хил' },
+  { code: 'DD', label: 'ДД' },
+];
+
+const officers: Officer[] = guild.officers.length
+  ? guild.officers
+  : [{ name: 'Офицер', code: 'OFF' }];
+
+// Код в заявке — только латиница и цифры, иначе аддон его не разберёт.
+const refOf = (code: string) =>
+  (code || 'OFF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6) || 'OFF';
+
+const defaultOfficer = officers[0];
+const defaultRef = refOf(defaultOfficer.code);
+const defaultClass = classes[0];
+const defaultRole = roles[0];
+const defaultLevel = 60;
+const defaultCode = `DUR1-${defaultClass.code}-${defaultRole.code}-${defaultLevel}-${defaultRef}-0000`;
+const defaultGameLine = `/w ${defaultOfficer.name} Привет! Заявка в Durotar: ${defaultCode}`;
+
+const nav = [
+  { label: 'Главная', href: base },
+  { label: 'Вступить', href: `${base}join/`, active: true },
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Вступить в гильдию Durotar — заявка</title>
+    <meta
+      name="description"
+      content="Заявка в гильдию Durotar (World of Warcraft: Forever): выбери класс и роль, скопируй строку и отправь её офицеру в игре."
+    />
+    <meta name="theme-color" content="#0c0906" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta property="og:title" content="Вступить в гильдию Durotar" />
+    <meta
+      property="og:description"
+      content="Форма заявки в гильдию Durotar: класс, роль и готовая строка для игры."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+    />
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --night: #0c0906;
+        --stone: #17120c;
+        --stone-2: #1f1811;
+        --parch: #ecdfc2;
+        --gold: #d4af37;
+        --gold-lt: #f6e3a1;
+        --gold-dk: #8a6a22;
+        --text: #e9ddc4;
+        --muted: #a99a7d;
+        --line: rgba(212, 175, 55, 0.34);
+        --line-soft: rgba(212, 175, 55, 0.16);
+        --font-display: 'Cinzel Decorative', 'Times New Roman', serif;
+        --font-head: 'Forum', 'Palatino Linotype', Georgia, serif;
+        --font-body: 'PT Serif', Georgia, 'Times New Roman', serif;
+        --gold-grad: linear-gradient(180deg, #fff6d8 8%, #eccb6b 48%, #a37c26 92%);
+      }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 76px;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(90% 55% at 50% 0%, rgba(212, 175, 55, 0.07), transparent 70%),
+          var(--night);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img { display: block; max-width: 100%; }
+      a { color: inherit; text-decoration: none; }
+      h1, h2, h3 { font-weight: 400; }
+      [hidden] { display: none !important; }
+
+      ::selection { background: rgba(212, 175, 55, 0.32); color: #fff8e6; }
+
+      .shell {
+        width: min(1100px, 100% - 40px);
+        margin-inline: auto;
+      }
+
+      .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .gold-text {
+        background: var(--gold-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: linear-gradient(180deg, rgba(12, 9, 6, 0.96), rgba(12, 9, 6, 0.88));
+        border-bottom: 1px solid var(--line-soft);
+        backdrop-filter: blur(8px);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 10px 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 40px;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+      }
+
+      .brand b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        letter-spacing: 0.14em;
+        line-height: 1.1;
+      }
+
+      .brand .brand-sub {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .topnav {
+        display: flex;
+        gap: 4px;
+        margin-left: auto;
+      }
+
+      .topnav a {
+        padding: 8px 14px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+        transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      }
+
+      .topnav a:hover,
+      .topnav a:focus-visible {
+        color: var(--gold-lt);
+        border-color: var(--line-soft);
+        background: rgba(212, 175, 55, 0.07);
+      }
+
+      .topnav a.active {
+        color: var(--gold-lt);
+        border-color: var(--line);
+        background: rgba(212, 175, 55, 0.08);
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 13px 24px;
+        border-radius: 6px;
+        font-family: var(--font-head);
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      }
+
+      .btn-gold {
+        color: #241905;
+        background: linear-gradient(180deg, #f3dd93, #d4af37 55%, #a37c26);
+        border: 1px solid #6f5518;
+        box-shadow: inset 0 1px 0 rgba(255, 249, 220, 0.8), 0 10px 24px -12px rgba(212, 175, 55, 0.7);
+      }
+
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow: inset 0 1px 0 rgba(255, 249, 220, 0.8), 0 16px 30px -12px rgba(212, 175, 55, 0.8);
+      }
+
+      .btn-ghost {
+        color: var(--gold-lt);
+        background: rgba(12, 9, 6, 0.5);
+        border: 1px solid var(--line);
+      }
+
+      .btn-ghost:hover {
+        transform: translateY(-2px);
+        background: rgba(212, 175, 55, 0.1);
+      }
+
+      .btn-sm {
+        padding: 9px 16px;
+        font-size: 0.88rem;
+      }
+
+      a:focus-visible,
+      .btn:focus-visible,
+      select:focus-visible,
+      input:focus-visible,
+      summary:focus-visible {
+        outline: 2px solid var(--gold-lt);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* ── заголовок страницы ─────────────────────────── */
+      .page-head {
+        padding: 58px 0 8px;
+        text-align: center;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--gold);
+        font-family: var(--font-head);
+        font-size: 0.86rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      .page-head h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2rem, 6vw, 3.6rem);
+        letter-spacing: 0.07em;
+        line-height: 1.05;
+        filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.7));
+      }
+
+      .lead {
+        max-width: 62ch;
+        margin: 18px auto 0;
+        color: var(--text);
+        font-size: clamp(1rem, 2.2vw, 1.12rem);
+      }
+
+      .invite-banner {
+        display: inline-block;
+        margin: 20px auto 0;
+        padding: 9px 16px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: rgba(212, 175, 55, 0.08);
+        color: var(--gold-lt);
+        font-size: 0.95rem;
+      }
+
+      /* ── форма ──────────────────────────────────────── */
+      .join-single {
+        max-width: 760px;
+        margin: 34px auto 64px;
+      }
+
+      .panel {
+        border: 1px solid var(--line);
+        border-radius: 6px;
+        background:
+          radial-gradient(120% 90% at 10% 0%, rgba(255, 246, 216, 0.05), transparent 55%),
+          linear-gradient(180deg, rgba(31, 24, 17, 0.94), rgba(23, 18, 12, 0.96));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 249, 220, 0.05),
+          0 24px 48px -30px rgba(0, 0, 0, 0.9);
+        padding: clamp(18px, 3vw, 28px);
+      }
+
+      .fields {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+      }
+
+      .field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .field > span {
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.82rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      select,
+      input {
+        width: 100%;
+        padding: 11px 12px;
+        border: 1px solid var(--line);
+        border-radius: 4px;
+        background: rgba(12, 9, 6, 0.72);
+        color: var(--text);
+        font: inherit;
+        font-size: 0.98rem;
+      }
+
+      select { cursor: pointer; }
+      select option { background: var(--stone); color: var(--text); }
+
+      .line-box {
+        margin-top: 16px;
+        padding: 12px 14px;
+        border: 1px dashed var(--line);
+        border-radius: 4px;
+        background: rgba(12, 9, 6, 0.55);
+      }
+
+      .code-label {
+        display: block;
+        margin-bottom: 4px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.76rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .line-box pre {
+        margin: 0;
+        color: var(--text);
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+      }
+
+      .howto {
+        margin-top: 18px;
+      }
+
+      .howto h2 {
+        margin: 0 0 14px;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 1.2rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .steps {
+        counter-reset: step;
+        display: grid;
+        gap: 12px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .steps li {
+        counter-increment: step;
+        position: relative;
+        padding-left: 40px;
+      }
+
+      .steps li::before {
+        content: counter(step);
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: grid;
+        place-items: center;
+        width: 26px;
+        height: 26px;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.85rem;
+      }
+
+      .steps strong {
+        display: block;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.96rem;
+        letter-spacing: 0.04em;
+      }
+
+      .steps span {
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      /* ── подвал ─────────────────────────────────────── */
+      footer {
+        padding: 36px 0 40px;
+        border-top: 1px solid var(--line-soft);
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .foot-grid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .foot-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+      }
+
+      .foot-brand img { width: 28px; height: 34px; }
+
+      .foot-brand b {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+      }
+
+      .foot-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+      }
+
+      .foot-links a {
+        font-family: var(--font-head);
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .foot-links a:hover { color: var(--gold-lt); }
+
+      .foot-note {
+        max-width: 78ch;
+        margin: 18px 0 0;
+        line-height: 1.6;
+      }
+
+      .foot-note a {
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      @media (max-width: 900px) {
+        .topnav { display: none; }
+      }
+
+      @media (max-width: 560px) {
+        body { font-size: 16px; }
+        .shell { width: min(1100px, 100% - 28px); }
+        .fields { grid-template-columns: 1fr; }
+        .page-head { padding-top: 40px; }
+        .actions .btn { width: 100%; }
+        .brand .brand-sub { display: none; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        *, *::before, *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href={base} aria-label="Гильдия Durotar — на главную">
+          <img src={`${base}favicon.svg`} alt="" width="34" height="40" />
+          <span>
+            <b class="gold-text">DUROTAR</b>
+            <span class="brand-sub">гильдия · WoW: Forever</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Основная навигация">
+          {nav.map((item) => <a href={item.href} class={item.active ? 'active' : undefined}>{item.label}</a>)}
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-head">
+        <div class="shell">
+          <p class="eyebrow">Набор · World of Warcraft: Forever</p>
+          <h1 class="gold-text">ВСТУПИТЬ В DUROTAR</h1>
+          <p class="lead">
+            Выбери класс и роль, скопируй готовую строку и отправь её в игре.
+            Офицер получит шёпот с кодом заявки и пригласит тебя.
+          </p>
+          <p class="invite-banner" id="invite-banner" hidden></p>
+        </div>
+      </section>
+
+      <section class="shell join-single" aria-label="Заявка в гильдию">
+        <form class="panel form" id="apply-form">
+          <div class="fields">
+            <label class="field">
+              <span>Класс</span>
+              <select id="class" name="class" aria-label="Класс">
+                {classes.map((c) => <option value={c.code}>{c.label}</option>)}
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Роль</span>
+              <select id="role" name="role" aria-label="Роль">
+                {roles.map((r) => <option value={r.code}>{r.label}</option>)}
+              </select>
+            </label>
+
+            <label class="field">
+              <span>Уровень</span>
+              <input
+                id="level"
+                name="level"
+                type="number"
+                aria-label="Уровень"
+                min="1"
+                max="60"
+                step="1"
+                value={defaultLevel}
+                inputmode="numeric"
+              />
+            </label>
+
+            <label class="field">
+              <span>Офицер</span>
+              <select id="officer" name="officer" aria-label="Офицер">
+                {officers.map((o) => (
+                  <option value={o.code}>{o.name}</option>
+                ))}
+              </select>
+            </label>
+          </div>
+
+          <div class="line-box">
+            <span class="code-label">Строка для игрового чата</span>
+            <pre id="game-line">{defaultGameLine}</pre>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-gold" type="button" id="copy-game">Скопировать для чата</button>
+          </div>
+        </form>
+
+        <div class="panel howto">
+          <h2>Что дальше</h2>
+          <ol class="steps">
+            <li>
+              <strong>Скопируй строку</strong>
+              <span>Кнопка кладёт в буфер готовую команду <code>/w</code> с кодом заявки.</span>
+            </li>
+            <li>
+              <strong>Отправь в игре</strong>
+              <span>Вставь в чат World of Warcraft и нажми Enter — офицер получит шёпот.</span>
+            </li>
+            <li>
+              <strong>Прими приглашение</strong>
+              <span>Офицер нажимает «Пригласить» в аддоне, тебе приходит окно приглашения.</span>
+            </li>
+          </ol>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell">
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <img src={`${base}favicon.svg`} alt="" width="28" height="34" />
+            <b>DUROTAR</b>
+          </div>
+          <nav class="foot-links" aria-label="Ссылки подвала">
+            <a href={base}>Главная</a>
+            <a href={`${base}join/`}>Вступить</a>
+          </nav>
+        </div>
+        <p class="foot-note">
+          © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
+          Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
+          Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
+          материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener">warcraft.wiki.gg</a>.
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const form = document.querySelector<HTMLFormElement>('#apply-form');
+      const classSelect = document.querySelector<HTMLSelectElement>('#class');
+      const roleSelect = document.querySelector<HTMLSelectElement>('#role');
+      const levelInput = document.querySelector<HTMLInputElement>('#level');
+      const officerSelect = document.querySelector<HTMLSelectElement>('#officer');
+      const gameEl = document.querySelector<HTMLElement>('#game-line');
+      const bannerEl = document.querySelector<HTMLElement>('#invite-banner');
+      const copyGame = document.querySelector<HTMLButtonElement>('#copy-game');
+
+      if (
+        form &&
+        classSelect &&
+        roleSelect &&
+        levelInput &&
+        officerSelect &&
+        gameEl &&
+        bannerEl &&
+        copyGame
+      ) {
+        const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        const tag = Array.from(
+          { length: 4 },
+          () => alphabet[Math.floor(Math.random() * alphabet.length)],
+        ).join('');
+
+        const clampLevel = (value: number) => Math.min(60, Math.max(1, Math.round(value) || 60));
+
+        const selectedText = (select: HTMLSelectElement) =>
+          select.selectedOptions[0]?.textContent?.trim() || '';
+
+        const sanitizeRef = (value: string) =>
+          (value || 'OFF').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 6) || 'OFF';
+
+        const update = () => {
+          const officerName = selectedText(officerSelect) || 'Офицер';
+          const level = clampLevel(Number.parseInt(levelInput.value, 10));
+          const ref = sanitizeRef(officerSelect.value);
+          const code = `DUR1-${classSelect.value}-${roleSelect.value}-${level}-${ref}-${tag}`;
+
+          gameEl.textContent = `/w ${officerName} Привет! Заявка в Durotar: ${code}`;
+        };
+
+        const copyLabel = copyGame.textContent || 'Скопировать для чата';
+        const copyText = async (text: string, button: HTMLButtonElement) => {
+          if (!text) return;
+          try {
+            if (!navigator.clipboard || !window.isSecureContext) throw new Error('no clipboard');
+            await navigator.clipboard.writeText(text);
+          } catch {
+            const area = document.createElement('textarea');
+            area.value = text;
+            area.setAttribute('readonly', '');
+            area.style.position = 'fixed';
+            area.style.top = '-1000px';
+            document.body.appendChild(area);
+            area.select();
+            try {
+              document.execCommand('copy');
+            } finally {
+              area.remove();
+            }
+          }
+          button.textContent = 'Скопировано';
+          window.setTimeout(() => {
+            button.textContent = copyLabel;
+          }, 1800);
+        };
+
+        // ?ref=VIL или ?ref=Виллен — запоминаем пригласившего и выбираем его.
+        const refParam = (new URLSearchParams(location.search).get('ref') || '').trim();
+        if (refParam) {
+          const match = Array.from(officerSelect.options).find(
+            (option) =>
+              option.value.toUpperCase() === refParam.toUpperCase() ||
+              (option.textContent || '').trim().toUpperCase() === refParam.toUpperCase(),
+          );
+          if (match) {
+            officerSelect.value = match.value;
+            bannerEl.textContent = `Тебя пригласил(а) ${(match.textContent || '').trim()}. Выбери класс и роль — код уже подставлен.`;
+          } else {
+            bannerEl.textContent = `Код приглашения «${refParam}» не найден — выбери офицера вручную.`;
+          }
+          bannerEl.hidden = false;
+        }
+
+        form.addEventListener('submit', (event) => event.preventDefault());
+        [classSelect, roleSelect, officerSelect].forEach((el) =>
+          el.addEventListener('change', update),
+        );
+        levelInput.addEventListener('input', update);
+        levelInput.addEventListener('blur', () => {
+          levelInput.value = String(clampLevel(Number.parseInt(levelInput.value, 10)));
+          update();
+        });
+
+        copyGame.addEventListener('click', () =>
+          copyText(gameEl.textContent || '', copyGame),
+        );
+
+        update();
+      }
+    </script>
+  </body>
+</html>
