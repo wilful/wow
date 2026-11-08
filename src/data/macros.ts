@@ -8,6 +8,9 @@
 // code      — текст макроса, копируется как есть (многострочные строки через \n).
 // tags      — дополнительные слова для поиска (по-русски и по-английски).
 //
+// Отдельно в этом же файле лежит macroNames — короткие имена для строки-создателя
+// (/run CreateMacro), которую страница собирает из code.
+//
 // Названия способностей — как в русском клиенте игры. Если клиент английский,
 // замени слова в code на английские: других правок не потребуется.
 
@@ -250,4 +253,34 @@ export const classMacros: Record<string, Macro[]> = {
   ],
 };
 
-export default { generalMacros, classMacros, macroClasses };
+// Короткие имена макросов для команды CreateMacro: игра ограничивает имя
+// 16 символами, поэтому здесь не название карточки, а сокращение.
+// Ключ — id макроса; если имени нет, страница возьмёт заголовок (обрезанный).
+export const macroNames: Record<string, string> = {
+  autoattack: 'Автоатака',
+  'focus-mouseover': 'Фокус мышью',
+  clearfocus: 'Сброс фокуса',
+  mount: 'Маунт',
+  'castrandom-mount': 'Случ. маунт',
+  trinkets: 'Аксессуары',
+  charge: 'Рывок',
+  'shield-stance': 'Стойка+щит',
+  'holy-light-mouseover': 'Свет небес',
+  'cleanse-mouseover': 'Очищение',
+  'mark-pet': 'Метка+питомец',
+  'pet-control': 'Питомец',
+  stealth: 'Незаметность',
+  pickpocket: 'Ограбление',
+  'flash-heal-mouseover': 'Быстрый хил',
+  'shield-mouseover': 'Щит жреца',
+  'heal-wave-mouseover': 'Волна хила',
+  totems: 'Тотемы',
+  polymorph: 'Овечка',
+  'counterspell-focus': 'Антимагия',
+  'corrupt-pet': 'Порча',
+  banish: 'Изгнание',
+  'cat-form': 'Кошка',
+  'heal-touch-mouseover': 'Хил друида',
+};
+
+export default { generalMacros, classMacros, macroClasses, macroNames };
