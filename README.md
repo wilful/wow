@@ -8,7 +8,7 @@
 
 - [Astro](https://astro.build) (статическая генерация)
 - единственная страница `src/pages/index.astro` со встроенными стилями
-- все изображения — из игры World of Warcraft (скриншоты с [warcraft.wiki.gg](https://warcraft.wiki.gg/), лежат в `public/img/` и `public/cities/`), шрифты — Google Fonts
+- все изображения — из игры World of Warcraft (скриншоты с [warcraft.wiki.gg](https://warcraft.wiki.gg/), лежат в `public/img/` и `public/cities/`); шрифты (Cinzel Decorative, Forum, PT Serif) скачаны с Google Fonts и лежат локально в `public/fonts/` — сторонних запросов со страницы нет
 - публикация на GitHub Pages через GitHub Actions (`.github/workflows/deploy.yml`)
 
 ## Локальный запуск
