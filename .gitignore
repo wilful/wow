@@ -2,6 +2,9 @@
 dist/
 .astro/
 
+# артефакты сессии OpenChamber (скриншоты)
+.openchamber/
+
 # dependencies
 node_modules/
 
