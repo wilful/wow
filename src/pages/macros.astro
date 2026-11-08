@@ -542,6 +542,12 @@ const classGroups = macroClasses.map((cls) => ({
         letter-spacing: 0.03em;
       }
 
+      .badges {
+        display: flex;
+        flex-shrink: 0;
+        gap: 6px;
+      }
+
       .badge {
         flex-shrink: 0;
         padding: 2px 9px;
@@ -553,6 +559,12 @@ const classGroups = macroClasses.map((cls) => ({
         letter-spacing: 0.1em;
         text-transform: uppercase;
         white-space: nowrap;
+      }
+
+      .badge-hit {
+        border-color: rgba(212, 175, 55, 0.55);
+        background: rgba(212, 175, 55, 0.14);
+        color: var(--gold-lt);
       }
 
       .macro p {
@@ -1006,7 +1018,10 @@ const classGroups = macroClasses.map((cls) => ({
                 <article class="macro" data-scope="general" data-search={m.search}>
                   <div class="macro-top">
                     <h2>{m.title}</h2>
-                    <span class="badge">Общий</span>
+                    <span class="badges">
+                      {m.popular && <span class="badge badge-hit">Хит</span>}
+                      <span class="badge">Общий</span>
+                    </span>
                   </div>
                   <p>{m.description}</p>
                   <pre>{m.code}</pre>
@@ -1028,7 +1043,10 @@ const classGroups = macroClasses.map((cls) => ({
                   <article class="macro" data-class={c.code} data-search={m.search}>
                     <div class="macro-top">
                       <h2>{m.title}</h2>
-                      <span class="badge">{c.label}</span>
+                      <span class="badges">
+                        {m.popular && <span class="badge badge-hit">Хит</span>}
+                        <span class="badge">{c.label}</span>
+                      </span>
                     </div>
                     <p>{m.description}</p>
                     <pre>{m.code}</pre>
