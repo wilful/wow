@@ -752,8 +752,12 @@ const nav = [
           }, 1800);
         };
 
+        // Класс и роль из ссылки (?role=TANK / ?class=WAR) и пригласивший (?ref=VIL).
+        const params = new URLSearchParams(location.search);
+        const messages: string[] = [];
+
         // ?ref=VIL или ?ref=Виллен — запоминаем пригласившего и выбираем его.
-        const refParam = (new URLSearchParams(location.search).get('ref') || '').trim();
+        const refParam = (params.get('ref') || '').trim();
         if (refParam) {
           const match = Array.from(officerSelect.options).find(
             (option) =>
@@ -762,10 +766,42 @@ const nav = [
           );
           if (match) {
             officerSelect.value = match.value;
-            bannerEl.textContent = `Тебя пригласил(а) ${(match.textContent || '').trim()}. Выбери класс и роль — код уже подставлен.`;
+            messages.push(`Тебя пригласил(а) ${(match.textContent || '').trim()}.`);
           } else {
-            bannerEl.textContent = `Код приглашения «${refParam}» не найден — выбери офицера вручную.`;
+            messages.push(`Код приглашения «${refParam}» не найден — выбери офицера вручную.`);
           }
+        }
+
+        // ?role=HEAL или ?class=PAL: подставляем роль и первый класс, который её умеет.
+        const classParam = (params.get('class') || '').trim().toUpperCase();
+        const roleParam = (params.get('role') || '').trim().toUpperCase();
+        const classCodes = Array.from(classSelect.options).map((option) => option.value);
+        const wantedRole = roleOptions.find((role) => role.code === roleParam)?.code;
+        const classMatch = Array.from(classSelect.options).find(
+          (option) =>
+            option.value.toUpperCase() === classParam ||
+            (option.textContent || '').trim().toUpperCase() === classParam,
+        );
+        const chosenClass =
+          classMatch?.value ||
+          (wantedRole && classCodes.find((code) => (roleMap[code] || []).includes(wantedRole)));
+
+        if (chosenClass) {
+          classSelect.value = chosenClass;
+          updateRoles();
+          if (wantedRole && (roleMap[chosenClass] || []).includes(wantedRole)) {
+            roleSelect.value = wantedRole;
+          }
+          const roleLabel = roleOptions.find((role) => role.code === roleSelect.value)?.label || '';
+          messages.push(
+            wantedRole && roleLabel
+              ? `Набор: ${roleLabel}. Класс и роль уже подставлены — скопируй строку для чата.`
+              : 'Класс уже подставлен — скопируй строку для чата.',
+          );
+        }
+
+        if (messages.length > 0) {
+          bannerEl.textContent = messages.join(' ');
           bannerEl.hidden = false;
         }
 

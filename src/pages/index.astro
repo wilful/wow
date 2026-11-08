@@ -24,7 +24,12 @@ const nav = [
   { label: 'Контакты', href: '#contacts' },
 ];
 
-const roles = ['Танки', 'Хилы', 'ДД'];
+// Плашки набора: ведут на заявку с уже выбранной ролью (?role=...).
+const roles = [
+  { label: 'Танки', code: 'TANK' },
+  { label: 'Хилы', code: 'HEAL' },
+  { label: 'ДД', code: 'DD' },
+];
 
 // Орк с большим топором — Гром Адовый Крик (Warcraft III: Reforged), вырезанный
 // рендер с прозрачным фоном, источник — warcraft.wiki.gg, лежит в public/img/.
@@ -677,6 +682,7 @@ const orc = {
       }
 
       .role {
+        display: inline-block;
         padding: 9px 22px;
         border: 1px solid var(--line);
         border-radius: 4px;
@@ -1058,7 +1064,11 @@ const orc = {
           важно, с кем они играют. Присоединяйся: познакомимся и покажем, как всё устроено.
         </p>
         <div class="roles">
-          {roles.map((r) => <span class="role">{r}</span>)}
+          {roles.map((r) => (
+            <a class="role" href={`${base}join/?role=${r.code}`} aria-label={`Оставить заявку: ${r.label}`}>
+              {r.label}
+            </a>
+          ))}
         </div>
         <a class="btn btn-gold" href={`${base}join/`}>Оставить заявку</a>
       </div>
