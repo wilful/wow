@@ -7,6 +7,34 @@
 import VoiceIDEBadge from '../components/VoiceIDEBadge.astro';
 
 const base = import.meta.env.BASE_URL;
+const siteUrl = (import.meta.env.SITE || 'https://durotar.0ae.ru').replace(/\/+$/, '');
+// Канонический адрес главной: site + base (base всегда со слэшем на конце).
+const canonical = `${siteUrl}${base}`;
+
+// Разметка для поисковиков: гильдия как организация и сайт на русском языке.
+const schema = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': `${canonical}#organization`,
+      name: 'Гильдия Durotar',
+      alternateName: 'Durotar',
+      url: canonical,
+      logo: `${canonical}favicon.svg`,
+      description:
+        'Русскоязычная гильдия в World of Warcraft: Forever (Classic, уровни 1–60): рейды, подземелья, PvP и открытый набор.',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${canonical}#website`,
+      url: canonical,
+      name: 'Гильдия Durotar — World of Warcraft: Forever',
+      inLanguage: 'ru',
+      publisher: { '@id': `${canonical}#organization` },
+    },
+  ],
+};
 
 const hero = {
   src: `${base}img/hero-durotar.jpg`,
@@ -56,7 +84,14 @@ const orc = {
     <meta property="og:title" content="Гильдия Durotar — World of Warcraft: Forever" />
     <meta property="og:description" content="Русскоязычная гильдия: рейды, подземелья, PvP, открытый набор." />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={`${import.meta.env.SITE}${base}img/hero-durotar.jpg`} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Гильдия Durotar" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:image" content={`${canonical}img/hero-durotar.jpg`} />
+    <meta property="og:image:alt" content="Пустыня Дуротар в игре World of Warcraft" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <script type="application/ld+json" set:html={JSON.stringify(schema)} />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="stylesheet" href={`${base}fonts/fonts.css`} />
@@ -107,6 +142,20 @@ const orc = {
       img {
         display: block;
         max-width: 100%;
+      }
+
+      /* Текст для поисковиков и скринридеров, который не ломает макет. */
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        margin: -1px;
+        padding: 0;
+        overflow: hidden;
+        clip: rect(0 0 0 0);
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
       }
 
       a {
@@ -975,7 +1024,7 @@ const orc = {
       </div>
 
       <div class="hero-inner">
-        <h1>DUROTAR</h1>
+        <h1><span class="sr-only">Гильдия </span>DUROTAR</h1>
         <svg class="hero-ornament" viewBox="0 0 320 24" fill="none" stroke="currentColor" aria-hidden="true">
           <path d="M0 12h110" stroke-width="1.2" opacity="0.7" />
           <path d="M210 12h110" stroke-width="1.2" opacity="0.7" />

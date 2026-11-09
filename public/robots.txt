@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://durotar.0ae.ru/sitemap.xml

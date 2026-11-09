@@ -7,6 +7,8 @@ import guild, { applicationClasses, applicationRoles } from '../data/guild';
 import type { Officer } from '../data/guild';
 
 const base = import.meta.env.BASE_URL;
+const siteUrl = (import.meta.env.SITE || 'https://durotar.0ae.ru').replace(/\/+$/, '');
+const canonical = `${siteUrl}${base}join/`;
 
 const classes = applicationClasses;
 const roles = applicationRoles;
@@ -57,14 +59,16 @@ const nav = [
       content="Форма заявки в гильдию Durotar: класс, роль и готовая строка для игры."
     />
     <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Гильдия Durotar" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:image" content={`${siteUrl}${base}img/hero-durotar.jpg`} />
+    <meta property="og:image:alt" content="Пустыня Дуротар в игре World of Warcraft" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Forum&family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
-    />
+    <link rel="stylesheet" href={`${base}fonts/fonts.css`} />
 
     <style>
       :root {
