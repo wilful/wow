@@ -342,6 +342,22 @@ export const classMacros: Record<string, Macro[]> = {
       tags: ['жрец', 'внутреннее сосредоточение', 'inner focus', 'всепожирающая чума', 'devouring plague', 'урон'],
     },
     {
+      id: 'inner-fire-touch-of-weakness',
+      title: 'Внутренний огонь + Прикосновение слабости',
+      description:
+        'Две самобаффки одной кнопкой: первое нажатие включает внутренний огонь, второе вешает прикосновение слабости, дальше по кругу. Удобно заряжать жреца после смерти, выхода из боя или снятия баффов.',
+      code: '#showtooltip Внутренний огонь\n/castsequence Внутренний огонь, Прикосновение слабости',
+      tags: [
+        'жрец',
+        'бафф',
+        'внутренний огонь',
+        'inner fire',
+        'прикосновение слабости',
+        'touch of weakness',
+        'castsequence',
+      ],
+    },
+    {
       id: 'stopcast-psychic-scream',
       title: 'Стоп-каст + Ментальный крик',
       description:
@@ -567,6 +583,7 @@ export const macroNames: Record<string, string> = {
   stealth: 'Незаметность',
   pickpocket: 'Ограбление',
   'inner-focus-devouring-plague': 'Сосредоточение+Чума',
+  'inner-fire-touch-of-weakness': 'Огонь+Слабость',
   'stopcast-psychic-scream': 'Стоп+Крик',
   'flash-heal-mouseover': 'Быстрый хил',
   'shield-mouseover': 'Щит жреца',
