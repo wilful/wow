@@ -2,6 +2,7 @@
 // Страница заявки: форма собирает код DUR1-... и строку /w для игры.
 // Код разбирает аддон Durotar (папка AddOns/Durotar): он слушает шёпот
 // и показывает офицеру карточку с кнопкой «Пригласить».
+import VoiceIDEBadge from '../components/VoiceIDEBadge.astro';
 import guild, { applicationClasses, applicationRoles } from '../data/guild';
 import type { Officer } from '../data/guild';
 
@@ -26,6 +27,10 @@ const defaultRole = roles.find((role) => defaultClass.roles.includes(role.code))
 const defaultLevel = 60;
 const defaultCode = `DUR1-${defaultClass.code}-${defaultRole.code}-${defaultLevel}-${defaultRef}-0000`;
 const defaultGameLine = `/w ${defaultOfficer.name} Привет! Заявка в Durotar: ${defaultCode}`;
+
+// Офицеры пока не подтвердили способ заявки через сайт — форма закрыта.
+// Поставь true, когда способ согласуют: поля и кнопка снова станут активными.
+const applicationsOpen = false;
 
 const nav = [
   { label: 'Главная', href: base },
@@ -297,6 +302,69 @@ const nav = [
         font-size: 0.95rem;
       }
 
+      /* ── заявки закрыты ─────────────────────────────── */
+      .closed-notice {
+        margin-bottom: 18px;
+        border-color: rgba(224, 138, 62, 0.55);
+        background:
+          radial-gradient(120% 90% at 10% 0%, rgba(255, 196, 120, 0.1), transparent 55%),
+          linear-gradient(180deg, rgba(58, 32, 15, 0.94), rgba(30, 20, 11, 0.96));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 220, 170, 0.12),
+          0 24px 48px -30px rgba(0, 0, 0, 0.9);
+        text-align: left;
+      }
+
+      .closed-badge {
+        display: inline-block;
+        margin: 0 0 10px;
+        padding: 5px 12px;
+        border: 1px solid rgba(236, 157, 79, 0.65);
+        border-radius: 999px;
+        background: rgba(236, 157, 79, 0.15);
+        color: #ffd9a8;
+        font-family: var(--font-head);
+        font-size: 0.78rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .closed-notice h2 {
+        margin: 0 0 10px;
+        color: #ffe4c2;
+        font-family: var(--font-head);
+        font-size: clamp(1.15rem, 3vw, 1.5rem);
+        letter-spacing: 0.04em;
+      }
+
+      .closed-notice p:last-child {
+        margin: 0;
+        color: #f0dcc4;
+      }
+
+      .form[data-closed] .fields,
+      .form[data-closed] .line-box {
+        opacity: 0.55;
+      }
+
+      .form[data-closed] select:disabled,
+      .form[data-closed] input:disabled {
+        cursor: not-allowed;
+      }
+
+      .btn:disabled {
+        cursor: not-allowed;
+        opacity: 0.75;
+        filter: grayscale(0.55);
+        transform: none;
+        box-shadow: none;
+      }
+
+      .btn:disabled:hover {
+        transform: none;
+        box-shadow: none;
+      }
+
       /* ── форма ──────────────────────────────────────── */
       .join-single {
         max-width: 760px;
@@ -548,15 +616,26 @@ const nav = [
           <p class="eyebrow">Набор · World of Warcraft: Forever</p>
           <h1 class="gold-text">ВСТУПИТЬ В DUROTAR</h1>
           <p class="lead">
-            Выбери класс и роль, скопируй готовую строку и отправь её в игре.
-            Офицер получит шёпот с кодом заявки и пригласит тебя.
+            {applicationsOpen
+              ? 'Выбери класс и роль, скопируй готовую строку и отправь её в игре. Офицер получит шёпот с кодом заявки и пригласит тебя.'
+              : 'Подача заявок через сайт временно закрыта: офицеры ещё не подтвердили этот способ. Подробности ниже.'}
           </p>
           <p class="invite-banner" id="invite-banner" hidden></p>
         </div>
       </section>
 
       <section class="shell join-single" aria-label="Заявка в гильдию">
-        <form class="panel form" id="apply-form">
+        <div class="panel closed-notice" role="alert">
+          <p class="closed-badge">Заявки временно не принимаются</p>
+          <h2>Офицеры ещё не подтвердили этот способ заявки</h2>
+          <p>
+            Подать заявку через сайт сейчас нельзя: форма останется закрытой, пока офицеры
+            гильдии не проверят и не одобрят такой способ подачи. Когда способ подтвердят,
+            форма снова откроется — следи за обновлениями.
+          </p>
+        </div>
+
+        <form class="panel form" id="apply-form" data-closed={applicationsOpen ? undefined : ''}>
           <div class="fields">
             <label class="field">
               <span>Класс</span>
@@ -564,6 +643,7 @@ const nav = [
                 id="class"
                 name="class"
                 aria-label="Класс"
+                disabled={applicationsOpen ? undefined : true}
                 data-role-map={JSON.stringify(roleMap)}
                 data-role-options={JSON.stringify(roles)}
               >
@@ -573,7 +653,12 @@ const nav = [
 
             <label class="field">
               <span>Роль</span>
-              <select id="role" name="role" aria-label="Роль">
+              <select
+                id="role"
+                name="role"
+                aria-label="Роль"
+                disabled={applicationsOpen ? undefined : true}
+              >
                 {roles
                   .filter((role) => defaultClass.roles.includes(role.code))
                   .map((role) => <option value={role.code}>{role.label}</option>)}
@@ -592,12 +677,18 @@ const nav = [
                 step="1"
                 value={defaultLevel}
                 inputmode="numeric"
+                disabled={applicationsOpen ? undefined : true}
               />
             </label>
 
             <label class="field">
               <span>Офицер</span>
-              <select id="officer" name="officer" aria-label="Офицер">
+              <select
+                id="officer"
+                name="officer"
+                aria-label="Офицер"
+                disabled={applicationsOpen ? undefined : true}
+              >
                 {officers.map((o) => (
                   <option value={o.code}>{o.name}</option>
                 ))}
@@ -611,12 +702,19 @@ const nav = [
           </div>
 
           <div class="actions">
-            <button class="btn btn-gold" type="button" id="copy-game">Скопировать для чата</button>
+            <button
+              class="btn btn-gold"
+              type="button"
+              id="copy-game"
+              disabled={applicationsOpen ? undefined : true}
+            >
+              {applicationsOpen ? 'Скопировать для чата' : 'Подача заявок закрыта'}
+            </button>
           </div>
         </form>
 
         <div class="panel howto">
-          <h2>Что дальше</h2>
+          <h2>{applicationsOpen ? 'Что дальше' : 'Как будет проходить заявка'}</h2>
           <ol class="steps">
             <li>
               <strong>Скопируй строку</strong>
@@ -654,6 +752,7 @@ const nav = [
           Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
           материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener">warcraft.wiki.gg</a>.
         </p>
+        <VoiceIDEBadge />
       </div>
     </footer>
 
@@ -677,6 +776,9 @@ const nav = [
         bannerEl &&
         copyGame
       ) {
+        // Заявки закрыты: поля и кнопка отключены, подсказки из ссылки не показываем.
+        const formClosed = form.dataset.closed !== undefined;
+
         const alphabet = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
         const tag = Array.from(
           { length: 4 },
@@ -800,7 +902,7 @@ const nav = [
           );
         }
 
-        if (messages.length > 0) {
+        if (messages.length > 0 && !formClosed) {
           bannerEl.textContent = messages.join(' ');
           bannerEl.hidden = false;
         }
@@ -817,9 +919,10 @@ const nav = [
           update();
         });
 
-        copyGame.addEventListener('click', () =>
-          copyText(gameEl.textContent || '', copyGame),
-        );
+        copyGame.addEventListener('click', () => {
+          if (copyGame.disabled || formClosed) return;
+          void copyText(gameEl.textContent || '', copyGame);
+        });
 
         updateRoles();
         update();

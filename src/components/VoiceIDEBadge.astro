@@ -1,0 +1,57 @@
+---
+// Плашка в подвале: сайт сделан с помощью VoiceIDE (https://voiceide.ru/).
+---
+<a
+  class="made-with"
+  href="https://voiceide.ru/"
+  target="_blank"
+  rel="noopener noreferrer"
+  aria-label="Сайт сделан с помощью VoiceIDE — voiceide.ru (откроется в новой вкладке)"
+>
+  <span class="made-with-dot" aria-hidden="true"></span>
+  <span>Сайт сделан с помощью <b>VoiceIDE</b> · voiceide.ru</span>
+</a>
+
+<style>
+  .made-with {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 9px;
+    margin: 18px auto 0;
+    padding: 8px 16px;
+    border: 1px solid var(--line-soft, rgba(212, 175, 55, 0.16));
+    border-radius: 999px;
+    background: rgba(212, 175, 55, 0.06);
+    color: var(--muted, #a99a7d);
+    font-family: var(--font-head, Georgia, serif);
+    font-size: 0.86rem;
+    letter-spacing: 0.04em;
+    line-height: 1.4;
+    transition:
+      color 0.15s ease,
+      border-color 0.15s ease,
+      background 0.15s ease;
+  }
+
+  .made-with:hover {
+    border-color: var(--line, rgba(212, 175, 55, 0.34));
+    background: rgba(212, 175, 55, 0.12);
+    color: var(--gold-lt, #f6e3a1);
+  }
+
+  .made-with b {
+    color: var(--gold-lt, #f6e3a1);
+    font-weight: 400;
+    letter-spacing: 0.06em;
+  }
+
+  .made-with-dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--gold, #d4af37);
+    box-shadow: 0 0 8px rgba(212, 175, 55, 0.8);
+  }
+</style>

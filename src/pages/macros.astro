@@ -4,6 +4,7 @@
 // Картинка гоблина — игровой скриншот World of Warcraft с warcraft.wiki.gg,
 // лежит в public/img/ и подключается локально.
 
+import VoiceIDEBadge from '../components/VoiceIDEBadge.astro';
 import { generalMacros, classMacros, macroClasses, macroNames } from '../data/macros';
 import type { Macro } from '../data/macros';
 
@@ -1115,6 +1116,7 @@ const classGroups = macroClasses.map((cls) => ({
           Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
           материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener">warcraft.wiki.gg</a>.
         </p>
+        <VoiceIDEBadge />
       </div>
     </footer>
 
