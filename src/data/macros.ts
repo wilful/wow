@@ -342,6 +342,14 @@ export const classMacros: Record<string, Macro[]> = {
       tags: ['жрец', 'внутреннее сосредоточение', 'inner focus', 'всепожирающая чума', 'devouring plague', 'урон'],
     },
     {
+      id: 'stopcast-psychic-scream',
+      title: 'Стоп-каст + Ментальный крик',
+      description:
+        'Прерывает текущий каст и пытается применить ментальный крик. Удобно, чтобы быстро остановить заклинание и отпугнуть противников рядом.',
+      code: '#showtooltip Ментальный крик\n/stopcasting\n/cast Ментальный крик',
+      tags: ['жрец', 'стоп-каст', 'stopcasting', 'ментальный крик', 'psychic scream', 'страх', 'контроль'],
+    },
+    {
       id: 'flash-heal-mouseover',
       title: 'Быстрое исцеление по наведению',
       description: 'Мгновенно лечит союзника под курсором, не переключая текущую цель.',
@@ -559,6 +567,7 @@ export const macroNames: Record<string, string> = {
   stealth: 'Незаметность',
   pickpocket: 'Ограбление',
   'inner-focus-devouring-plague': 'Сосредоточение+Чума',
+  'stopcast-psychic-scream': 'Стоп+Крик',
   'flash-heal-mouseover': 'Быстрый хил',
   'shield-mouseover': 'Щит жреца',
   'heal-wave-mouseover': 'Волна хила',
