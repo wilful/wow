@@ -9,6 +9,8 @@ import { generalMacros, classMacros, macroClasses, macroNames } from '../data/ma
 import type { Macro } from '../data/macros';
 
 const base = import.meta.env.BASE_URL;
+const siteUrl = (import.meta.env.SITE || 'https://durotar.0ae.ru').replace(/\/+$/, '');
+const canonical = `${siteUrl}${base}macros/`;
 
 const nav = [
   { label: 'Главная', href: base },
@@ -72,7 +74,13 @@ const classGroups = macroClasses.map((cls) => ({
       content="Общие и классовые макросы с описанием: выбери класс, скопируй код."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:image" content={`${import.meta.env.SITE}${base}img/hero-durotar.jpg`} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Гильдия Durotar" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:image" content={`${siteUrl}${base}img/hero-durotar.jpg`} />
+    <meta property="og:image:alt" content="Пустыня Дуротар в игре World of Warcraft" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="stylesheet" href={`${base}fonts/fonts.css`} />
