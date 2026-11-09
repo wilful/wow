@@ -334,6 +334,14 @@ export const classMacros: Record<string, Macro[]> = {
   ],
   PRI: [
     {
+      id: 'inner-focus-devouring-plague',
+      title: 'Внутреннее сосредоточение + Всепожирающая чума',
+      description:
+        'Сначала пытается применить внутреннее сосредоточение, затем — всепожирающую чуму. Если сосредоточение на перезарядке, чума всё равно будет применена.',
+      code: '#showtooltip Всепожирающая чума\n/cast Внутреннее сосредоточение\n/cast Всепожирающая чума',
+      tags: ['жрец', 'внутреннее сосредоточение', 'inner focus', 'всепожирающая чума', 'devouring plague', 'урон'],
+    },
+    {
       id: 'flash-heal-mouseover',
       title: 'Быстрое исцеление по наведению',
       description: 'Мгновенно лечит союзника под курсором, не переключая текущую цель.',
@@ -550,6 +558,7 @@ export const macroNames: Record<string, string> = {
   'pet-control': 'Питомец',
   stealth: 'Незаметность',
   pickpocket: 'Ограбление',
+  'inner-focus-devouring-plague': 'Сосредоточение+Чума',
   'flash-heal-mouseover': 'Быстрый хил',
   'shield-mouseover': 'Щит жреца',
   'heal-wave-mouseover': 'Волна хила',
