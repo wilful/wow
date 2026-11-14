@@ -873,9 +873,47 @@ const orc = {
 
       /* ── адаптив ────────────────────────────────────── */
       @media (max-width: 900px) {
+        /* На телефоне ссылки не прячем, а переносим во вторую строку шапки:
+           полоса прокручивается вбок, поэтому влезают все пункты. */
+        .topbar-inner {
+          flex-wrap: wrap;
+          gap: 0;
+          padding: 8px 0 0;
+        }
+
         .topnav {
+          order: 3;
+          flex: 1 0 100%;
+          gap: 6px;
+          margin: 8px 0 0;
+          padding: 6px 0 8px;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          border-top: 1px solid var(--line-soft);
+        }
+
+        .topnav::-webkit-scrollbar {
           display: none;
         }
+
+        .topnav a {
+          flex: 0 0 auto;
+          padding: 7px 12px;
+          font-size: 0.95rem;
+          white-space: nowrap;
+        }
+
+        html {
+          scroll-padding-top: 122px;
+        }
+
+        /* Шапка стала выше — герой ужимаем, чтобы нижняя строка осталась видна. */
+        .hero {
+          min-height: calc(100svh - 112px);
+        }
+
         .hero-frame {
           inset: 10px;
         }
@@ -894,7 +932,14 @@ const orc = {
         body {
           font-size: 16px;
         }
+        /* Кнопка «В гильдию» остаётся в шапке — уменьшаем её, а не прячем. */
         .topbar .btn {
+          margin-left: auto;
+          padding: 8px 13px;
+          font-size: 0.8rem;
+          letter-spacing: 0.05em;
+        }
+        .brand .brand-sub {
           display: none;
         }
         .hero-inner {
@@ -957,7 +1002,7 @@ const orc = {
           </svg>
           <span>
             <b class="gold-text">DUROTAR</b>
-            <span>гильдия · WoW: Forever</span>
+            <span class="brand-sub">гильдия · WoW: Forever</span>
           </span>
         </a>
 
