@@ -3,7 +3,7 @@
 // Адреса совпадают с canonical на страницах.
 import type { APIRoute } from 'astro';
 
-const pages = ['', 'join/', 'macros/'];
+const pages = ['', 'addons/', 'join/', 'macros/'];
 
 export const GET: APIRoute = ({ site }) => {
   const base = import.meta.env.BASE_URL;
