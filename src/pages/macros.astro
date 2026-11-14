@@ -828,9 +828,42 @@ const classGroups = macroClasses.map((cls) => ({
 
       /* ── адаптив ────────────────────────────────────── */
       @media (max-width: 900px) {
+        /* На телефоне ссылки не прячем, а переносим во вторую строку шапки:
+           полоса прокручивается вбок, поэтому влезают все пункты. */
+        .topbar-inner {
+          flex-wrap: wrap;
+          gap: 0;
+          padding: 8px 0 0;
+        }
+
         .topnav {
+          order: 3;
+          flex: 1 0 100%;
+          gap: 6px;
+          margin: 8px 0 0;
+          padding: 6px 0 8px;
+          overflow-x: auto;
+          overscroll-behavior-x: contain;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          border-top: 1px solid var(--line-soft);
+        }
+
+        .topnav::-webkit-scrollbar {
           display: none;
         }
+
+        .topnav a {
+          flex: 0 0 auto;
+          padding: 7px 12px;
+          font-size: 0.95rem;
+          white-space: nowrap;
+        }
+
+        html {
+          scroll-padding-top: 122px;
+        }
+
         .head-grid {
           gap: 22px;
         }
