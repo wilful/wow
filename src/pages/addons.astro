@@ -1,0 +1,716 @@
+---
+// Страница аддонов: раздел только заявлен, поэтому здесь честная заглушка
+// «в разработке» и план того, что появится.
+// Картинка — игровой скриншот World of Warcraft с warcraft.wiki.gg,
+// лежит в public/img/ и подключается локально.
+
+import VoiceIDEBadge from '../components/VoiceIDEBadge.astro';
+
+const base = import.meta.env.BASE_URL;
+const siteUrl = (import.meta.env.SITE || 'https://durotar.0ae.ru').replace(/\/+$/, '');
+const canonical = `${siteUrl}${base}addons/`;
+
+const nav = [
+  { label: 'Главная', href: base },
+  { label: 'Макросы', href: `${base}macros/` },
+  { label: 'Аддоны', href: `${base}addons/`, active: true },
+  { label: 'Вступить', href: `${base}join/` },
+];
+
+const goblin = {
+  src: `${base}img/goblin-tinker.jpg`,
+  alt: 'Гоблин-механик с гаечным ключом — игровой скриншот World of Warcraft',
+};
+
+// Что появится в разделе, когда его наполнят.
+const planned = [
+  {
+    title: 'Аддон гильдии Durotar',
+    text: 'Тот самый аддон, который ловит шёпот с кодом заявки и показывает офицеру карточку с кнопкой «Пригласить».',
+  },
+  {
+    title: 'Подборка полезных аддонов',
+    text: 'Рейд, аукцион, квесты и интерфейс: что ставим сами и что работает в Forever без лишних настроек.',
+  },
+  {
+    title: 'Инструкция по установке',
+    text: 'Куда класть папку аддона (Interface/AddOns), как включить его в игре и что делать, если он не виден.',
+  },
+];
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Аддоны — гильдия Durotar (WoW: Forever)</title>
+    <meta
+      name="description"
+      content="Раздел аддонов гильдии Durotar (World of Warcraft: Forever): аддон гильдии, подборка полезных аддонов и инструкция по установке. Раздел в разработке."
+    />
+    <meta name="theme-color" content="#0c0906" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta
+      property="og:title"
+      content="Аддоны — гильдия Durotar"
+    />
+    <meta
+      property="og:description"
+      content="Раздел аддонов гильдии Durotar: аддон гильдии, подборка полезных аддонов и установка. Раздел в разработке."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Гильдия Durotar" />
+    <meta property="og:locale" content="ru_RU" />
+    <meta property="og:image" content={`${siteUrl}${base}img/hero-durotar.jpg`} />
+    <meta property="og:image:alt" content="Пустыня Дуротар в игре World of Warcraft" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="canonical" href={canonical} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="stylesheet" href={`${base}fonts/fonts.css`} />
+
+    <style>
+      :root {
+        color-scheme: dark;
+        --night: #0c0906;
+        --stone: #17120c;
+        --stone-2: #1f1811;
+        --parch: #ecdfc2;
+        --gold: #d4af37;
+        --gold-lt: #f6e3a1;
+        --gold-dk: #8a6a22;
+        --text: #e9ddc4;
+        --muted: #a99a7d;
+        --line: rgba(212, 175, 55, 0.34);
+        --line-soft: rgba(212, 175, 55, 0.16);
+        --font-display: 'Cinzel Decorative', 'Times New Roman', serif;
+        --font-head: 'Forum', 'Palatino Linotype', Georgia, serif;
+        --font-body: 'PT Serif', Georgia, 'Times New Roman', serif;
+        --gold-grad: linear-gradient(180deg, #fff6d8 8%, #eccb6b 48%, #a37c26 92%);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        background:
+          radial-gradient(90% 55% at 50% 0%, rgba(212, 175, 55, 0.07), transparent 70%),
+          var(--night);
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 17px;
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      h1,
+      h2,
+      h3 {
+        font-weight: 400;
+      }
+
+      ::selection {
+        background: rgba(212, 175, 55, 0.32);
+        color: #fff8e6;
+      }
+
+      .shell {
+        width: min(1100px, 100% - 40px);
+        margin-inline: auto;
+      }
+
+      .grain {
+        position: fixed;
+        inset: 0;
+        z-index: 80;
+        pointer-events: none;
+        opacity: 0.05;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      .gold-text {
+        background: var(--gold-grad);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      /* ── шапка ──────────────────────────────────────── */
+      .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 40;
+        background: linear-gradient(180deg, rgba(12, 9, 6, 0.96), rgba(12, 9, 6, 0.88));
+        border-bottom: 1px solid var(--line-soft);
+        backdrop-filter: blur(8px);
+      }
+
+      .topbar-inner {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 10px 0;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .brand img {
+        width: 34px;
+        height: 40px;
+        filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.6));
+      }
+
+      .brand b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 1.05rem;
+        letter-spacing: 0.14em;
+        line-height: 1.1;
+      }
+
+      .brand .brand-sub {
+        display: block;
+        color: var(--muted);
+        font-size: 0.72rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .topnav {
+        display: flex;
+        gap: 4px;
+        margin-left: auto;
+      }
+
+      .topnav a {
+        padding: 8px 14px;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 1rem;
+        letter-spacing: 0.06em;
+        transition: color 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+      }
+
+      .topnav a:hover,
+      .topnav a:focus-visible {
+        color: var(--gold-lt);
+        border-color: var(--line-soft);
+        background: rgba(212, 175, 55, 0.07);
+      }
+
+      .topnav a.active {
+        color: var(--gold-lt);
+        border-color: var(--line);
+        background: rgba(212, 175, 55, 0.08);
+      }
+
+      a:focus-visible,
+      .btn:focus-visible {
+        outline: 2px solid var(--gold-lt);
+        outline-offset: 3px;
+        border-radius: 4px;
+      }
+
+      /* ── заголовок страницы ─────────────────────────── */
+      .page-head {
+        overflow-x: clip;
+        padding: 52px 0 8px;
+      }
+
+      .head-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 34px;
+      }
+
+      .eyebrow {
+        margin: 0 0 12px;
+        color: var(--gold);
+        font-family: var(--font-head);
+        font-size: 0.86rem;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      .page-head h1 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: clamp(2.1rem, 6vw, 3.6rem);
+        letter-spacing: 0.07em;
+        line-height: 1.05;
+        filter: drop-shadow(0 6px 20px rgba(0, 0, 0, 0.7));
+      }
+
+      .lead {
+        max-width: 58ch;
+        margin: 16px 0 0;
+        font-size: clamp(1rem, 2.2vw, 1.1rem);
+      }
+
+      .lead b {
+        color: var(--gold-lt);
+        font-weight: 400;
+      }
+
+      .mascot {
+        position: relative;
+        justify-self: center;
+        margin: 0;
+        width: 168px;
+        text-align: center;
+      }
+
+      .mascot::before {
+        content: '';
+        position: absolute;
+        inset: -24px;
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(212, 175, 55, 0.28), transparent 70%);
+        pointer-events: none;
+      }
+
+      .coin {
+        position: relative;
+        width: 168px;
+        height: 168px;
+        padding: 5px;
+        border-radius: 50%;
+        background: linear-gradient(160deg, #f6e3a1, #d4af37 45%, #7d5e1b 78%, #f3dd93);
+        box-shadow:
+          0 0 0 1px #5d4714,
+          0 22px 44px -20px rgba(0, 0, 0, 0.95),
+          inset 0 1px 2px rgba(255, 255, 255, 0.6);
+      }
+
+      .coin img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        object-fit: cover;
+        object-position: 50% 20%;
+        border: 1px solid rgba(60, 42, 10, 0.75);
+      }
+
+      .mascot figcaption {
+        position: relative;
+        margin-top: 11px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        line-height: 1.45;
+        text-transform: uppercase;
+      }
+
+      .mascot figcaption b {
+        display: block;
+        color: var(--gold-lt);
+        font-weight: 400;
+        letter-spacing: 0.18em;
+      }
+
+      /* ── заглушка «в разработке» ────────────────────── */
+      .panel {
+        margin: 30px 0 0;
+        padding: 26px 28px 28px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          radial-gradient(120% 90% at 8% 0%, rgba(255, 246, 216, 0.06), transparent 55%),
+          linear-gradient(180deg, rgba(31, 24, 17, 0.94), rgba(23, 18, 12, 0.96));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 249, 220, 0.06),
+          0 26px 52px -34px rgba(0, 0, 0, 0.95);
+      }
+
+      .badge-soon {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 14px;
+        padding: 7px 15px;
+        border: 1px solid rgba(224, 138, 62, 0.55);
+        border-radius: 999px;
+        background: rgba(224, 138, 62, 0.12);
+        color: #f3c98a;
+        font-family: var(--font-head);
+        font-size: 0.86rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .badge-soon i {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #e08a3e;
+        box-shadow: 0 0 9px rgba(224, 138, 62, 0.9);
+      }
+
+      .panel h2 {
+        margin: 0;
+        font-family: var(--font-head);
+        font-size: clamp(1.35rem, 3.4vw, 1.9rem);
+        letter-spacing: 0.04em;
+      }
+
+      .panel > p {
+        max-width: 68ch;
+        margin: 12px 0 0;
+      }
+
+      .planned {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 16px;
+        margin: 22px 0 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .planned li {
+        padding: 16px 18px;
+        border: 1px solid var(--line-soft);
+        border-radius: 6px;
+        background: rgba(12, 9, 6, 0.55);
+      }
+
+      .planned h3 {
+        margin: 0 0 6px;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 1.05rem;
+        letter-spacing: 0.04em;
+      }
+
+      .planned p {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.96rem;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        padding: 13px 24px;
+        border-radius: 6px;
+        font-family: var(--font-head);
+        font-size: 1rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      }
+
+      .btn-gold {
+        color: #241905;
+        background: linear-gradient(180deg, #f3dd93, #d4af37 55%, #a37c26);
+        border: 1px solid #6f5518;
+        box-shadow:
+          inset 0 1px 0 rgba(255, 249, 220, 0.8),
+          0 10px 24px -12px rgba(212, 175, 55, 0.7);
+      }
+
+      .btn-gold:hover {
+        transform: translateY(-2px);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 249, 220, 0.8),
+          0 16px 30px -12px rgba(212, 175, 55, 0.8);
+      }
+
+      .btn-ghost {
+        color: var(--gold-lt);
+        background: rgba(12, 9, 6, 0.5);
+        border: 1px solid var(--line);
+      }
+
+      .btn-ghost:hover {
+        transform: translateY(-2px);
+        background: rgba(212, 175, 55, 0.1);
+      }
+
+      .note {
+        margin: 26px 0 0;
+        color: var(--muted);
+        font-size: 0.95rem;
+      }
+
+      .note a {
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      /* ── подвал ─────────────────────────────────────── */
+      footer {
+        margin-top: 46px;
+        padding: 36px 0 40px;
+        border-top: 1px solid var(--line-soft);
+        color: var(--muted);
+        font-size: 0.86rem;
+      }
+
+      .foot-grid {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px 40px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid var(--line-soft);
+      }
+
+      .foot-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--text);
+      }
+
+      .foot-brand img {
+        width: 28px;
+        height: 34px;
+      }
+
+      .foot-brand b {
+        font-family: var(--font-display);
+        font-size: 0.95rem;
+        letter-spacing: 0.14em;
+      }
+
+      .foot-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 22px;
+      }
+
+      .foot-links a {
+        font-family: var(--font-head);
+        font-size: 0.9rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .foot-links a:hover {
+        color: var(--gold-lt);
+      }
+
+      .foot-note {
+        max-width: 78ch;
+        margin: 18px 0 0;
+        line-height: 1.6;
+      }
+
+      .foot-note a {
+        color: var(--gold);
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+
+      @media (max-width: 900px) {
+        .topnav {
+          display: none;
+        }
+        .head-grid {
+          gap: 22px;
+        }
+        .mascot,
+        .coin {
+          width: 132px;
+        }
+        .coin {
+          height: 132px;
+        }
+      }
+
+      @media (max-width: 640px) {
+        .head-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .mascot {
+          justify-self: start;
+        }
+        .panel {
+          padding: 20px 18px 22px;
+        }
+      }
+
+      @media (max-width: 560px) {
+        body {
+          font-size: 16px;
+        }
+        .shell {
+          width: min(1100px, 100% - 28px);
+        }
+        .brand .brand-sub {
+          display: none;
+        }
+        .page-head {
+          padding-top: 38px;
+        }
+        .actions .btn {
+          width: 100%;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+          animation: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+
+    <header class="topbar">
+      <div class="shell topbar-inner">
+        <a class="brand" href={base} aria-label="Гильдия Durotar — на главную">
+          <img src={`${base}favicon.svg`} alt="" width="34" height="40" />
+          <span>
+            <b class="gold-text">DUROTAR</b>
+            <span class="brand-sub">гильдия · WoW: Forever</span>
+          </span>
+        </a>
+
+        <nav class="topnav" aria-label="Основная навигация">
+          {
+            nav.map((item) => (
+              <a href={item.href} class={item.active ? 'active' : undefined}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="page-head">
+        <div class="shell head-grid">
+          <div>
+            <p class="eyebrow">Инструменты · World of Warcraft: Forever</p>
+            <h1 class="gold-text">АДДОНЫ</h1>
+            <p class="lead">
+              Раздел про аддоны гильдии: <b>что поставить</b>, как настроить и чем это
+              помогает в рейде и на прокачке. Пока здесь только план — раздел в разработке.
+            </p>
+          </div>
+
+          <figure class="mascot">
+            <div class="coin">
+              <img src={goblin.src} alt={goblin.alt} width="168" height="176" />
+            </div>
+            <figcaption>
+              <b>Гоблин-механик</b>
+              уже собирает аддоны
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="shell" aria-labelledby="soon">
+        <div class="panel">
+          <p class="badge-soon"><i aria-hidden="true" />Раздел в разработке</p>
+          <h2 id="soon">Аддоны ещё в работе</h2>
+          <p>
+            Раздел пока пустой: мы собираем и проверяем аддоны для World of Warcraft: Forever,
+            чтобы выкладывать только то, что действительно работает. Как только список будет
+            готов — здесь появится аддон гильдии, подборка полезных аддонов и инструкция по
+            установке.
+          </p>
+
+          <ul class="planned">
+            {
+              planned.map((item) => (
+                <li>
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </li>
+              ))
+            }
+          </ul>
+
+          <div class="actions">
+            <a class="btn btn-gold" href={`${base}macros/`}>Посмотреть макросы</a>
+            <a class="btn btn-ghost" href={`${base}join/`}>Вступить в гильдию</a>
+          </div>
+
+          <p class="note">
+            Пока аддоны готовятся, можно заглянуть на главную или
+            <a href={`${base}join/`}>оставить заявку в гильдию</a> — о новых разделах напишем
+            там же.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="shell">
+        <div class="foot-grid">
+          <div class="foot-brand">
+            <img src={`${base}favicon.svg`} alt="" width="28" height="34" />
+            <b>DUROTAR</b>
+          </div>
+          <nav class="foot-links" aria-label="Ссылки подвала">
+            <a href={base}>Главная</a>
+            <a href={`${base}macros/`}>Макросы</a>
+            <a href={`${base}addons/`}>Аддоны</a>
+            <a href={`${base}join/`}>Вступить</a>
+          </nav>
+        </div>
+        <p class="foot-note">
+          © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
+          Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
+          Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
+          материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener"
+            >warcraft.wiki.gg</a
+          >.
+        </p>
+        <VoiceIDEBadge />
+      </div>
+    </footer>
+  </body>
+</html>
