@@ -48,6 +48,7 @@ const lava = {
 
 const nav = [
   { label: 'О нас', href: '#about' },
+  { label: 'Карта', href: `${base}map/` },
   { label: 'Набор', href: '#recruit' },
   { label: 'Макросы', href: `${base}macros/` },
   { label: 'Аддоны', href: `${base}addons/` },
@@ -746,6 +747,90 @@ const orc = {
         text-transform: uppercase;
       }
 
+
+      /* ── тизер карты ────────────────────────────────── */
+      .atlas-teaser {
+        position: relative;
+        padding: 90px 0 20px;
+      }
+
+      .atlas-teaser-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+        align-items: center;
+        gap: clamp(24px, 5vw, 56px);
+      }
+
+      .atlas-teaser h2 {
+        margin: 0;
+        font-family: var(--font-head);
+        font-size: clamp(1.8rem, 4.2vw, 2.7rem);
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+
+      .atlas-teaser p {
+        max-width: 48ch;
+        margin: 16px 0 0;
+        color: var(--muted);
+      }
+
+      .atlas-teaser .kicker {
+        display: block;
+        margin-bottom: 10px;
+        color: var(--gold);
+        font-family: var(--font-head);
+        font-size: 0.8rem;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+      }
+
+      .atlas-teaser .btn {
+        margin-top: 24px;
+      }
+
+      .atlas-teaser-fig {
+        position: relative;
+        margin: 0;
+        padding: 10px;
+        border: 1px solid var(--line);
+        background: rgba(12, 9, 6, 0.6);
+        box-shadow: 0 30px 70px -45px rgba(0, 0, 0, 0.95);
+      }
+
+      .atlas-teaser-fig::before {
+        content: '';
+        position: absolute;
+        inset: 4px;
+        border: 1px solid rgba(212, 175, 55, 0.18);
+        pointer-events: none;
+      }
+
+      .atlas-teaser-fig img {
+        width: 100%;
+        filter: saturate(1.05) contrast(1.03);
+        transition: transform 0.4s ease;
+      }
+
+      .atlas-teaser-fig:hover img {
+        transform: scale(1.015);
+      }
+
+      .atlas-teaser-fig figcaption {
+        margin-top: 9px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-align: center;
+      }
+
+      @media (max-width: 900px) {
+        .atlas-teaser-grid {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
       /* ── аддоны ─────────────────────────────────────── */
       .addons-teaser {
         position: relative;
@@ -1369,6 +1454,31 @@ const orc = {
       </div>
     </section>
 
+
+    <!-- ══ атлас ══ -->
+    <section class="atlas-teaser" id="map">
+      <div class="shell atlas-teaser-grid">
+        <div>
+          <span class="kicker">Атлас Азерота</span>
+          <h2 class="gold-text">Карта мира Forever</h2>
+          <p>
+            Интерактивная карта Азерота эпохи Forever: зоны, подземелья, рейды, горы,
+            озёра, перевалы и транспорт. Приближайте, ищите и изучайте.
+          </p>
+          <a class="btn btn-gold" href={`${base}map/`}>Открыть карту</a>
+        </div>
+        <figure class="atlas-teaser-fig">
+          <img
+            src={`${base}img/map/eastern-kingdoms.jpg`}
+            alt="Игровая карта Восточных королевств World of Warcraft: Forever"
+            loading="lazy"
+            decoding="async"
+          />
+          <figcaption>Игровая карта Восточных королевств · warcraft.wiki.gg</figcaption>
+        </figure>
+      </div>
+    </section>
+
     <!-- ══ аддоны ══ -->
     <section class="addons-teaser" id="addons">
       <div class="shell addons-teaser-grid">
@@ -1500,6 +1610,7 @@ const orc = {
           <nav class="foot-links" aria-label="Ссылки подвала">
             <a href="#about">О нас</a>
             <a href="#recruit">Набор</a>
+            <a href={`${base}map/`}>Карта</a>
             <a href={`${base}macros/`}>Макросы</a>
             <a href={`${base}addons/`}>Аддоны</a>
             <a href={`${base}join/`}>Вступить</a>

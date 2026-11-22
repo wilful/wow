@@ -10,10 +10,12 @@
     "check": "astro check"
   },
   "dependencies": {
-    "astro": "^7.4.1"
+    "astro": "^7.4.1",
+    "leaflet": "^1.9.4"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.12",
+    "@types/leaflet": "^1.9.20",
     "typescript": "^6.0.3"
   }
 }

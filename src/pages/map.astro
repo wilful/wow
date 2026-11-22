@@ -1,0 +1,1532 @@
+---
+// Полноэкранная карта Азерота эпохи World of Warcraft: Forever.
+// Leaflet + игровые карты Forever (public/img/map/), маркеры — src/data/worldmap.ts.
+// Внешних запросов нет: Leaflet и шрифты лежат локально.
+
+import 'leaflet/dist/leaflet.css';
+import { categories, REGIONS } from '../data/worldmap';
+
+const base = import.meta.env.BASE_URL;
+---
+
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Карта мира — гильдия Durotar (WoW: Forever)</title>
+    <meta
+      name="description"
+      content="Подробная карта Азерота эпохи World of Warcraft: Forever: зоны, города, подземелья, рейды, горы, озёра, перевалы и транспорт. Как интерактивный атлас, только для Forever."
+    />
+    <meta name="theme-color" content="#0c0906" />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    <meta property="og:title" content="Карта Азерота — гильдия Durotar" />
+    <meta
+      property="og:description"
+      content="Интерактивная карта WoW: Forever: все зоны, подземелья, рейды, озёра, перевалы и транспорт."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={`${import.meta.env.SITE}${base}img/map/azeroth.jpg`} />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="stylesheet" href={`${base}fonts/fonts.css`} />
+
+    <style is:global>
+      :root {
+        color-scheme: dark;
+        --night: #0c0906;
+        --gold: #d4af37;
+        --gold-lt: #f6e3a1;
+        --text: #e9ddc4;
+        --muted: #a99a7d;
+        --line: rgba(212, 175, 55, 0.34);
+        --line-soft: rgba(212, 175, 55, 0.18);
+        --panel: rgba(12, 9, 6, 0.86);
+        --font-display: 'Cinzel Decorative', 'Times New Roman', serif;
+        --font-head: 'Forum', 'Palatino Linotype', Georgia, serif;
+        --font-body: 'PT Serif', Georgia, 'Times New Roman', serif;
+        --cat-zone: #f0d58a;
+        --cat-city: #ffd15c;
+        --cat-dungeon: #e79a45;
+        --cat-raid: #e1534c;
+        --cat-pvp: #b189e8;
+        --cat-boss: #7fd49a;
+        --cat-transport: #77c5e8;
+        --cat-geo: #d8c9a5;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      body {
+        margin: 0;
+        overflow: hidden;
+        background: #6d6855;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 16px;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      button,
+      input {
+        font: inherit;
+        color: inherit;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      :focus-visible {
+        outline: 2px solid var(--gold-lt);
+        outline-offset: 2px;
+        border-radius: 4px;
+      }
+
+      ::selection {
+        background: rgba(212, 175, 55, 0.32);
+        color: #fff8e6;
+      }
+
+      #map {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background: #6d6855;
+      }
+
+      .leaflet-container {
+        background: #6d6855;
+        font-family: var(--font-body);
+      }
+
+      .base-image {
+        image-rendering: auto;
+        filter: saturate(1.02) contrast(1.02);
+      }
+
+      /* ── HUD ─────────────────────────────────────────── */
+      .hud {
+        position: fixed;
+        z-index: 800;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: none;
+      }
+
+      .hud > * {
+        pointer-events: auto;
+      }
+
+      .hud-tl {
+        top: max(12px, env(safe-area-inset-top));
+        left: max(12px, env(safe-area-inset-left));
+        align-items: flex-start;
+      }
+
+      .hud-tr {
+        top: max(12px, env(safe-area-inset-top));
+        right: max(12px, env(safe-area-inset-right));
+        align-items: flex-end;
+      }
+
+      .card {
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+      }
+
+      .brand-mini {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        padding: 8px 12px 8px 9px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+      }
+
+      .brand-mini svg {
+        width: 26px;
+        height: 31px;
+        filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7));
+      }
+
+      .brand-mini b {
+        display: block;
+        font-family: var(--font-display);
+        font-size: 0.82rem;
+        letter-spacing: 0.14em;
+        line-height: 1.15;
+      }
+
+      .brand-mini span span {
+        display: block;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.62rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+      }
+
+      .region-switch {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+      }
+
+      .region-btn {
+        padding: 6px 11px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        background: transparent;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.82rem;
+        letter-spacing: 0.04em;
+        cursor: pointer;
+        transition:
+          color 0.15s ease,
+          background 0.15s ease,
+          border-color 0.15s ease;
+        white-space: nowrap;
+      }
+
+      .region-btn:hover {
+        color: var(--gold-lt);
+      }
+
+      .region-btn[aria-selected='true'] {
+        border-color: #6f5518;
+        background: linear-gradient(180deg, #f3dd93, #d4af37 60%, #b18a2e);
+        color: #241905;
+      }
+
+      .zoom-stack {
+        display: flex;
+        gap: 4px;
+        padding: 4px;
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+      }
+
+      .zoom-btn {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        background: transparent;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 1.15rem;
+        line-height: 1;
+        cursor: pointer;
+        transition:
+          background 0.15s ease,
+          border-color 0.15s ease;
+      }
+
+      .zoom-btn:hover {
+        border-color: var(--line-soft);
+        background: rgba(212, 175, 55, 0.12);
+      }
+
+      .zoom-btn svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      /* поиск */
+      .search-card {
+        position: relative;
+        display: flex;
+        align-items: center;
+        width: min(310px, calc(100vw - 24px));
+        height: 40px;
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+      }
+
+      .search-card svg.ico {
+        position: absolute;
+        left: 11px;
+        width: 16px;
+        height: 16px;
+        color: var(--muted);
+        pointer-events: none;
+      }
+
+      #search {
+        width: 100%;
+        height: 100%;
+        padding: 0 34px 0 35px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: var(--text);
+        font-family: var(--font-body);
+        font-size: 0.9rem;
+        outline: none;
+      }
+
+      #search::placeholder {
+        color: #8b7d66;
+      }
+
+      #search::-webkit-search-cancel-button {
+        display: none;
+      }
+
+      .search-clear {
+        position: absolute;
+        right: 4px;
+        display: none;
+        width: 28px;
+        height: 28px;
+        border: 0;
+        border-radius: 50%;
+        background: transparent;
+        color: var(--muted);
+        font-size: 1.1rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .search-clear:hover {
+        color: var(--gold-lt);
+      }
+
+      .search-card.has-value .search-clear {
+        display: block;
+      }
+
+      .search-results {
+        position: absolute;
+        top: calc(100% + 6px);
+        left: 0;
+        right: 0;
+        max-height: 320px;
+        overflow: auto;
+        margin: 0;
+        padding: 5px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(12, 9, 6, 0.97);
+        box-shadow: 0 24px 50px -20px rgba(0, 0, 0, 0.95);
+        list-style: none;
+        scrollbar-width: thin;
+      }
+
+      .search-results[hidden] {
+        display: none;
+      }
+
+      .result {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        padding: 7px 8px;
+        border: 1px solid transparent;
+        border-radius: 5px;
+        background: transparent;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .result:hover,
+      .result.is-active {
+        border-color: var(--line-soft);
+        background: rgba(212, 175, 55, 0.1);
+      }
+
+      .result-dot {
+        flex: none;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--cat-geo);
+      }
+
+      .result-body {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .result-name {
+        display: block;
+        overflow: hidden;
+        color: var(--text);
+        font-family: var(--font-head);
+        font-size: 0.88rem;
+        line-height: 1.25;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .result-meta {
+        display: block;
+        color: var(--muted);
+        font-size: 0.7rem;
+        line-height: 1.3;
+      }
+
+      .result-new {
+        flex: none;
+        padding: 1px 4px;
+        border: 1px solid rgba(225, 83, 76, 0.55);
+        border-radius: 3px;
+        color: #ffb4ae;
+        font-family: var(--font-head);
+        font-size: 0.58rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .no-results {
+        padding: 10px;
+        color: var(--muted);
+        font-size: 0.82rem;
+        text-align: center;
+      }
+
+      /* Leaflet: слои */
+      .leaflet-top.leaflet-right {
+        top: 58px;
+        right: 0;
+      }
+
+      .leaflet-control-layers {
+        border: 1px solid var(--line-soft) !important;
+        border-radius: 8px !important;
+        background: var(--panel) !important;
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95) !important;
+        backdrop-filter: blur(8px);
+      }
+
+      .leaflet-control-layers-toggle {
+        width: 38px !important;
+        height: 38px !important;
+        border-radius: 7px !important;
+        background-color: transparent !important;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f6e3a1' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 3 2 8l10 5 10-5-10-5Z'/%3E%3Cpath d='m2 12 10 5 10-5'/%3E%3Cpath d='m2 16 10 5 10-5'/%3E%3C/svg%3E") !important;
+        background-size: 20px 20px !important;
+        background-position: center !important;
+        background-repeat: no-repeat !important;
+        filter: none !important;
+      }
+
+      .leaflet-control-layers-expanded {
+        padding: 9px 12px 10px !important;
+        color: var(--text) !important;
+        font-family: var(--font-head) !important;
+        font-size: 0.82rem !important;
+      }
+
+      .leaflet-control-layers-expanded form {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+      }
+
+      .leaflet-control-layers label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin: 0;
+      }
+
+      .leaflet-control-layers-selector {
+        accent-color: var(--gold);
+      }
+
+      .leaflet-control-zoom {
+        display: none !important;
+      }
+
+      /* маркеры */
+      .mm {
+        background: none;
+        border: 0;
+      }
+
+      .pin {
+        display: grid;
+        place-items: center;
+        width: 21px;
+        height: 21px;
+        border: 1px solid rgba(0, 0, 0, 0.7);
+        border-radius: 50%;
+        background: rgba(16, 11, 6, 0.94);
+        color: var(--cat-geo);
+        box-shadow:
+          0 0 0 1px rgba(255, 244, 210, 0.22),
+          0 3px 8px rgba(0, 0, 0, 0.85);
+        transition:
+          transform 0.15s ease,
+          box-shadow 0.15s ease;
+        cursor: pointer;
+      }
+
+      .pin svg {
+        width: 12px;
+        height: 12px;
+      }
+
+      .pin:hover {
+        transform: scale(1.22);
+        box-shadow:
+          0 0 0 1px var(--gold-lt),
+          0 0 14px rgba(246, 227, 161, 0.7),
+          0 4px 10px rgba(0, 0, 0, 0.85);
+      }
+
+      .pin-city { color: var(--cat-city); border-color: rgba(255, 209, 92, 0.75); }
+      .pin-dungeon { color: var(--cat-dungeon); border-color: rgba(231, 154, 69, 0.7); }
+      .pin-raid { color: var(--cat-raid); border-color: rgba(225, 83, 76, 0.75); }
+      .pin-pvp { color: var(--cat-pvp); border-color: rgba(177, 137, 232, 0.75); }
+      .pin-boss { color: var(--cat-boss); border-color: rgba(127, 212, 154, 0.75); }
+      .pin-transport { color: var(--cat-transport); border-color: rgba(119, 197, 232, 0.7); }
+      .pin-geo { color: var(--cat-geo); border-color: rgba(216, 201, 165, 0.6); }
+
+      .pin.is-new {
+        box-shadow:
+          0 0 0 1px rgba(255, 244, 210, 0.22),
+          0 0 0 4px rgba(225, 83, 76, 0.25),
+          0 3px 8px rgba(0, 0, 0, 0.85);
+      }
+
+      .pin[data-soon] {
+        border-style: dashed;
+      }
+
+      .zone-tag,
+      .geo-tag {
+        position: absolute;
+        left: 0;
+        top: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        padding: 1px 5px;
+        border: 1px solid rgba(212, 175, 55, 0.26);
+        border-radius: 3px;
+        background: linear-gradient(180deg, rgba(10, 7, 4, 0.86), rgba(10, 7, 4, 0.7));
+        color: #f6e7be;
+        font-family: var(--font-head);
+        font-size: 0.66rem;
+        letter-spacing: 0.03em;
+        line-height: 1.3;
+        white-space: nowrap;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+        transform: translate(-50%, calc(-50% - 10px));
+        transition:
+          color 0.15s ease,
+          border-color 0.15s ease;
+      }
+
+      .zone-tag::before,
+      .geo-tag::before {
+        content: '';
+        width: 4px;
+        height: 4px;
+        border-radius: 50%;
+        background: currentColor;
+        opacity: 0.65;
+      }
+
+      .zone-tag::after,
+      .geo-tag::after {
+        content: '';
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        width: 1px;
+        height: 10px;
+        background: linear-gradient(180deg, rgba(212, 175, 55, 0.6), rgba(212, 175, 55, 0.08));
+        transform: translateX(-50%);
+      }
+
+      .zone-tag.is-new {
+        border-color: rgba(225, 83, 76, 0.5);
+        color: #ffd9a1;
+      }
+
+      .zone-tag:hover,
+      .geo-tag:hover {
+        border-color: var(--gold-lt);
+        color: var(--gold-lt);
+      }
+
+      .geo-tag {
+        border-color: transparent;
+        background: rgba(10, 7, 4, 0.45);
+        color: #e7dcc0;
+        font-style: italic;
+        font-size: 0.64rem;
+      }
+
+      .geo-tag::before {
+        content: '◆';
+        width: auto;
+        height: auto;
+        border-radius: 0;
+        background: none;
+        opacity: 0.7;
+        font-size: 0.55rem;
+      }
+
+      .geo-lake::before { content: '≈'; font-size: 0.9rem; font-style: normal; }
+      .geo-pass::before { content: '⌃'; font-size: 0.9rem; }
+      .geo-river::before { content: '≈'; font-size: 0.9rem; font-style: normal; }
+      .geo-road::before { content: '—'; }
+      .geo-landmark::before { content: '✦'; }
+
+      .mm.is-zoom-hidden,
+      .mm.label-hidden {
+        display: none !important;
+      }
+
+      /* попапы и подсказки */
+      .leaflet-popup-content-wrapper {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background:
+          radial-gradient(120% 80% at 50% 0%, rgba(212, 175, 55, 0.09), transparent 65%),
+          #100c08;
+        color: var(--text);
+        box-shadow: 0 24px 60px -25px rgba(0, 0, 0, 0.95);
+      }
+
+      .leaflet-popup-tip {
+        background: #100c08;
+        border: 1px solid var(--line);
+      }
+
+      .leaflet-popup-content {
+        margin: 13px 15px 14px;
+        font-family: var(--font-body);
+        font-size: 0.88rem;
+        line-height: 1.5;
+      }
+
+      .leaflet-container a.leaflet-popup-close-button {
+        top: 5px;
+        right: 6px;
+        color: var(--muted);
+        font-size: 1.15rem;
+      }
+
+      .leaflet-container a.leaflet-popup-close-button:hover {
+        color: var(--gold-lt);
+      }
+
+      .popup-cat {
+        color: var(--gold);
+        font-family: var(--font-head);
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .popup-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin-top: 5px;
+      }
+
+      .popup-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 1px 6px;
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.62rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+
+      .popup-badge.new {
+        border-color: rgba(225, 83, 76, 0.55);
+        color: #ffb4ae;
+      }
+
+      .popup-badge.soon {
+        border-color: rgba(212, 175, 55, 0.55);
+        color: var(--gold-lt);
+      }
+
+      .popup-badge .fdot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #8c7f69;
+      }
+
+      .popup-badge .fdot--alliance { background: #6ea6ff; }
+      .popup-badge .fdot--horde { background: #ff6f61; }
+
+      .leaflet-popup-content h3 {
+        margin: 5px 0 0;
+        color: #f4e9ce;
+        font-family: var(--font-head);
+        font-size: 1.08rem;
+        font-weight: 400;
+        line-height: 1.25;
+      }
+
+      .leaflet-popup-content p {
+        margin: 6px 0 0;
+        color: #cfc3aa;
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+
+      .ff-tip {
+        border: 1px solid var(--line) !important;
+        border-radius: 4px !important;
+        background: rgba(10, 7, 4, 0.94) !important;
+        color: var(--text) !important;
+        font-family: var(--font-head) !important;
+        font-size: 0.74rem !important;
+        letter-spacing: 0.03em;
+        box-shadow: none !important;
+      }
+
+      .ff-tip::before {
+        border-top-color: var(--line) !important;
+      }
+
+      /* легенда */
+      .legend {
+        position: fixed;
+        left: max(12px, env(safe-area-inset-left));
+        bottom: max(14px, env(safe-area-inset-bottom));
+        z-index: 700;
+        width: 196px;
+        padding: 11px 12px;
+        border: 1px solid var(--line-soft);
+        border-radius: 8px;
+        background: var(--panel);
+        box-shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(8px);
+        pointer-events: none;
+      }
+
+      .legend h2 {
+        margin: 0 0 7px;
+        color: var(--gold);
+        font-family: var(--font-head);
+        font-size: 0.7rem;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+      }
+
+      .legend ul {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+
+      .legend li {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.72rem;
+        line-height: 1.3;
+      }
+
+      .legend i {
+        flex: none;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: currentColor;
+      }
+
+      .legend small {
+        display: block;
+        margin-top: 7px;
+        padding-top: 7px;
+        border-top: 1px solid var(--line-soft);
+        color: #8c7f69;
+        font-size: 0.66rem;
+        line-height: 1.4;
+      }
+
+      .attribution {
+        position: fixed;
+        right: max(10px, env(safe-area-inset-right));
+        bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 700;
+        padding: 3px 7px;
+        border-radius: 4px;
+        background: rgba(12, 9, 6, 0.6);
+        color: #8c7f69;
+        font-family: var(--font-head);
+        font-size: 0.64rem;
+        letter-spacing: 0.03em;
+        pointer-events: auto;
+      }
+
+      .attribution a {
+        color: #b7a887;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+      }
+
+      .map-hint {
+        position: fixed;
+        left: 50%;
+        bottom: max(14px, env(safe-area-inset-bottom));
+        z-index: 690;
+        padding: 5px 12px;
+        border: 1px solid var(--line-soft);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--muted);
+        font-family: var(--font-head);
+        font-size: 0.72rem;
+        letter-spacing: 0.04em;
+        white-space: nowrap;
+        pointer-events: none;
+        transform: translateX(-50%);
+        transition: opacity 0.4s ease;
+      }
+
+      body.was-interacted .map-hint {
+        opacity: 0;
+      }
+
+      @media (max-width: 900px) {
+        .legend {
+          display: none;
+        }
+
+        .map-hint {
+          font-size: 0.66rem;
+        }
+
+        .region-btn {
+          padding: 5px 8px;
+          font-size: 0.74rem;
+        }
+
+        .zoom-btn {
+          width: 29px;
+          height: 29px;
+        }
+      }
+
+      @media (max-width: 620px) {
+        .hud-tl {
+          gap: 6px;
+        }
+
+        .brand-mini {
+          padding: 6px 9px 6px 7px;
+        }
+
+        .brand-mini svg {
+          width: 22px;
+          height: 26px;
+        }
+
+        .brand-mini b {
+          font-size: 0.72rem;
+        }
+
+        .brand-mini span span {
+          display: none;
+        }
+
+        .region-switch {
+          gap: 2px;
+          padding: 3px;
+          max-width: calc(100vw - 24px);
+          overflow-x: auto;
+          scrollbar-width: none;
+        }
+
+        .region-switch::-webkit-scrollbar {
+          display: none;
+        }
+
+        .region-btn {
+          padding: 5px 7px;
+          font-size: 0.68rem;
+        }
+
+        .search-card {
+          width: min(210px, calc(100vw - 24px));
+          height: 36px;
+        }
+
+        #search {
+          font-size: 0.82rem;
+          padding-left: 32px;
+        }
+
+        .leaflet-top.leaflet-right {
+          top: 52px;
+        }
+
+        .leaflet-control-layers-toggle {
+          width: 34px !important;
+          height: 34px !important;
+        }
+
+        .map-hint {
+          display: none;
+        }
+
+        .attribution {
+          left: 10px;
+          right: auto;
+          font-size: 0.6rem;
+        }
+
+        .zone-tag {
+          font-size: 0.66rem;
+          padding: 1px 5px;
+        }
+
+        .geo-tag {
+          font-size: 0.62rem;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        *,
+        *::before,
+        *::after {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="map" role="application" aria-label="Интерактивная карта Азерота эпохи World of Warcraft: Forever"></div>
+
+    <!-- верхний левый блок -->
+    <header class="hud hud-tl">
+      <a class="brand-mini" href={base} aria-label="Гильдия Durotar — на главную">
+        <svg viewBox="0 0 122 157" aria-hidden="true">
+          <defs>
+            <linearGradient id="crestG" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#d9432f" />
+              <stop offset="0.5" stop-color="#a3121a" />
+              <stop offset="1" stop-color="#5a0a0d" />
+            </linearGradient>
+          </defs>
+          <path
+            d="M61 3C38 12 20 18 8 22c0 44 4 82 14 106 8 18 22 30 39 37 17-7 31-19 39-37 10-24 14-62 14-106C102 18 84 12 61 3Z"
+            fill="url(#crestG)"
+            stroke="#2c0606"
+            stroke-width="3"
+          />
+          <path
+            d="M61 22c-13 6-25 10-33 13 1 33 4 61 10 79 5 12 13 20 23 25 10-5 18-13 23-25 6-18 9-46 10-79-8-3-20-7-33-13Z"
+            fill="none"
+            stroke="rgba(255,220,190,0.45)"
+            stroke-width="2"
+          />
+        </svg>
+        <span>
+          <b class="gold-text">DUROTAR</b>
+          <span>карта · WoW: Forever</span>
+        </span>
+      </a>
+
+      <div class="region-switch" role="tablist" aria-label="Регион карты">
+        {REGIONS.map((region) => (
+          <button
+            class="region-btn"
+            type="button"
+            role="tab"
+            data-region={region.id}
+            aria-selected={region.id === 'world' ? 'true' : 'false'}
+          >
+            {region.short}
+          </button>
+        ))}
+      </div>
+
+      <div class="zoom-stack" aria-label="Масштаб">
+        <button class="zoom-btn" type="button" id="zoom-in" aria-label="Приблизить">+</button>
+        <button class="zoom-btn" type="button" id="zoom-out" aria-label="Отдалить">−</button>
+        <button class="zoom-btn" type="button" id="zoom-home" aria-label="Показать весь регион" title="Весь регион">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
+            <path d="M3 11 12 3l9 8M5 10v10h14V10" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- верхний правый блок -->
+    <div class="hud hud-tr">
+      <div class="search-card" id="search-card">
+        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        <input
+          id="search"
+          type="search"
+          inputmode="search"
+          autocomplete="off"
+          placeholder="Поиск: Хиджал, рейд, озеро…"
+          aria-label="Поиск по карте"
+        />
+        <button class="search-clear" type="button" id="search-clear" aria-label="Очистить поиск">×</button>
+        <ul class="search-results" id="search-results" hidden></ul>
+      </div>
+    </div>
+
+    <!-- легенда -->
+    <aside class="legend" aria-label="Легенда карты">
+      <h2>Легенда</h2>
+      <ul>
+        {categories.map((category) => (
+          <li style={`color: var(--cat-${category.id})`}><i></i>{category.label}</li>
+        ))}
+      </ul>
+      <small>Красное кольцо — новое в Forever. Приблизьте карту, чтобы увидеть подписи гор, озёр и перевалов.</small>
+    </aside>
+
+    <p class="map-hint">Колесо — масштаб · перетаскивание — панорама · Forever 1.60.1</p>
+
+    <div class="attribution">
+      <a href="https://leafletjs.com" target="_blank" rel="noopener">Leaflet</a> ·
+      World of Warcraft: Forever · карты:
+      <a href="https://warcraft.wiki.gg/" target="_blank" rel="noopener">warcraft.wiki.gg</a>
+    </div>
+
+    <script>
+      import L from 'leaflet';
+      import {
+        categories,
+        mapPoints,
+        pointById,
+        pointsFor,
+        REGIONS,
+        type MapCategory,
+        type MapPoint,
+        type MapRegion,
+      } from '../data/worldmap';
+
+      const base = import.meta.env.BASE_URL;
+      const MAP_W = 2004;
+      const MAP_H = 1336;
+      const BOUNDS: L.LatLngBoundsExpression = [
+        [0, 0],
+        [MAP_H, MAP_W],
+      ];
+
+      const ICONS: Record<MapCategory, string> = {
+        zone: '<circle cx="12" cy="12" r="4" />',
+        city: '<path d="M4 21V9l4-3 4 3v12M12 21V5l4-3 4 3v16M7 13h1M7 17h1M15 9h1M15 13h1M15 17h1M2 21h20" />',
+        dungeon: '<path d="M4 21V8l8-5 8 5v13M9 21v-6h6v6M4 11h16" />',
+        raid: '<path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Z" /><circle cx="9.5" cy="9" r="1.2" /><circle cx="14.5" cy="9" r="1.2" /><path d="M10 14h4" />',
+        pvp: '<path d="M4 4l16 16M20 4L4 20M7 4H4v3M17 4h3v3M7 20H4v-3M17 20h3v-3" />',
+        boss: '<path d="m12 2 2.6 6.4L21 9l-5 4.6L17.5 21 12 17.2 6.5 21 8 13.6 3 9l6.4-.6Z" />',
+        transport: '<circle cx="12" cy="5" r="2.5" /><path d="M12 8v13M5 21h14M8 12H5a4 4 0 0 1 4-4M16 12h3a4 4 0 0 0-4-4" />',
+        geo: '<circle cx="12" cy="12" r="7" /><circle cx="12" cy="12" r="2" />',
+      };
+
+      const CATEGORY_LABEL: Record<string, string> = Object.fromEntries(
+        categories.map((category) => [category.id, category.label]),
+      );
+
+      const esc = (value: string) =>
+        value.replace(/[&<>"']/g, (char) => {
+          switch (char) {
+            case '&': return '&amp;';
+            case '<': return '&lt;';
+            case '>': return '&gt;';
+            case '"': return '&quot;';
+            default: return '&#39;';
+          }
+        });
+
+      const categoryColor = (id: string) =>
+        categories.find((category) => category.id === id)?.color ?? '#d8c9a5';
+
+      const state = {
+        region: 'world' as MapRegion,
+        markerRefs: new Map<string, L.Marker>(),
+        activeResult: 0,
+        results: [] as MapPoint[],
+      };
+
+      const map = L.map('map', {
+        crs: L.CRS.Simple,
+        minZoom: -3,
+        maxZoom: 1.5,
+        zoomSnap: 0.25,
+        zoomDelta: 0.5,
+        wheelPxPerZoomLevel: 90,
+        maxBounds: BOUNDS,
+        maxBoundsViscosity: 0.7,
+        attributionControl: false,
+        zoomControl: false,
+      });
+
+      const initialBounds = boundsFor('world');
+      map.fitBounds(initialBounds, { padding: [12, 12] });
+
+      let overlay = L.imageOverlay(`${base}img/${regionById('world').image}`, BOUNDS, {
+        className: 'base-image',
+      }).addTo(map);
+
+      const groups = new Map<MapCategory, L.LayerGroup>();
+      for (const category of categories) {
+        groups.set(category.id, L.layerGroup().addTo(map));
+      }
+
+      const overlayNames: Record<string, L.LayerGroup> = {};
+      for (const category of categories) {
+        overlayNames[category.label] = groups.get(category.id)!;
+      }
+
+      L.control
+        .layers(undefined, overlayNames, { position: 'topright', collapsed: true })
+        .addTo(map);
+
+      window.setTimeout(() => {
+        const toggle = document.querySelector<HTMLAnchorElement>('.leaflet-control-layers-toggle');
+        toggle?.setAttribute('title', 'Слои карты');
+        toggle?.setAttribute('aria-label', 'Слои карты');
+      }, 0);
+
+      function regionById(id: MapRegion) {
+        return REGIONS.find((region) => region.id === id) ?? REGIONS[0];
+      }
+
+      function latlng(point: { x: number; y: number }): L.LatLngExpression {
+        return [MAP_H * (1 - point.y / 100), MAP_W * (point.x / 100)];
+      }
+
+      function boundsFor(id: MapRegion): L.LatLngBounds {
+        const region = regionById(id);
+        const [x1, y1, x2, y2] = region.view;
+        return L.latLngBounds(
+          [MAP_H * (1 - y2), MAP_W * x1],
+          [MAP_H * (1 - y1), MAP_W * x2],
+        );
+      }
+
+      function iconFor(point: MapPoint): L.DivIcon {
+        if (point.category === 'zone') {
+          const classes = `zone-tag${point.isNew ? ' is-new' : ''}`;
+          return L.divIcon({
+            className: 'mm mm-zone',
+            html: `<span class="${classes}">${esc(point.name)}</span>`,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0],
+          });
+        }
+
+        if (point.category === 'geo') {
+          return L.divIcon({
+            className: 'mm mm-geo',
+            html: `<span class="geo-tag geo-${point.geoKind ?? 'landmark'}">${esc(point.name)}</span>`,
+            iconSize: [0, 0],
+            iconAnchor: [0, 0],
+          });
+        }
+
+        return L.divIcon({
+          className: 'mm',
+          html: `<span class="pin pin-${point.category}${point.isNew ? ' is-new' : ''}"${
+            point.soon ? ` data-soon="${esc(point.soon)}"` : ''
+          }><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[point.category]}</svg></span>`,
+          iconSize: [21, 21],
+          iconAnchor: [10.5, 10.5],
+        });
+      }
+
+      function popupHtml(point: MapPoint): string {
+        const meta: string[] = [];
+        if (point.level && point.level !== '—') meta.push(`Уровень ${point.level}`);
+        if (point.soon) meta.push(`с ${point.soon}`);
+        if (point.geoKind) meta.push(geoKindLabel(point.geoKind));
+
+        const badges: string[] = [];
+        if (point.isNew) badges.push('<span class="popup-badge new">Forever</span>');
+        if (point.soon) badges.push(`<span class="popup-badge soon">с ${esc(point.soon)}</span>`);
+        if (point.faction === 'alliance' || point.faction === 'horde') {
+          const name = point.faction === 'alliance' ? 'Альянс' : 'Орда';
+          badges.push(`<span class="popup-badge"><span class="fdot fdot--${point.faction}"></span>${name}</span>`);
+        }
+
+        return `
+          <div class="popup-cat">${esc(CATEGORY_LABEL[point.category] ?? 'Объект')}${
+            meta.length ? ` · ${esc(meta.join(' · '))}` : ''
+          }</div>
+          ${badges.length ? `<div class="popup-badges">${badges.join('')}</div>` : ''}
+          <h3>${esc(point.name)}</h3>
+          <p>${esc(point.desc)}</p>
+        `;
+      }
+
+      function geoKindLabel(kind: string): string {
+        switch (kind) {
+          case 'lake': return 'озеро';
+          case 'pass': return 'перевал';
+          case 'river': return 'река';
+          case 'road': return 'дорога';
+          case 'mountain': return 'горы';
+          default: return 'место';
+        }
+      }
+
+      function buildMarkers() {
+        for (const group of groups.values()) group.clearLayers();
+        state.markerRefs.clear();
+
+        for (const point of pointsFor(state.region)) {
+          const marker = L.marker(latlng(point), {
+            icon: iconFor(point),
+            riseOnHover: true,
+            title: point.name,
+            keyboard: true,
+          });
+
+          marker.bindPopup(popupHtml(point), {
+            className: 'ff-popup',
+            maxWidth: 300,
+            minWidth: 220,
+            autoPanPadding: [28, 28],
+            offset: [0, -6],
+          });
+
+          if (point.category !== 'zone' && point.category !== 'geo') {
+            marker.bindTooltip(point.name, {
+              direction: 'top',
+              offset: [0, -12],
+              opacity: 0.96,
+              className: 'ff-tip',
+            });
+          }
+
+          marker.addTo(groups.get(point.category)!);
+          state.markerRefs.set(point.id, marker);
+        }
+
+        applyZoomVisibility();
+        window.setTimeout(scheduleDeclutter, 0);
+      }
+
+      function applyZoomVisibility() {
+        const zoom = map.getZoom();
+        for (const [id, marker] of state.markerRefs) {
+          const point = pointById(id);
+          if (!point) continue;
+          const element = marker.getElement();
+          if (!element) continue;
+          const showGeo = point.category !== 'geo' || zoom >= 0.75;
+          element.classList.toggle('is-zoom-hidden', !showGeo);
+        }
+      }
+
+      map.on('zoomend', applyZoomVisibility);
+      map.on('overlayadd overlayremove', () => {
+        window.setTimeout(applyZoomVisibility, 0);
+        window.setTimeout(scheduleDeclutter, 0);
+      });
+
+      // Подписи зон и географии не должны налезать друг на друга.
+      let declutterFrame = 0;
+      function scheduleDeclutter() {
+        if (declutterFrame) return;
+        declutterFrame = window.requestAnimationFrame(() => {
+          declutterFrame = 0;
+          const labels: { marker: L.Marker; point: MapPoint; element: HTMLElement; rect: DOMRect }[] = [];
+
+          for (const [id, marker] of state.markerRefs) {
+            const point = pointById(id);
+            const element = marker.getElement();
+            if (!point || !element) continue;
+            if (point.category !== 'zone') continue;
+            element.classList.remove('label-hidden');
+            if (element.classList.contains('is-zoom-hidden')) continue;
+            const label = element.querySelector<HTMLElement>('.zone-tag, .geo-tag');
+            if (!label) continue;
+            labels.push({ marker, point, element, rect: label.getBoundingClientRect() });
+          }
+
+          labels.sort((a, b) => {
+            const rank = (p: MapPoint) =>
+              p.category === 'zone' ? (p.isNew ? 0 : 1) : p.category === 'geo' ? 3 : 2;
+            return rank(a.point) - rank(b.point);
+          });
+
+          const taken: DOMRect[] = [];
+          for (const entry of labels) {
+            const rect = entry.rect;
+            const collides = taken.some(
+              (other) =>
+                !(
+                  rect.right + 1 < other.left ||
+                  rect.left - 1 > other.right ||
+                  rect.bottom + 1 < other.top ||
+                  rect.top - 1 > other.bottom
+                ),
+            );
+            if (collides) entry.element.classList.add('label-hidden');
+            else taken.push(rect);
+          }
+        });
+      }
+
+      map.on('zoomend moveend', scheduleDeclutter);
+      window.addEventListener('resize', scheduleDeclutter);
+
+      function switchRegion(id: MapRegion) {
+        state.region = id;
+        const region = regionById(id);
+        overlay.setUrl(`${base}img/${region.image}`);
+        const overlayImage = overlay.getElement() as HTMLImageElement | null;
+        if (overlayImage) overlayImage.alt = `Игровая карта «${region.label}» World of Warcraft: Forever`;
+        map.closePopup();
+        const bounds = boundsFor(id);
+        map.fitBounds(bounds, { padding: [12, 12] });
+        if (window.innerWidth <= 620) {
+          // На телефоне заполняем экран картой: после fitBounds считаем,
+          // во сколько раз нужно приблизить, чтобы не оставалось полей.
+          const nw = map.latLngToLayerPoint(bounds.getNorthWest());
+          const se = map.latLngToLayerPoint(bounds.getSouthEast());
+          const width = Math.abs(se.x - nw.x);
+          const height = Math.abs(se.y - nw.y);
+          const size = map.getSize();
+          const need = Math.max(size.x / Math.max(1, width), size.y / Math.max(1, height));
+          if (need > 1) {
+            map.setZoom(
+              Math.min(map.getMaxZoom(), map.getZoom() + Math.log2(need)),
+              { animate: false },
+            );
+          }
+        }
+        buildMarkers();
+        for (const button of Array.from(document.querySelectorAll<HTMLButtonElement>('.region-btn'))) {
+          button.setAttribute('aria-selected', button.dataset.region === id ? 'true' : 'false');
+        }
+      }
+
+      // ── поиск ─────────────────────────────────────────────────────────────
+      const searchInput = document.querySelector<HTMLInputElement>('#search')!;
+      const searchCard = document.querySelector<HTMLElement>('#search-card')!;
+      const searchResults = document.querySelector<HTMLUListElement>('#search-results')!;
+      const searchClear = document.querySelector<HTMLButtonElement>('#search-clear')!;
+
+      function closeResults() {
+        searchResults.hidden = true;
+        searchResults.replaceChildren();
+        state.results = [];
+        state.activeResult = 0;
+      }
+
+      function renderResults() {
+        const query = searchInput.value.trim().toLowerCase();
+        searchCard.classList.toggle('has-value', query.length > 0);
+        if (!query) {
+          closeResults();
+          return;
+        }
+
+        const matches = mapPoints.filter((point) =>
+          `${point.name} ${point.desc}`.toLowerCase().includes(query),
+        );
+        // В обзорной карте мира не дублируем объекты, у которых есть континентальная версия.
+        const continentNames = new Set(
+          matches.filter((point) => point.region !== 'world').map((point) => point.name),
+        );
+        const found = matches
+          .filter((point) => !(point.region === 'world' && continentNames.has(point.name)))
+          .sort((a, b) => {
+            const aStarts = a.name.toLowerCase().startsWith(query) ? 0 : 1;
+            const bStarts = b.name.toLowerCase().startsWith(query) ? 0 : 1;
+            return aStarts - bStarts || a.name.localeCompare(b.name, 'ru');
+          })
+          .slice(0, 8);
+
+        state.results = found;
+        state.activeResult = 0;
+        searchResults.replaceChildren();
+        searchResults.hidden = false;
+
+        if (found.length === 0) {
+          const empty = document.createElement('li');
+          empty.className = 'no-results';
+          empty.textContent = 'Ничего не найдено';
+          searchResults.append(empty);
+          return;
+        }
+
+        found.forEach((point, index) => {
+          const li = document.createElement('li');
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `result${index === 0 ? ' is-active' : ''}`;
+          button.dataset.id = point.id;
+
+          const dot = document.createElement('span');
+          dot.className = 'result-dot';
+          dot.style.background = categoryColor(point.category);
+
+          const body = document.createElement('span');
+          body.className = 'result-body';
+          const name = document.createElement('span');
+          name.className = 'result-name';
+          name.textContent = point.name;
+          const meta = document.createElement('span');
+          meta.className = 'result-meta';
+          const region = regionById(point.region);
+          meta.textContent = `${CATEGORY_LABEL[point.category] ?? 'Объект'} · ${region.label}`;
+          body.append(name, meta);
+
+          button.append(dot, body);
+          if (point.isNew) {
+            const flag = document.createElement('span');
+            flag.className = 'result-new';
+            flag.textContent = 'new';
+            button.append(flag);
+          }
+
+          li.append(button);
+          searchResults.append(li);
+        });
+      }
+
+      function choosePoint(point: MapPoint) {
+        searchInput.value = point.name;
+        searchCard.classList.add('has-value');
+        closeResults();
+
+        if (point.region !== state.region) {
+          switchRegion(point.region);
+        }
+
+        const marker = state.markerRefs.get(point.id);
+        if (!marker) return;
+        map.flyTo(marker.getLatLng(), Math.max(map.getZoom(), 0.85), { duration: 0.7 });
+        window.setTimeout(() => marker.openPopup(), 720);
+      }
+
+      searchInput.addEventListener('input', renderResults);
+      searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim()) renderResults();
+      });
+      searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+          closeResults();
+          searchInput.blur();
+          return;
+        }
+        if (!state.results.length) return;
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const delta = event.key === 'ArrowDown' ? 1 : -1;
+          state.activeResult =
+            (state.activeResult + delta + state.results.length) % state.results.length;
+          const buttons = Array.from(searchResults.querySelectorAll<HTMLElement>('.result'));
+          buttons.forEach((button, index) =>
+            button.classList.toggle('is-active', index === state.activeResult),
+          );
+        }
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          const point = state.results[state.activeResult];
+          if (point) choosePoint(point);
+        }
+      });
+
+      searchResults.addEventListener('click', (event) => {
+        const button = (event.target as HTMLElement).closest<HTMLElement>('.result');
+        if (!button?.dataset.id) return;
+        const point = pointById(button.dataset.id);
+        if (point) choosePoint(point);
+      });
+
+      searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchCard.classList.remove('has-value');
+        closeResults();
+        searchInput.focus();
+      });
+
+      document.addEventListener('pointerdown', (event) => {
+        if (!searchCard.contains(event.target as Node)) closeResults();
+      });
+
+      // ── управление ────────────────────────────────────────────────────────
+      document.querySelector('#zoom-in')?.addEventListener('click', () => {
+        map.setZoom(map.getZoom() + 0.5, { animate: false });
+        markInteracted();
+      });
+      document.querySelector('#zoom-out')?.addEventListener('click', () => {
+        map.setZoom(map.getZoom() - 0.5, { animate: false });
+        markInteracted();
+      });
+      document.querySelector('#zoom-home')?.addEventListener('click', () => {
+        map.flyToBounds(boundsFor(state.region), { padding: [12, 12], duration: 0.6 });
+      });
+
+      for (const button of Array.from(document.querySelectorAll<HTMLButtonElement>('.region-btn'))) {
+        button.addEventListener('click', () => {
+          if (button.dataset.region) switchRegion(button.dataset.region as MapRegion);
+        });
+      }
+
+      function markInteracted() {
+        document.body.classList.add('was-interacted');
+      }
+
+      map.on('dragstart', markInteracted);
+      map.on('zoomstart', markInteracted);
+
+      // начальное состояние
+      switchRegion('world');
+    </script>
+  </body>
+</html>
