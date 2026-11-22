@@ -33,15 +33,15 @@ const pluralize = (n: number, forms: [string, string, string]) => {
 const install = [
   {
     title: 'Скачай аддон',
-    text: 'Возьми архив у офицеров гильдии и распакуй его на компьютере.',
+    text: 'Архив можно взять у офицеров гильдии.',
   },
   {
     title: 'Положи в AddOns',
-    text: 'Папка аддона должна лежать в Interface/AddOns, рядом с остальными аддонами.',
+    text: 'Папка аддона — в Interface/AddOns.',
   },
   {
     title: 'Загляни в игру',
-    text: 'Запусти игру, зайди персонажем — на миникарте появится кнопка аддона.',
+    text: 'Запусти игру и набери /durotar.',
   },
 ];
 ---
@@ -896,16 +896,15 @@ const install = [
       <section class="page-head">
         <div class="shell head-grid">
           <div>
-            <p class="eyebrow">Наши инструменты · World of Warcraft: Forever</p>
+            <p class="eyebrow">Инструменты · World of Warcraft: Forever</p>
             <h1 class="gold-text">АДДОНЫ</h1>
             <p class="lead">
-              Мы делаем небольшие аддоны для своей игры: чтобы <b>заявки не терялись</b>,&nbsp;<b>свои люди были на виду</b>, а золото считалось само. Без лишних кнопок
-              и без технических ребусов — ставится за минуту.
+              Аддоны, которые мы делаем для гильдии: заявки, согильдейцы рядом, учёт золота.
             </p>
             <ul class="head-facts">
               <li>{addons.length} {pluralize(addons.length, ['аддон', 'аддона', 'аддонов'])}</li>
               <li>
-                {featuresCount} {pluralize(featuresCount, ['возможность', 'возможности', 'возможностей'])}
+                {featuresCount} {pluralize(featuresCount, ['вкладка', 'вкладки', 'вкладок'])}
               </li>
               <li>WoW: Forever и TBC</li>
             </ul>
@@ -944,7 +943,6 @@ const install = [
 
                   <div class="addon-body">
                     <div class="addon-tags">
-                      <span>{a.category}</span>
                       <span class="plain">{a.clients.join(' · ')}</span>
                     </div>
 
@@ -955,15 +953,13 @@ const install = [
                     <p class="addon-summary">{a.summary}</p>
 
                     <ul class="addon-points">
-                      {a.features.slice(0, 4).map((f) => (
+                      {a.features.map((f) => (
                         <li>{f.title}</li>
                       ))}
                     </ul>
 
                     <div class="addon-foot">
-                      <span class="addon-clients">
-                        Версия {a.version} · обновлено {a.updated}
-                      </span>
+                      <span class="addon-clients">Версия {a.version}</span>
                       <a class="addon-link" href={`${base}addons/${a.slug}/`}>
                         Подробнее <span aria-hidden="true">→</span>
                       </a>
@@ -978,8 +974,7 @@ const install = [
                 <path d="M12 5v14M5 12h14" stroke-linecap="round" />
               </svg>
               <p>
-                <b>Место для следующих аддонов.</b>&nbsp;Раздел только наполняется: здесь появятся
-                новые инструменты для гильдии — с таким же коротким описанием и понятной установкой.
+                <b>Место для следующих аддонов.</b>
               </p>
             </div>
           </div>
@@ -1002,8 +997,6 @@ const install = [
             </ol>
             <p class="install-note">
               Аддон ставится только себе — остальным участникам гильдии он не нужен.
-              Если после запуска игры кнопки не видно, проверь, что папка лежит именно в
-              <code>Interface/AddOns</code> и называется так же, как в описании аддона.
             </p>
           </div>
         </div>
