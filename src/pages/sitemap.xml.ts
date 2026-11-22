@@ -2,8 +2,9 @@
 // поэтому работает и на своём домене, и на GitHub Pages с подпапкой.
 // Адреса совпадают с canonical на страницах.
 import type { APIRoute } from 'astro';
+import { addons } from '../data/addons';
 
-const pages = ['', 'addons/', 'join/', 'macros/'];
+const pages = ['', 'addons/', ...addons.map((addon) => `addons/${addon.slug}/`), 'join/', 'macros/'];
 
 export const GET: APIRoute = ({ site }) => {
   const base = import.meta.env.BASE_URL;
