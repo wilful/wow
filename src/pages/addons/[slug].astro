@@ -552,73 +552,41 @@ const meta = [
       }
 
       .process-lead {
-        max-width: 72ch;
-        margin: 16px 0 0;
+        max-width: 68ch;
+        margin: 18px auto 0;
         color: var(--text);
-        font-size: clamp(1rem, 2.2vw, 1.1rem);
-        line-height: 1.7;
+        font-size: clamp(1.08rem, 2.3vw, 1.24rem);
+        line-height: 1.8;
+        text-align: center;
       }
 
-      .process-steps {
-        display: grid;
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0 34px;
-        margin: 30px 0 0;
-        padding: 0;
-        list-style: none;
-      }
-
-      .process-step {
-        display: flex;
-        gap: 16px;
-        padding: 18px 0;
-        border-top: 1px solid var(--line-soft);
-      }
-
-      .process-num {
-        flex: none;
-        display: grid;
-        place-items: center;
-        width: 44px;
-        height: 44px;
-        border: 1px solid var(--line);
-        border-radius: 50%;
-        background: rgba(212, 175, 55, 0.09);
-        color: var(--gold-lt);
-        font-family: var(--font-display);
-        font-size: 1.12rem;
-        box-shadow: inset 0 1px 0 rgba(246, 227, 161, 0.14);
-      }
-
-      .process-step h3 {
-        margin: 2px 0 6px;
-        color: var(--gold-lt);
-        font-family: var(--font-head);
-        font-size: 1.14rem;
-        letter-spacing: 0.03em;
-      }
-
-      .process-step p {
-        margin: 0;
+      .process-story {
+        max-width: 74ch;
+        margin: 30px auto 0;
         color: var(--muted);
-        font-size: 0.95rem;
-        line-height: 1.62;
+        font-size: 1rem;
+        line-height: 1.82;
       }
 
-      .process-meaning {
-        margin: 26px 0 0;
-        padding-top: 22px;
+      .process-story p {
+        margin: 0;
+      }
+
+      .process-story p + p {
+        margin-top: 1.1em;
+      }
+
+      .process-creed {
+        max-width: 68ch;
+        margin: 34px auto 0;
+        padding: 22px 18px 0;
         border-top: 1px solid var(--line-soft);
-        color: var(--text);
-        font-size: 1.02rem;
-        line-height: 1.7;
-      }
-
-      .process-meaning b {
         color: var(--gold-lt);
         font-family: var(--font-head);
-        font-weight: 400;
-        letter-spacing: 0.05em;
+        font-size: clamp(1.1rem, 2.5vw, 1.32rem);
+        line-height: 1.65;
+        text-align: center;
+        text-wrap: balance;
       }
 
       /* вкладки */
@@ -942,12 +910,6 @@ const meta = [
         .feature-grid {
           grid-template-columns: minmax(0, 1fr);
         }
-        .process-steps {
-          grid-template-columns: minmax(0, 1fr);
-        }
-        .process-step:first-child {
-          border-top: 0;
-        }
         .shots {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -1088,24 +1050,10 @@ const meta = [
                     {addon.process.title}
                   </h2>
                   <p class="process-lead">{addon.process.lead}</p>
-
-                  <ol class="process-steps">
-                    {addon.process.steps.map((step, index) => (
-                      <li class="process-step">
-                        <span class="process-num" aria-hidden="true">
-                          {index + 1}
-                        </span>
-                        <div>
-                          <h3>{step.title}</h3>
-                          <p>{step.text}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-
-                  <p class="process-meaning">
-                    <b>В чём смысл.</b> {addon.process.meaning}
-                  </p>
+                  <div class="process-story">
+                    {addon.process.story.map((paragraph) => <p>{paragraph}</p>)}
+                  </div>
+                  <p class="process-creed">{addon.process.creed}</p>
                 </div>
               </div>
             </div>
