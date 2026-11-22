@@ -37,6 +37,8 @@ const icons: Record<AddonIcon, string> = {
     '<circle cx="9" cy="8" r="3"/><path d="M3.5 20c0-3 2.5-5 5.5-5s5.5 2 5.5 5"/><path d="M16 5.5a2.8 2.8 0 0 1 0 5.4"/><path d="M17 15.2c2.2.5 3.5 2.2 3.5 4.8"/>',
   coin:
     '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="5.5"/><path d="M12 8.5v7M10.2 10.2h3.6M10.2 13.8h3.6"/>',
+  skull:
+    '<path d="M12 3a7 7 0 0 0-7 7c0 2.4 1.2 4.1 3 5.2V19a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-3.8c1.8-1.1 3-2.8 3-5.2a7 7 0 0 0-7-7Z"/><circle cx="9.3" cy="10.4" r="1.3"/><circle cx="14.7" cy="10.4" r="1.3"/><path d="M10.5 20v-2M13.5 20v-2"/>',
   info: '<circle cx="12" cy="12" r="8.5"/><path d="M12 11v6"/><circle cx="12" cy="7.8" r="0.9" fill="currentColor" stroke="none"/>',
 };
 
@@ -542,6 +544,106 @@ const meta = [
         line-height: 1.6;
       }
 
+      /* скриншоты */
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+      }
+
+      .shot {
+        display: block;
+        padding: 0;
+        overflow: hidden;
+        border: 1px solid var(--line-soft);
+        border-radius: 3px;
+        background: rgba(18, 13, 7, 0.7);
+        cursor: zoom-in;
+        text-align: left;
+        transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .shot:hover,
+      .shot:focus-visible {
+        border-color: var(--line);
+        transform: translateY(-2px);
+        box-shadow: 0 24px 44px -34px rgba(0, 0, 0, 0.95);
+      }
+
+      .shot img {
+        width: 100%;
+        aspect-ratio: 856 / 592;
+        object-fit: cover;
+        border-bottom: 1px solid var(--line-soft);
+        background: var(--stone);
+      }
+
+      .shot span {
+        display: block;
+        padding: 10px 14px;
+        color: var(--gold-lt);
+        font-family: var(--font-head);
+        font-size: 0.84rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+      }
+
+      .shot-dialog {
+        width: min(1100px, 94vw);
+        max-width: none;
+        padding: 0;
+        border: 1px solid var(--line);
+        background: var(--night);
+        color: var(--text);
+        box-shadow: 0 40px 90px -40px rgba(0, 0, 0, 1);
+      }
+
+      .shot-dialog::backdrop {
+        background: rgba(6, 4, 2, 0.88);
+        backdrop-filter: blur(3px);
+      }
+
+      .dlg-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line-soft);
+        font-family: var(--font-head);
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: var(--gold-lt);
+      }
+
+      .dlg-bar button {
+        display: grid;
+        place-items: center;
+        width: 32px;
+        height: 32px;
+        padding: 0;
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        background: rgba(212, 175, 55, 0.08);
+        color: var(--gold-lt);
+        font-family: var(--font-body);
+        font-size: 1.2rem;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      .dlg-bar button:hover {
+        background: rgba(212, 175, 55, 0.2);
+      }
+
+      .shot-dialog img {
+        width: 100%;
+        height: auto;
+        max-height: 82vh;
+        object-fit: contain;
+        background: var(--night);
+      }
+
       /* установка */
       .install {
         margin-top: 58px;
@@ -709,6 +811,9 @@ const meta = [
         .feature-grid {
           grid-template-columns: minmax(0, 1fr);
         }
+        .shots {
+          grid-template-columns: minmax(0, 1fr);
+        }
         .install-steps {
           grid-template-columns: minmax(0, 1fr);
         }
@@ -867,6 +972,35 @@ const meta = [
         </div>
       </section>
 
+      {
+        addon.shots && addon.shots.length > 0 && (
+          <section class="section" aria-labelledby="shots-title">
+            <div class="shell">
+              <div class="sec-head">
+                <h2 id="shots-title">Скриншоты</h2>
+                <span class="rule" aria-hidden="true" />
+              </div>
+              <div class="shots">
+                {addon.shots.map((s) => (
+                  <button
+                    class="shot"
+                    type="button"
+                    data-shot
+                    data-src={`${base}${s.src}`}
+                    data-alt={s.alt}
+                    data-caption={s.caption}
+                    aria-label={`Открыть скриншот: ${s.caption}`}
+                  >
+                    <img src={`${base}${s.src}`} alt={s.alt} loading="lazy" decoding="async" />
+                    <span>{s.caption}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
+        )
+      }
+
       <section class="section" id="install" aria-labelledby="install-title">
         <div class="shell">
           <div class="install">
@@ -909,11 +1043,43 @@ const meta = [
         <p class="foot-note">
           © {new Date().getFullYear()} Гильдия Durotar. Сайт посвящён игре World of Warcraft:
           Forever; World of Warcraft и Warcraft® — товарные знаки Blizzard Entertainment.
-          Проект любительский и не связан с Blizzard. Изображения: игровые скриншоты и
-          материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener">warcraft.wiki.gg</a>.
+          Проект любительский и не связан с Blizzard. Изображения: скриншоты аддона
+          и игровые материалы World of Warcraft — <a href="https://warcraft.wiki.gg/" rel="noopener">warcraft.wiki.gg</a>.
         </p>
         <VoiceIDEBadge />
       </div>
     </footer>
+
+    <dialog class="shot-dialog" id="shot-dialog" aria-labelledby="shot-caption">
+      <div class="dlg-bar">
+        <span id="shot-caption"></span>
+        <button type="button" id="shot-close" aria-label="Закрыть">×</button>
+      </div>
+      <img id="shot-image" alt="" />
+    </dialog>
+
+    <script>
+      // Скриншоты открываются поверх страницы; Esc и клик по фону закрывают.
+      const dialog = document.getElementById('shot-dialog') as HTMLDialogElement | null;
+      const dialogImage = document.getElementById('shot-image') as HTMLImageElement | null;
+      const dialogCaption = document.getElementById('shot-caption');
+      const closeButton = document.getElementById('shot-close');
+
+      if (dialog && dialogImage) {
+        document.querySelectorAll<HTMLButtonElement>('[data-shot]').forEach((shot) => {
+          shot.addEventListener('click', () => {
+            dialogImage.src = shot.dataset.src ?? '';
+            dialogImage.alt = shot.dataset.alt ?? '';
+            if (dialogCaption) dialogCaption.textContent = shot.dataset.caption ?? '';
+            dialog.showModal();
+          });
+        });
+
+        closeButton?.addEventListener('click', () => dialog.close());
+        dialog.addEventListener('click', (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+      }
+    </script>
   </body>
 </html>
