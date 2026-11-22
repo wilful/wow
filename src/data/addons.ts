@@ -142,7 +142,7 @@ export const addons: Addon[] = [
     },
     shots: [
       {
-        src: 'img/addons/durotar-applications.png',
+        src: 'img/addons/durotar-applications.jpg',
         alt: 'Вкладка «Заявки» аддона Durotar со списком заявок в гильдию',
         caption: 'Заявки',
       },
@@ -152,7 +152,7 @@ export const addons: Addon[] = [
         caption: 'Финансы',
       },
       {
-        src: 'img/addons/durotar-makgora.png',
+        src: 'img/addons/durotar-makgora.jpg',
         alt: 'Вкладка «Мак’гора» аддона Durotar: игроки, убивавшие вас в PvP',
         caption: 'Мак’гора',
       },
